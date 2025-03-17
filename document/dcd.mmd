@@ -1,0 +1,47 @@
+classDiagram
+
+    class BoardGameGenre {
+        -int _id
+        -string _name
+        GameGenre()
+    }
+
+    class BoardGameUsedState {
+        -int _id
+        -string _name
+    }
+
+    class BoardGameCollection {
+        
+    }
+
+    class BoardGame {
+        -int _id // guid or int
+        -string _name
+        -string _genre
+        Game()
+    }
+    class BoardGameList  {
+        -List<Game> _gameList
+        -Custom _reservedBy
+        Add(string GameTitle) // Check for reservation
+        GetListByName()
+        GetListByGenre()
+    }
+    class Custom {
+        -int _id
+        -string _name
+        -string _address
+        -string _phone
+        -string _email
+        Custom()
+    }
+    class CustomList {
+        List<Custom> _customList
+    }
+
+    Class
+    BoardGame "*" -- "0..1" BoardGameGenre
+    BoardGame "1" *-- "*" BoardGameList
+    BoardGame "*" -- "1" BoardGameUsedState
+    Custom "1" o-- "*" CustomList
