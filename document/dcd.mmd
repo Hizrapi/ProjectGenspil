@@ -1,5 +1,122 @@
 classDiagram
 
+
+class Customer {
+    -string CustomerID
+    -string Name
+    -string Address
+    Customer(CustomerID: int, Name: string, Address: string):
+    GetCustomerID(): int
+    GetName(): string
+    GetAddress(): string
+    SetName(Name: string): void
+    SetAddress(Address: string): void
+    GetCustomerID(): int
+    ToString(): string
+}
+note for Customer "Administrerer personlige oplysninger og spilkøb/reservationer."
+
+class CustomerList {
+    -list<Customer> _customers
+    +GetCustomers(): list<Customer>
+    +AddCustomer(Customer: Customer): void
+    +UpdateCustomer(Customer: Customer): void
+    +RemoveCustomer(Customer: Customer): void
+    +GetCustomerByID(CustomerID: int): Customer
+    +GenerateID(): int
+}
+note for CustomerList "Indeholder en liste over kunder."
+
+class BoardGameList {
+    -list<BoardGame> _boardGames
+    -Reserved? _reserved = null
+    +BoardGames(): list<BoardGame>
+    +GetBoardGames(): list<BoardGame>
+    +Add(BoardGame: BoardGame): void
+    +Update(BoardGame: BoardGame): void
+    +GetBoardGamesByGenre(genre: Genre): list<BoardGame>
+    +GetBoardGamesByTitle(title: string): list<BoardGame>
+    +GetReserved(): Reserved
+    +SetReserved(Reserved: Reserved): void
+    +GenerateID(): int
+    +Seek(title: string, condition: Condition, price: decimal, genre: Genre, numberPlayers: int): list<BoardGameVariant>
+}
+note for BoardGameList "Indeholder en liste
+over brætspil."
+
+class BoardGame {
+    -int _boardGameID
+    -string _title
+    -string _variant
+    -Genre _genre
+    -Condition _condition
+    +Title(): string
+    +Title(Title: string): void
+    +Variants(): list<string>
+    +Variants(Variants: list<string>): void
+    +Genre(): Genre
+    +Genre(Genre: Genre): void
+    BoardGame(BoardGameID: int, Title: string, Variant: string, Genre: Genre, Condition: Condition)
+    +ToString(): string
+}
+note for BoardGame "Repræsenterer et brugt brætspil
+med tilstand og lager."
+
+class reserved {
+    DateTime ReservedDate
+    int Quantity
+    CustomerID CustomerID
+    BoardGameID BoardGameID
+    reserved(ReservedDate: DateTime, Quantity: int):
+}
+note for Reserved "Hvornår et brætspil er 
+reserveret. Og til hvem"
+
+class Condition {
+    -ConditionEnum _condition
+    -int _quantity
+    -decimal _price
+    +ConditionEnum(): ConditionEnum
+    +ConditionEnum(Condition: ConditionEnum): void
+    +Quantity(): int
+    +Quantity(Quantity: int): void
+    +GetPrice(): decimal
+    +SetPrice(Price: decimal): void
+    +Condition(Condition: ConditionEnum, Quantity: int, Price: decimal): void
+}
+note for Condition "Brætspil tilstand og antal vi har"
+
+class ConditionEnum {
+    <<enumeration>>
+    Sealed // helt ny
+    Good // god stand
+    Ok // lettere ridset
+    Fair // lidt skrammet
+    Reparation // reparation
+}
+note for ConditionEnum "Brætspil tilstand"
+
+
+class Genre {
+    <<enumeration>>
+    Strategy // strategi
+    Party // fest
+    Family // familie
+    Abstract // abstrakt
+    Thematic // tematisk
+    Children // børn
+}
+note for Genre "Brætspil genre"
+
+CustomerList "1" *-- "*" Customer : Indeholder
+CustomerList "1" *-- "*" reserved : Reserveres
+CustomerList "1" *-- "*" BoardGame : Indeholder
+BoardGameList "1" *-- "*" BoardGame : Indeholder
+BoardGameList "1" *-- "*" reserved : Reserveres
+BoardGameList "1" *-- "*" Stock : Indeholder
+BoardGame "1" -- "1" Condition : Har
+BoardGame "1" -- "1" Genre : Har
+
 class UserList {
     list<User> Users
     GetUders(): list<User>
@@ -25,102 +142,6 @@ class Role {
 }
 note for Role "Brugerroller"
 
-class Customer {
-    -string CustomerID
-    -string Name
-    -string Address
-    Customer(CustomerID: int, Name: string, Address: string):
-    GetCustomerID(): int
-    GetName(): string
-    GetAddress(): string
-    SetName(Name: string): void
-    SetAddress(Address: string): void
-    GetCustomerID(): int
-    ToString(): string
-}
-note for Customer "Administrerer personlige oplysninger og spilkøb/reservationer."
-
-class CustomerList {
-    list<Customer> Customers
-    GetCustomers(): list<Customer>
-    AddCustomer(Customer: Customer): void
-    UpdateCustomer(Customer: Customer): void
-    RemoveCustomer(Customer: Customer): void
-    GetCustomerByID(): Customer
-    GenerateID(): int
-}
-note for CustomerList "Indeholder en liste over kunder."
-
-class BoardGame {
-    string GameID
-    string Title
-    Genre Genre //enum
-    string Description
-    Condition Condition //enum
-    decimal Price
-    int StockQuantity
-    bool reperation
-    BoardGame(GameID: string, Title: string, Description: string, Condition: Condition, Price: decimal, StockQuantity: int, reperation=false: bool):
-    ToString(): string
-}
-note for BoardGame "Repræsenterer et brugt 
-brætspil med tilstand 
-og lager."
-
-class BoardGameList {
-    +list<BoardGame> BoardGames
-    +GetBoardGames(): list<BoardGame>
-    +Add(BoardGame: BoardGame): void
-    +Update(BoardGame: BoardGame): void
-    +GetBoardGamesByGenre(genre: Genre): list<BoardGame>
-    +GetBoardGamesByTitle(title: string): list<BoardGame>
-    +GenerateID(): int
-}
-
-class Stock {
-    int Quantity
-    BoardGameID BoardGameID
-    StockQuantity(Quantity: int):
-}
-
-class reserved {
-    DateTime ReservedDate
-    int Quantity
-    CustomerID CustomerID
-    BoardGameID BoardGameID
-    reserved(ReservedDate: DateTime, Quantity: int):
-}
-note for reserved "Hvornår et brætspil er 
-reserveret. Og til hvem"
-
-class Condition {
-    <<enumeration>>
-    New
-    Good
-    Used
-    Damaged
-}
-note for Condition "Tilstande et brætspil kan
-være i."
-
-class Genre {
-    <<enumeration>>
-    Strategy
-    Party
-    Family
-    Abstract
-    Thematic
-    Children
-}
-note for Genre "Brætspil genre"
-
-CustomerList "1" *-- "*" Customer : Indeholder
-Customer "*" -- "*" Stock : Køber / reservere
-BoardGameList "1" *-- "*" BoardGame : Indeholder
-BoardGameList "1" *-- "*" reserved : Reserveres
-BoardGameList "1" *-- "*" Stock : Indeholder
-BoardGame "1" -- "1" Condition : Har
-BoardGame "1" -- "1" Genre : Har
-Stock -- BoardGame : Har
 UserList "1" *-- "*" User : Indeholder
 User "1" -- "1" Role : Har
+ConditionEnum -- Condition : Har
