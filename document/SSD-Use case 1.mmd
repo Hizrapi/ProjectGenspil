@@ -1,0 +1,11 @@
+sequenceDiagram
+    participant Medarbejder as Medarbejder
+    participant System as System
+
+    %% Use Case 1: Lagerliste med filtrering og sortering
+    Medarbejder->>System: Anmod om lagerliste
+    System-->>Medarbejder: Viser liste med alle spil (navn, genre, stand, pris, antal)
+    Medarbejder->>System: Filtrer efter stand
+    System-->>Medarbejder: Opdateret liste vises
+    Medarbejder->>System: Sortér efter navn eller genre
+    System-->>Medarbejder: Opdateret liste vises
