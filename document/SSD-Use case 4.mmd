@@ -1,0 +1,13 @@
+sequenceDiagram
+    participant Medarbejder as Medarbejder
+    participant System as System
+
+%% Use Case 4: Oprettelse af en reservation for spil ikke på lager
+    Medarbejder->>System: Søg efter et spil
+    System-->>Medarbejder: Spil ikke fundet
+    Medarbejder->>System: Opret nyt spil i systemet
+    System-->>Medarbejder: Bekræftelse på oprettelse
+    Medarbejder->>System: Opret en reservation for kunden
+    System-->>Medarbejder: Bekræft reservation for oprettelse
+    Medarbejder->>System: Tilføj kundeoplysninger
+    System-->>Medarbejder: Bekræftelse på kundeoprettelse
