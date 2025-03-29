@@ -24,7 +24,6 @@ internal class Program
         throw new NotImplementedException();
     }
 
-
     static void ShowBoardGame()
     {
         throw new NotImplementedException();
@@ -44,6 +43,22 @@ internal class Program
     {
         throw new NotImplementedException();
     }
+
+    static void ShowReportBoardGameSort()
+    {
+        throw new NotImplementedException();
+    }
+
+    static void ShowReportBoardGameSortTitle()
+    {
+        throw new NotImplementedException();
+    }
+
+    static void ShowReportBoardGameSortGenre()
+    {
+        throw new NotImplementedException();
+    }
+
 
     static void HeadLine(string headLine)
     {
@@ -65,7 +80,7 @@ internal class Program
             Console.Clear();
             HeadLine("Hoved menu");
             List<MenuItem> menuItems = new();
-            menuItems.Add(new MenuItem("Board game", (Action)MenuBoardGame));
+            menuItems.Add(new MenuItem("Boardgame", (Action)MenuBoardGame));
             menuItems.Add(new MenuItem("Kunde", (Action)MenuCostumer));
             menuItems.Add(new MenuItem("Rapporter", (Action)MenuReport));
             menuItems.Add(new MenuItem("Admin", (Action)MenuAdmin));
@@ -89,12 +104,34 @@ internal class Program
 
     static void MenuReport()
     {
-        throw new NotImplementedException();
+        do
+        {
+            Console.Clear();
+            HeadLine("Rapport");
+            List<MenuItem> menuItems = new();
+            menuItems.Add(new MenuItem("Lagerstatus sorteret på titel", (Action)ShowReportBoardGameSortTitle));
+            menuItems.Add(new MenuItem("Lagerstatus sorteret på gerne", (Action)ShowReportBoardGameSortGenre));
+            MenuPaginator menu = new(menuItems, 10);
+            if (menu.menuItem != null && menu.menuItem.Action is Action action)
+            {
+                action();
+            }
+            else
+            {
+                return;
+            }
+        } while (true);
     }
 
     static void MenuAdmin()
     {
-        throw new NotImplementedException();
+        do
+        {
+            Console.Clear();
+            HeadLine("Administrator");
+            List<MenuItem> menuItems = new();
+            throw new NotImplementedException();
+        } while (true);
     }
 
     static void MenuBoardGame()
