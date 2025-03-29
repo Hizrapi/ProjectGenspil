@@ -11,4 +11,8 @@
     <Folder Include="data\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="TirsvadCLI.MenuPaginator" Version="0.1.0-alpha.3" />
+  </ItemGroup>
+
 </Project>
