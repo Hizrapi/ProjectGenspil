@@ -5,7 +5,7 @@ namespace GenSpil;
 
 internal class Program
 {
-    static readonly string TITLE = "GenSpil";
+    const string TITLE = "GenSpil";
     static readonly string DATA_JSON_FILE = "/data/genspil.json";
 
     static string GetVersion()
