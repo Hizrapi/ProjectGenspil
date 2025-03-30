@@ -1,6 +1,7 @@
 ﻿//using GenSpil.Model;
 
 using System.Text.Json;
+using Microsoft.VisualBasic;
 
 namespace GenSpil.Handler;
 
@@ -26,6 +27,7 @@ class JsonFileHandler
         }
     }
 
+    private const string _filePath = Constants.jsonFilePath; ///> The file path for the JSON file.
     private readonly Version _version = new Version(1, 0); ///> The version of the JSON file.
     private readonly DataContainer _dataContainer = new DataContainer(); ///> The data container for the JSON file.
 
@@ -74,7 +76,6 @@ class JsonFileHandler
     /// Reassign owner object for Car objects. So owner object is the same in OwnerList and CarList.
     /// </summary>
     /// <param name="filename">Optional. Default value from Constants.jsonFilePath</param>
-    public void ImportData(string filename)
     {
         lock (_lock)
         {
