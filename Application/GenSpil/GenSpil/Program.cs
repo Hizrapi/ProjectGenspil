@@ -5,7 +5,7 @@ namespace GenSpil;
 
 internal class Program
 {
-    static readonly string TITLE = "GenSpil";
+    const string TITLE = "GenSpil";
     static readonly string DATA_JSON_FILE = "/data/genspil.json";
 
     static string GetVersion()
@@ -80,7 +80,7 @@ internal class Program
             Console.Clear();
             HeadLine("Hoved menu");
             List<MenuItem> menuItems = new();
-            menuItems.Add(new MenuItem("Boardgame", (Action)MenuBoardGame));
+            menuItems.Add(new MenuItem("Brætspil", (Action)MenuBoardGame));
             menuItems.Add(new MenuItem("Kunde", (Action)MenuCostumer));
             menuItems.Add(new MenuItem("Rapporter", (Action)MenuReport));
             menuItems.Add(new MenuItem("Admin", (Action)MenuAdmin));
@@ -161,6 +161,8 @@ internal class Program
         throw new NotImplementedException();
     }
 
+
+    // maybe tihs is not needed as a menu. Maybe it should be a method in the BoardGame class
     static void MenuChooseBoardGameVariant()
     {
         throw new NotImplementedException();

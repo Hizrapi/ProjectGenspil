@@ -7,7 +7,7 @@
 - [Projektformål](#projektformål)
 - [Folder struktur](#folder-struktur)
 - [Kontakt os](#kontakt-os)
-  - [Udviklere](#udviklere)]
+  - [Udviklere](#udviklere)
 
 ## Projekt beskrivelse
 
@@ -31,6 +31,7 @@ ProjectGenspil
 │   │   │---GenSpil                     # Visual studio projekt filer
 |   |   |---data                        # Persistent data
 |   |   |---Model                       # Models for the application
+|   |   |---Handler                     # Handlers for the application
 ```
 
 ## Kontakt os
