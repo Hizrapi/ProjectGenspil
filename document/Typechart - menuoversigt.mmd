@@ -1,0 +1,37 @@
+  graph TD;
+    A[Main Menu] -->|User Management| B[User List];
+    B --> C[Get Users];
+    B --> D[Add User];
+    B --> E[Remove User];
+   
+    A -->|Customer Management| F[Customer List];
+    F --> G[Get Customers];
+    F --> H[Add Customer];
+    F --> I[Update Customer];
+    F --> J[Remove Customer];
+    F --> K[Get Customer by ID];
+   
+    A -->|Board Game Management| L[Board Game List];
+    L --> M[Get Board Games];
+    L --> N[Add Board Game];
+    L --> O[Update Board Game];
+    L --> P[Search by Genre];
+    L --> Q[Search by Title];
+   
+    A -->|Reservations| R[Reserved Games];
+    R --> S[View Reservations];
+    R --> T[Reserve Game];
+   
+    A -->|Stock Management| U[Stock];
+    U --> V[Update Stock];
+   
+    B -.->|Has Users| X[User];
+    X -.->|Has Role| Y[Role];
+   
+    F -.->|Contains| Z[Customer];
+    L -.->|Contains| AA[Board Game];
+    AA -.->|Has Condition| AB[Condition];
+    AA -.->|Has Genre| AC[Genre];
+   
+    R -.->|Contains| AD[Reserved];
+    U -.->|Has| AE[BoardGame Stock];
