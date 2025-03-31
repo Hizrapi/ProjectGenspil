@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using TirsvadCLI.MenuPaginator;
+//using GenSpil.Model;
 
 namespace GenSpil;
 
@@ -7,6 +8,8 @@ internal class Program
 {
     const string TITLE = "GenSpil";
     static readonly string DATA_JSON_FILE = "/data/genspil.json";
+
+    //BoardGameList _boardGameList = BoardGameList.Instance;
 
     static string GetVersion()
     {
@@ -73,27 +76,32 @@ internal class Program
 
 
     #region menu
+    /// <summary>
+    /// Main menu
+    /// (Action) is a delegate to a method with no parameters and no return value.
+    /// When calling PaginateMenu() the menu is displayed and the user can select an item.
+    /// Item with it action is returned.
+    /// Then we execute the action.
+    /// </summary>
     static void MenuMain()
     {
         do
         {
             Console.Clear();
             HeadLine("Hoved menu");
+            // Create a list of menu items
             List<MenuItem> menuItems = new();
-            menuItems.Add(new MenuItem("Brætspil", (Action)MenuBoardGame));
-            menuItems.Add(new MenuItem("Kunde", (Action)MenuCostumer));
-            menuItems.Add(new MenuItem("Rapporter", (Action)MenuReport));
-            menuItems.Add(new MenuItem("Admin", (Action)MenuAdmin));
-            menuItems.Add(new MenuItem("Logout", (Action)Logout));
+            menuItems.Add(new MenuItem("Brætspil", MenuBoardGame));
+            menuItems.Add(new MenuItem("Kunde", MenuCostumer));
+            menuItems.Add(new MenuItem("Rapporter", MenuReport));
+            menuItems.Add(new MenuItem("Admin", MenuAdmin));
+            menuItems.Add(new MenuItem("Logout", Logout));
+            // Create a menu paginator
             MenuPaginator menu = new(menuItems, 10);
             if (menu.menuItem != null && menu.menuItem.Action is Action action)
-            {
-                action();
-            }
+                action(); // Execute the action
             else
-            {
                 return;
-            }
         } while (true);
     }
 
@@ -102,6 +110,13 @@ internal class Program
         throw new NotImplementedException();
     }
 
+    /// <summary>
+    /// Report menu
+    /// (Action) is a delegate to a method with no parameters and no return value.
+    /// When calling PaginateMenu() the menu is displayed and the user can select an item.
+    /// Item with it action is returned.
+    /// Then we execute the action.
+    /// </summary>
     static void MenuReport()
     {
         do
@@ -109,17 +124,13 @@ internal class Program
             Console.Clear();
             HeadLine("Rapport");
             List<MenuItem> menuItems = new();
-            menuItems.Add(new MenuItem("Lagerstatus sorteret på titel", (Action)ShowReportBoardGameSortTitle));
-            menuItems.Add(new MenuItem("Lagerstatus sorteret på gerne", (Action)ShowReportBoardGameSortGenre));
+            menuItems.Add(new MenuItem("Lagerstatus sorteret på titel", ShowReportBoardGameSortTitle));
+            menuItems.Add(new MenuItem("Lagerstatus sorteret på gerne", ShowReportBoardGameSortGenre));
             MenuPaginator menu = new(menuItems, 10);
             if (menu.menuItem != null && menu.menuItem.Action is Action action)
-            {
                 action();
-            }
             else
-            {
                 return;
-            }
         } while (true);
     }
 
@@ -134,6 +145,13 @@ internal class Program
         } while (true);
     }
 
+    /// <summary>
+    /// Board game menu
+    /// (Action) is a delegate to a method with no parameters and no return value.
+    /// When calling PaginateMenu() the menu is displayed and the user can select an item.
+    /// Item with it action is returned.
+    /// Then we execute the action.
+    /// </summary>
     static void MenuBoardGame()
     {
         do
@@ -141,9 +159,9 @@ internal class Program
             Console.Clear();
             HeadLine("Brætspil menu");
             List<MenuItem> menuItems = new();
-            menuItems.Add(new MenuItem("Vælg spil", (Action)MenuChooseBoardGame));
-            menuItems.Add(new MenuItem("Tilføj spil", (Action)AddBoardGame));
-            menuItems.Add(new MenuItem("Søg", (Action)SeekBoardGame));
+            menuItems.Add(new MenuItem("Vælg spil", MenuChooseBoardGame));
+            menuItems.Add(new MenuItem("Tilføj spil", AddBoardGame));
+            menuItems.Add(new MenuItem("Søg", SeekBoardGame));
             MenuPaginator menu = new(menuItems, 10);
             if (menu.menuItem != null && menu.menuItem.Action is Action action)
             {
@@ -156,9 +174,26 @@ internal class Program
         } while (true);
     }
 
+    /// <summary>
+    /// Choose board game menu
+    /// (Action) is a delegate to a method with no parameters and no return value.
+    /// When calling PaginateMenu() the menu is displayed and the user can select an item.
+    /// Item with it action is returned.
+    /// Then we execute the action.
+    /// </summary>
     static void MenuChooseBoardGame()
     {
-        throw new NotImplementedException();
+        do
+        {
+            Console.Clear();
+            HeadLine("Vælg spil");
+            List<MenuItem> menuItems = new();
+            //foreach (BoardGame boardGame in _boardGameList)
+            //{
+            //    menuItems.Add(new MenuItem(boardGame.Title, () => ShowBoardGame(boardGame)));
+            //}
+            throw new NotImplementedException();
+        } while (true);
     }
 
 
