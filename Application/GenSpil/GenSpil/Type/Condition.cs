@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GenSpil.Type
 {
-  public enum ConditionEnum
+  public enum Condition
 
     /// <summary>
     /// BoardGames ConditionEnum 
