@@ -74,9 +74,8 @@ over brætspil."
 class BoardGame {
     -int _boardGameID
     -string _title
-    -string _variant
+    -list<BoardGameVariant> _variant
     -Genre _genre
-    -Condition _condition
     +Title(): string
     +Title(Title: string): void
     +Variants(): list<string>
@@ -90,9 +89,7 @@ note for BoardGame "Repræsenterer et brugt brætspil
 med tilstand og lager."
 
 class BoardGameVariant {
-    -int _boardGameID
-    -Condition _condition
-    BoardGame BoardGame
+    -list<Condition> _condition
     string Variant
     +BoardGameVariant(BoardGame: BoardGame, Variant: string, Condition: Condition): void
     +Condition(): Condition
