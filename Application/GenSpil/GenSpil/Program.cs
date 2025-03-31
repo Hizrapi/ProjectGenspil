@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using TirsvadCLI.Frame;
 using TirsvadCLI.MenuPaginator;
 //using GenSpil.Model;
 
@@ -62,18 +63,40 @@ internal class Program
         throw new NotImplementedException();
     }
 
-
+    /// <summary>
+    /// Display a headline with the title and version of the program.
+    /// </summary>
     static void HeadLine(string headLine)
     {
         Console.Clear();
-        string title = TITLE + " version " + GetVersion();
-        Console.WriteLine(title);
-        Console.WriteLine(new string('=', title.Length));
-        Console.WriteLine(headLine);
-        Console.WriteLine(new string('-', headLine.Length));
+        string title = $" {TITLE} version {GetVersion()} ";
+
+        int l = Math.Max(title.Length, title.Length) + 1;
+        Frame frame = new Frame(l, 2);
+        frame.SetFrameText(title);
+        frame.Render();
+        Console.WriteLine();
+        Console.WriteLine(CenterString(headLine, l));
+        Console.WriteLine(new string('-', l + 1));
         Console.WriteLine();
     }
-
+    /// <summary>
+    /// Centers the given text within a specified width.
+    /// </summary>
+    /// <param name="text">The text to center.</param>
+    /// <param name="width">The width within which to center the text.</param>
+    /// <returns>The centered text with padding.</returns>
+    static string CenterString(string text, int width)
+    {
+        if (width <= text.Length)
+        {
+            return text; // Or throw an exception, or truncate the string
+        }
+        int padding = width - text.Length;
+        int leftPadding = padding / 2;
+        int rightPadding = padding - leftPadding;
+        return new string(' ', leftPadding) + text + new string(' ', rightPadding);
+    }
 
     #region menu
     /// <summary>
