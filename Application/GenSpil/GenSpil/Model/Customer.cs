@@ -8,9 +8,9 @@ using System.Xml.Linq;
 
 namespace GenSpil.Model
 {
-    internal class Customer
+    public class Customer
     {
-        int CustomerID {  get; set; }
+        public int CustomerID { get; private set; }
         string Name { get; set; }
         string Address { get; set; }
 
