@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using GenSpil.Model;
 using TirsvadCLI.Frame;
 using TirsvadCLI.MenuPaginator;
 //using GenSpil.Model;
@@ -9,8 +10,7 @@ internal class Program
 {
     const string TITLE = "GenSpil";
     static readonly string DATA_JSON_FILE = "/data/genspil.json";
-
-    //BoardGameList _boardGameList = BoardGameList.Instance;
+    static BoardGameList _boardGameList = BoardGameList.Instance;
 
     static string GetVersion()
     {
@@ -43,9 +43,63 @@ internal class Program
         throw new NotImplementedException();
     }
 
-    static void SeekBoardGame()
+    static BoardGame ChooseBoardGame()
     {
         throw new NotImplementedException();
+    }
+
+    static List<BoardGame> SearchBoardGame()
+    {
+        int cTop;
+        int cInputLeft = 14;
+        int i;
+        string? title;
+        string? genre;
+        string? variant;
+        string? condition;
+        string? price;
+
+        Console.CursorVisible = true;
+
+        HeadLine("Søg efter brætspil");
+        cTop = Console.CursorTop;
+        Console.Write("Title");
+        Console.CursorLeft = cInputLeft - 2;
+        Console.WriteLine(":");
+        Console.Write("Genre");
+        Console.CursorLeft = cInputLeft - 2;
+        Console.WriteLine(":");
+        Console.Write("Variant");
+        Console.CursorLeft = cInputLeft - 2;
+        Console.WriteLine(":");
+        Console.Write("Condition");
+        Console.CursorLeft = cInputLeft - 2;
+        Console.WriteLine(":");
+        for (i = 0; i < Enum.GetValues<Type.Condition>().Length; i++)
+        {
+            Console.Write((int)Enum.GetValues(typeof(Type.Condition)).GetValue(i));
+            Console.Write(" - ");
+            Console.WriteLine(Enum.GetName(typeof(Type.Condition), i));
+        }
+        Console.Write("Pris");
+        Console.CursorLeft = cInputLeft - 2;
+        Console.WriteLine(":");
+
+        Console.SetCursorPosition(cInputLeft, cTop++);
+        title = Console.ReadLine();
+        Console.SetCursorPosition(cInputLeft, cTop++);
+        genre = Console.ReadLine();
+        Console.SetCursorPosition(cInputLeft, cTop++);
+        variant = Console.ReadLine();
+        Console.SetCursorPosition(cInputLeft, cTop++);
+        condition = Console.ReadLine();
+        Console.SetCursorPosition(cInputLeft, cTop + i);
+        price = Console.ReadLine();
+
+        Console.CursorVisible = false;
+
+        return _boardGameList.SearchBoardGames(); // should be with parameters (Tirsvad)
+        //return _boardGameList.SearchBoardGames(title, genre, variant, condition, price);
     }
 
     static void ShowReportBoardGameSort()
@@ -177,6 +231,7 @@ internal class Program
     /// </summary>
     static void MenuBoardGame()
     {
+        List<BoardGame> boardGames;
         do
         {
             Console.Clear();
@@ -184,7 +239,7 @@ internal class Program
             List<MenuItem> menuItems = new();
             menuItems.Add(new MenuItem("Vælg spil", MenuChooseBoardGame));
             menuItems.Add(new MenuItem("Tilføj spil", AddBoardGame));
-            menuItems.Add(new MenuItem("Søg", SeekBoardGame));
+            menuItems.Add(new MenuItem("Søg", new Action(() => boardGames = SearchBoardGame())));
             MenuPaginator menu = new(menuItems, 10);
             if (menu.menuItem != null && menu.menuItem.Action is Action action)
             {
