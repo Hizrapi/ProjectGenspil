@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using GenSpil.Model;
 using TirsvadCLI.Frame;
 using TirsvadCLI.MenuPaginator;
 //using GenSpil.Model;
@@ -8,7 +9,8 @@ namespace GenSpil;
 internal class Program
 {
     const string TITLE = "GenSpil";
-    static readonly string DATA_JSON_FILE = "/data/genspil.json";
+    const string DATA_JSON_FILE = "/data/genspil.json";
+    static BoardGameList _boardGameList = BoardGameList.Instance;
 
     //BoardGameList _boardGameList = BoardGameList.Instance;
 
@@ -20,6 +22,8 @@ internal class Program
 
     static void Login()
     {
+        Console.Clear();
+        HeadLine("Log på");
         throw new NotImplementedException();
     }
 
@@ -30,22 +34,80 @@ internal class Program
 
     static void ShowBoardGame()
     {
+        Console.Clear();
+        HeadLine("");
         throw new NotImplementedException();
     }
 
     static void AddBoardGame()
     {
+        Console.Clear();
+        HeadLine("Tilføj brætspil");
         throw new NotImplementedException();
     }
 
     static void RemoveBoardGame()
     {
+        Console.Clear();
+        HeadLine("Fjern brætspil");
+        BoardGame item = ChooseBoardGame();
+        if (item != null)
+        {
+            //if (_boardGameList.Remove(item))
+            //{
+            //        //    Console.WriteLine("Spillet er fjernet fra listen.");
+            //        //}
+            //        //else
+            //        //{
+            //        //    Console.WriteLine("Spillet kunne ikke fjernes fra listen.");
+            //}
+        }
+        //else
+        //{
+        //    Console.WriteLine("Spillet blev ikke fundet.");
+        //}
+        //throw new NotImplementedException();
+    }
+
+    static BoardGame ChooseBoardGame()
+    {
+        Console.Clear();
+        HeadLine("Vælg brætspil");
         throw new NotImplementedException();
     }
 
-    static void SeekBoardGame()
+    public static List<BoardGame> SearchBoardGame()
     {
-        throw new NotImplementedException();
+        int cInputLeft = 14;
+        Console.Clear();
+        Console.CursorVisible = true;
+        HeadLine("Søg efter brætspil");
+        var cTop = Console.GetCursorPosition().Top;
+        Console.WriteLine("Titel       : ");
+        Console.WriteLine("Genre       : ");
+        Console.WriteLine("Variant     : ");
+        Console.WriteLine("Tilstand    : ");
+        for (int i = 0; i < Enum.GetValues(typeof(Type.Condition)).Length; i++)
+        {
+            Console.Write($"{i + 1}={(Type.Condition)i} ");
+        }
+        Console.WriteLine();
+        Console.WriteLine("Pris        : ");
+        Console.CursorTop = cTop;
+        Console.CursorLeft = cInputLeft;
+        string title = Console.ReadLine() ?? "";
+        Console.CursorLeft = cInputLeft;
+        string genre = Console.ReadLine() ?? "";
+        Console.CursorLeft = cInputLeft;
+        string variant = Console.ReadLine() ?? "";
+        Console.CursorLeft = cInputLeft;
+        string condition = Console.ReadLine() ?? "";
+        Console.CursorLeft = cInputLeft;
+        Console.CursorTop++;
+        string price = Console.ReadLine() ?? "";
+        Console.CursorVisible = false;
+
+        return _boardGameList.SearchBoardGames(); //SearchBoardGames() should take parameters (Tirsvad)
     }
 
     static void ShowReportBoardGameSort()
@@ -130,6 +192,8 @@ internal class Program
 
     static void MenuCostumer()
     {
+        Console.Clear();
+        HeadLine("Kunde menu");
         throw new NotImplementedException();
     }
 
@@ -177,23 +241,20 @@ internal class Program
     /// </summary>
     static void MenuBoardGame()
     {
+        List<BoardGame> boardGames;
         do
         {
             Console.Clear();
             HeadLine("Brætspil menu");
             List<MenuItem> menuItems = new();
-            menuItems.Add(new MenuItem("Vælg spil", MenuChooseBoardGame));
-            menuItems.Add(new MenuItem("Tilføj spil", AddBoardGame));
-            menuItems.Add(new MenuItem("Søg", SeekBoardGame));
+            menuItems.Add(new MenuItem("Vælg spil", (Action)MenuChooseBoardGame));
+            menuItems.Add(new MenuItem("Tilføj spil", (Action)AddBoardGame));
+            menuItems.Add(new MenuItem("Søg", new Action(() => { boardGames = SearchBoardGame(); })));
             MenuPaginator menu = new(menuItems, 10);
             if (menu.menuItem != null && menu.menuItem.Action is Action action)
-            {
                 action();
-            }
             else
-            {
                 return;
-            }
         } while (true);
     }
 

@@ -41,7 +41,7 @@ class JsonFileHandler
         public DataContainer()
         {
             Version = null;
-            //BoardGaems = null; // Instance of BoardGameList when the class is created.
+            //BoardGames = null; // Instance of BoardGameList when the class is created.
             //Customers = null;  // Instance of CustomerList when the class is created.
         }
     }
@@ -115,5 +115,4 @@ class JsonFileHandler
             }
         }
     }
-
 }
