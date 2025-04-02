@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using GenSpil.Model;
 using TirsvadCLI.Frame;
 using TirsvadCLI.MenuPaginator;
 //using GenSpil.Model;
@@ -9,8 +10,7 @@ internal class Program
 {
     const string TITLE = "GenSpil";
     static readonly string DATA_JSON_FILE = "/data/genspil.json";
-
-    //BoardGameList _boardGameList = BoardGameList.Instance;
+    static BoardGameList _boardGameList = BoardGameList.Instance;
 
     static string GetVersion()
     {
@@ -28,13 +28,36 @@ internal class Program
         throw new NotImplementedException();
     }
 
-    static void ShowBoardGame()
+    static void ShowBoardGame(BoardGame boardGame)
     {
         throw new NotImplementedException();
     }
 
     static void AddBoardGame()
     {
+        BoardGame boardGame = new BoardGame(0, "Matador", new List<BoardGameVariant> { new BoardGameVariant("", new ConditionList()) }, [Type.Genre.Familie]);
+        AddBoardGameVariant(boardGame);
+        throw new NotImplementedException();
+    }
+
+    static BoardGameVariant AddBoardGameVariant(BoardGame boardGame)
+    {
+        int cTop;
+        int cInputLeft = 14;
+        string? variant;
+        Console.CursorVisible = true;
+        HeadLine($"Tilføj variant til {boardGame.Title}");
+        // Form
+        cTop = Console.CursorTop;
+        Console.Write("Variants");
+        Console.CursorLeft = cInputLeft - 2;
+        Console.WriteLine(":");
+        // User input
+        Console.SetCursorPosition(cInputLeft, cTop++);
+        variant = Console.ReadLine();
+        Console.CursorVisible = false;
+        // Add variant
+        //return boardGame.AddVariant(variant);
         throw new NotImplementedException();
     }
 
@@ -43,9 +66,64 @@ internal class Program
         throw new NotImplementedException();
     }
 
-    static void SeekBoardGame()
+    static List<BoardGame>? SearchBoardGame()
     {
-        throw new NotImplementedException();
+        int cTop;
+        int cInputLeft = 14;
+        int i;
+        string? title;
+        string? genre;
+        string? variant;
+        string? condition;
+        string? price;
+        Console.CursorVisible = true;
+        // Headline
+        HeadLine("Søg efter brætspil");
+        // Form
+        cTop = Console.CursorTop;
+        Console.Write("Title");
+        Console.CursorLeft = cInputLeft - 2;
+        Console.WriteLine(":");
+        Console.Write("Genre");
+        Console.CursorLeft = cInputLeft - 2;
+        Console.WriteLine(":");
+        Console.Write("Variants");
+        Console.CursorLeft = cInputLeft - 2;
+        Console.WriteLine(":");
+        Console.Write("Condition");
+        Console.CursorLeft = cInputLeft - 2;
+        Console.WriteLine(":");
+        for (i = 0; i < Enum.GetValues<Type.Condition>().Length; i++)
+        {
+            object? conditionValue = Enum.GetValues<Type.Condition>().GetValue(i);
+            if (conditionValue != null)
+            {
+                Console.Write((int)conditionValue);
+                Console.Write(" - ");
+                Console.WriteLine(Enum.GetName(typeof(Type.Condition), i));
+            }
+        }
+        Console.Write("Pris");
+        Console.CursorLeft = cInputLeft - 2;
+        Console.WriteLine(":");
+        // User input
+        Console.SetCursorPosition(cInputLeft, cTop++);
+        title = Console.ReadLine();
+        Console.SetCursorPosition(cInputLeft, cTop++);
+        genre = Console.ReadLine();
+        Console.SetCursorPosition(cInputLeft, cTop++);
+        variant = Console.ReadLine();
+        Console.SetCursorPosition(cInputLeft, cTop++);
+        condition = Console.ReadLine();
+        Console.SetCursorPosition(cInputLeft, cTop + i);
+        price = Console.ReadLine();
+        Console.CursorVisible = false;
+
+        Type.Condition? conditionEnum = ParseCondition(condition);
+        Type.Genre? genreEnum = ParseGenre(genre);
+
+        // Search
+        return _boardGameList.Search(title, genreEnum, variant, conditionEnum, price);
     }
 
     static void ShowReportBoardGameSort()
@@ -97,6 +175,57 @@ internal class Program
         int rightPadding = padding - leftPadding;
         return new string(' ', leftPadding) + text + new string(' ', rightPadding);
     }
+
+    static Type.Condition? ParseCondition(string? condition)
+    {
+        if (condition == null)
+        {
+            return null;
+        }
+
+        // Try to parse as integer
+        if (int.TryParse(condition, out int conditionInt))
+        {
+            if (Enum.IsDefined(typeof(Type.Condition), conditionInt))
+            {
+                return (Type.Condition)conditionInt;
+            }
+        }
+
+        // Try to parse as string
+        if (Enum.TryParse(condition, true, out Type.Condition conditionEnum))
+        {
+            return conditionEnum;
+        }
+
+        return null;
+    }
+
+    static Type.Genre? ParseGenre(string? gerne)
+    {
+        if (gerne == null)
+        {
+            return null;
+        }
+
+        // Try to parse as integer
+        if (int.TryParse(gerne, out int gerneInt))
+        {
+            if (Enum.IsDefined(typeof(Type.Genre), gerneInt))
+            {
+                return (Type.Genre)gerneInt;
+            }
+        }
+
+        // Try to parse as string
+        if (Enum.TryParse(gerne, true, out Type.Genre genreEnum))
+        {
+            return genreEnum;
+        }
+
+        return null;
+    }
+
 
     #region menu
     /// <summary>
@@ -177,6 +306,7 @@ internal class Program
     /// </summary>
     static void MenuBoardGame()
     {
+        List<BoardGame> boardGames;
         do
         {
             Console.Clear();
@@ -184,7 +314,7 @@ internal class Program
             List<MenuItem> menuItems = new();
             menuItems.Add(new MenuItem("Vælg spil", MenuChooseBoardGame));
             menuItems.Add(new MenuItem("Tilføj spil", AddBoardGame));
-            menuItems.Add(new MenuItem("Søg", SeekBoardGame));
+            menuItems.Add(new MenuItem("Søg", new Action(() => boardGames = SearchBoardGame())));
             MenuPaginator menu = new(menuItems, 10);
             if (menu.menuItem != null && menu.menuItem.Action is Action action)
             {
@@ -211,11 +341,15 @@ internal class Program
             Console.Clear();
             HeadLine("Vælg spil");
             List<MenuItem> menuItems = new();
-            //foreach (BoardGame boardGame in _boardGameList)
-            //{
-            //    menuItems.Add(new MenuItem(boardGame.Title, () => ShowBoardGame(boardGame)));
-            //}
-            throw new NotImplementedException();
+            foreach (BoardGame boardGame in _boardGameList.BoardGames)
+            {
+                menuItems.Add(new MenuItem(boardGame.Title, () => ShowBoardGame(boardGame)));
+            }
+            MenuPaginator menu = new(menuItems, 10);
+            if (menu.menuItem != null && menu.menuItem.Action is Action action)
+                action();
+            else
+                return;
         } while (true);
     }
 

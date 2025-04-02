@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GenSpil.Model
+﻿namespace GenSpil.Model
 {
-    
-    class Condition
+    public class Condition
     {
-        private Type.Condition _condition;
-        private int _quantity;
-        private decimal _price;
+        public Type.Condition ConditionEnum { get; private set; }
+        public int Quantity { get; private set; }
+        public decimal Price { get; private set; }
 
         /// <summary>
         /// Constructor til Condition
@@ -21,11 +14,11 @@ namespace GenSpil.Model
         /// <param name="price"></param>
         public Condition(Type.Condition condition, int quantity, decimal price)
         {
-            _condition = condition;
-            _quantity = quantity;
-            _price = price;
+            ConditionEnum = condition;
+            Quantity = quantity;
+            Price = price;
         }
 
-        public override string ToString() => $"{_condition} - Antal: {_quantity}, Pris: {_price} kr";
+        public override string ToString() => $"{ConditionEnum} - Antal: {Quantity}, Pris: {Price} kr";
     }
 }

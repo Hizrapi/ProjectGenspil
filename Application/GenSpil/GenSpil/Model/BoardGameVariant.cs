@@ -1,20 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GenSpil.Model
+﻿namespace GenSpil.Model
 {
-    class BoardGameVariant
+    public class BoardGameVariant
     {
         public string Title { get; private set; }
-        public string Variant { get; private set; }
+        public ConditionList Conditions { get; private set; }
 
-        public BoardGameVariant(string title, string variant)
+        public BoardGameVariant(string title, ConditionList conditions)
         {
             Title = title;
-            Variant = variant;
+            Conditions = conditions;
         }
     }
 }
