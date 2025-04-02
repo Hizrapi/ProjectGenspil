@@ -4,31 +4,30 @@ namespace GenSpil.Model
 {
     public class BoardGame
     {
-        private int _boardGameID;
-        private string _title;
-        private BoardGameVariant _variant;
-        private Genre _genre;
-        private Condition _condition;
+        public int BoardGameID { get; set; }
+        public string Title { get; set; }
+        public List<BoardGameVariant> Variants { get; private set; }
+        public List<Genre> Genre { get; private set; }
 
         /// <summary>
         /// Constructor til at at samle al data, i en.
         /// </summary>
         /// <param name="boardGameID"></param>
         /// <param name="title"></param>
-        /// <param name="variant"></param>
+        /// <param name="variants">List of game board variants</param>
         /// <param name="genre"></param>
-        /// <param name="condition"></param>
-        public BoardGame(int boardGameID, string title, BoardGameVariant variant, Genre genre, Condition condition)
+        public BoardGame(int boardGameID, string title, List<BoardGameVariant> variants, List<Genre> genre)
         {
-            _boardGameID = boardGameID;
-            _title = title;
-            _variant = variant;
-            _genre = genre;
-            _condition = condition;
+            BoardGameID = boardGameID;
+            Title = title;
+            Variants = variants;
+            Genre = genre;
         }
 
-        public string Title() => _title;
-        public void Title(string title) => _title = title;
-        public override string ToString() => $"{_title} ({_variant.Variant}) - Genre: {_genre}, Tilstand: {_condition}";
+        public override string ToString()
+        {
+            string result = $"Titel {Title}\n";
+            return result;
+        }
     }
 }

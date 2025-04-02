@@ -2,9 +2,9 @@
 {
     public class Condition
     {
-        private Type.Condition _condition;
-        private int _quantity;
-        private decimal _price;
+        public Type.Condition ConditionEnum { get; set; }
+        public int Quantity { get; set; }
+        public decimal Price { get; set; }
 
         /// <summary>
         /// Constructor til Condition
@@ -14,11 +14,11 @@
         /// <param name="price"></param>
         public Condition(Type.Condition condition, int quantity, decimal price)
         {
-            _condition = condition;
-            _quantity = quantity;
-            _price = price;
+            ConditionEnum = condition;
+            Quantity = quantity;
+            Price = price;
         }
 
-        public override string ToString() => $"{_condition} - Antal: {_quantity}, Pris: {_price} kr";
+        public override string ToString() => $"{ConditionEnum} - Antal: {Quantity}, Pris: {Price} kr";
     }
 }
