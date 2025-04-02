@@ -1,20 +1,15 @@
 ﻿using GenSpil.Type;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GenSpil.Model
 {
-    internal class BoardGame
+    public class BoardGame
     {
         private int _boardGameID;
         private string _title;
         private BoardGameVariant _variant;
         private Genre _genre;
         private Condition _condition;
-        
+
         /// <summary>
         /// Constructor til at at samle al data, i en.
         /// </summary>
@@ -35,7 +30,5 @@ namespace GenSpil.Model
         public string Title() => _title;
         public void Title(string title) => _title = title;
         public override string ToString() => $"{_title} ({_variant.Variant}) - Genre: {_genre}, Tilstand: {_condition}";
-
-
     }
 }
