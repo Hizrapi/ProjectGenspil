@@ -3,12 +3,12 @@
     public class BoardGameVariant
     {
         public string Title { get; private set; }
-        public string Variant { get; private set; }
+        public ConditionList Conditions { get; private set; }
 
-        public BoardGameVariant(string title, string variant)
+        public BoardGameVariant(string title, ConditionList conditions)
         {
             Title = title;
-            Variant = variant;
+            Conditions = conditions;
         }
     }
 }
