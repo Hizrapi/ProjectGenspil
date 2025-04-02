@@ -1,6 +1,5 @@
 ﻿namespace GenSpil.Model
 {
-
     public class Condition
     {
         private Type.Condition _condition;
