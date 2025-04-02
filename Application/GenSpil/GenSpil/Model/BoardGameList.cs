@@ -6,7 +6,7 @@ namespace GenSpil.Model;
 /// Singleton class for handling a list of board games.
 /// TODO Should not interact with the user directly. (Tirsvad)
 /// </summary>
-class BoardGameList
+public class BoardGameList
 {
     private static BoardGameList? _instance;
     private static readonly object _lock = new object();
@@ -28,7 +28,7 @@ class BoardGameList
 
     private List<BoardGame> _boardGames = new List<BoardGame>();
 
-    public void ManageBoardGames()
+    public void ManageBoardGames() //TODO Not nessesary as model should be backend. Should not interaction with user (Tirsvad)
     {
         string userChoice;
 
@@ -81,7 +81,7 @@ class BoardGameList
     /// <summary>
     /// Tilføjer et brætspil.
     /// </summary>
-    private void AddBoardGame()
+    public void AddBoardGame() //TODO Could be renamed to Add. Should not interaction with user (Tirsvad)
     {
         Console.Write("Titel: ");
         string title = Console.ReadLine();
@@ -160,7 +160,7 @@ class BoardGameList
     /// <summary>
     /// Vis brætspil
     /// </summary>
-    private void DisplayBoardGames()
+    public void DisplayBoardGames() //TODO Could be renamed to ToString and return a string. Should not interaction with user (Tirsvad)
     {
         if (_boardGames.Count == 0)
         {
@@ -180,7 +180,7 @@ class BoardGameList
     /// <summary>
     /// Søg efter brætspil
     /// </summary>
-    public List<BoardGame> SearchBoardGames() //SearchBoardGames() should take parameters (Tirsvad)
+    public List<BoardGame> SearchBoardGames() //TODO SearchBoardGames() should take parameters. Rename it to Search. Should not interaction with user (Tirsvad)
     {
         Console.Write("Indtast titel - eller del af den: ");
         string searchTitle = Console.ReadLine();
@@ -209,7 +209,7 @@ class BoardGameList
     /// <summary>
     /// Fjern brætspil
     /// </summary>
-    private void RemoveBoardGame()
+    public void RemoveBoardGame() //TODO Could be renamed to Remove and take parameter BoardGame. Should not interaction with user (Tirsvad)
     {
         Console.Clear();
         Console.WriteLine("--- Fjern Brætspil ---");
