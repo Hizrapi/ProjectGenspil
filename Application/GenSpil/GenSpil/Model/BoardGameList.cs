@@ -189,7 +189,7 @@ class BoardGameList
 
         Console.WriteLine("Vælg nummeret på det spil, du vil fjerne:");
 
-        // Vis alle spil med et nummer (startende fra 1)
+        // Vis alle spil med et nummer (startende fra 1 (Den starter normalt med 0)
         for (int i = 0; i < _boardGames.Count; i++)
         {
             // Brug i + 1 for at vise 1-baseret nummerering til brugeren
