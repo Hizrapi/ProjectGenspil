@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
+using System.Text;
 using GenSpil.Handler;
 using GenSpil.Model;
 using GenSpil.Type;
@@ -169,6 +170,7 @@ internal class Program
         Console.ReadKey();
     }
 
+   
 
 
     #region menu
