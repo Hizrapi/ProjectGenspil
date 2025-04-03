@@ -5,10 +5,10 @@ namespace GenSpil.Model
     public class BoardGame
     {
         private int _boardGameID;
-        private string _title;
-        private BoardGameVariant _variant;
-        private Genre _genre;
-        private Condition _condition;
+        public string Title { get; private set; }
+        public BoardGameVariant Variant { get; private set; }
+        public Genre Genre { get; private set; }
+        public Condition Condition { get; private set; }
 
         /// <summary>
         /// Constructor til at at samle al data, i en.
@@ -21,14 +21,13 @@ namespace GenSpil.Model
         public BoardGame(int boardGameID, string title, BoardGameVariant variant, Genre genre, Condition condition)
         {
             _boardGameID = boardGameID;
-            _title = title;
-            _variant = variant;
-            _genre = genre;
-            _condition = condition;
+            Title = title;
+            Variant = variant;
+            Genre = genre;
+            Condition = condition;
         }
 
-        public string Title() => _title;
-        public void Title(string title) => _title = title;
-        public override string ToString() => $"{_title} ({_variant.Variant}) - Genre: {_genre}, Tilstand: {_condition}";
+        
+        public override string ToString() => $"{Title} ({Variant.Variant}) - Genre: {Genre}, Tilstand: {Condition}";
     }
 }
