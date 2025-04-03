@@ -10,11 +10,15 @@ namespace GenSpil.Model;
 /// <summary>
 /// Singleton class for handling a list of users.
 /// </summary>
-class UserList
+public class UserList
 {
     private static UserList? _instance;
     private static readonly object padlock = new object();
 
+    private UserList()
+    {
+        // Eventuel initialisering af UserList
+    }
     public static UserList Instance
     {
         get
@@ -27,7 +31,9 @@ class UserList
                 }
                 return _instance;
             }
+        
         }
 
     }
+
 } ///> Singleton instance of the UserList

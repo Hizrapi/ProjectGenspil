@@ -11,8 +11,10 @@ namespace GenSpil.Model
     {
         private string username { get; set; }
         private string password { get; set; }
-        private Role Role { get; set; } // Enum
+        public Role Role { get; set; } // Enum
 
+        public string Username => username;
+        public string Password => password;
 
         public User (Role role, string username, string password)
         {
@@ -22,7 +24,7 @@ namespace GenSpil.Model
 
         }
 
-
     }
+
 }
 
