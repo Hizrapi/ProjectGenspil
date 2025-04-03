@@ -10,7 +10,7 @@ namespace GenSpil.Model;
 /// <summary>
 /// Singleton class for handling a list of users.
 /// </summary>
-class UserList
+public class UserList
 {
     private static UserList? _instance;
     private static readonly object padlock = new object();
@@ -30,4 +30,21 @@ class UserList
         }
 
     }
+    public List<User> Users { get; private set; } // List of users 
+
+    private UserList()
+    {
+        Users = new List<User>();
+#if DEBUG
+     Seed();
+#endif
+    }
+
+# if DEBUG
+    public void Seed()
+    {
+        Users.Add(new User("admin", "admin", Type.Role.Admin));
+        Users.Add(new User("user", "user", Type.Role.User));
+    }
+#endif
 } ///> Singleton instance of the UserList
