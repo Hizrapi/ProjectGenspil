@@ -26,62 +26,13 @@ class BoardGameList
     } ///> Singleton instance of the BoardGameList
 
 
-    private List<BoardGame> _boardGames = new List<BoardGame>();
+    public List<BoardGame> _boardGames = new List<BoardGame>();
 
-    public void ManageBoardGames()
-    {
-        string userChoice;
-
-        do
-        {
-            Console.Clear();
-            Console.WriteLine("--- Brætspilsmenu ---");
-            Console.WriteLine("1. Tilføj brætspil");
-            Console.WriteLine("2. Vis brætspil");
-            Console.WriteLine("3. Søg efter titel");
-            Console.WriteLine("4. Fjern brætspil");
-            Console.WriteLine("5. Retuner");
-            Console.Write("Vælg en mulighed: ");
-
-            userChoice = Console.ReadLine();
-
-            switch (userChoice)
-            {
-
-                case "1":
-                    AddBoardGame(); //Skal opdateres med varianter sådan at et spil har flere varianter.
-                    break;
-
-                case "2":
-                    DisplayBoardGames();
-                    break;
-
-                case "3":
-                    SearchBoardGames();
-                    break;
-
-                case "4":
-                    Console.WriteLine("Updater nuværende spil"); //Denne funktion mangler
-                    break;
-
-                case "5":
-                    RemoveBoardGame();
-                    break;
-
-                case "6": return;
-
-                default:
-                    Console.WriteLine("Ugyldigt valg.");
-                    break;
-            }
-        } while (userChoice != "6");
-
-    }
-
+    
     /// <summary>
     /// Tilføjer et brætspil.
     /// </summary>
-    private void AddBoardGame()
+    public void AddBoardGame()
     {
         Console.Write("Titel: ");
         string title = Console.ReadLine();
@@ -139,14 +90,13 @@ class BoardGameList
         }
 
 
-        // Opret variant-objekt (bruger stadig titel som en del af varianten - kan justeres hvis nødvendigt)
+        // Opret variant-objekt (bruger stadig titel som en del af varianten)
         BoardGameVariant bgVariant = new BoardGameVariant(title, variant);
 
         // Opret condition-objekt med de indtastede værdier
         Condition bgCondition = new Condition(conditionEnum, quantity, price);
 
-        // Opret det nye brætspil med alle data
-        // Bruger _boardGames.Count + 1 som midlertidigt ID
+        // Opret det nye brætspil med alle data. + 1 pga. ny linje
         BoardGame newGame = new BoardGame(_boardGames.Count + 1, title, bgVariant, genre, bgCondition);
 
         // Tilføj spillet til listen
@@ -154,26 +104,43 @@ class BoardGameList
         Console.WriteLine("Brætspil tilføjet!");
 
         Console.ReadLine();
+        return;
 
     }
 
     /// <summary>
     /// Vis brætspil
     /// </summary>
-    private void DisplayBoardGames()
+    public void DisplayBoardGames()
     {
+        Console.Clear(); // Ryd skærm før visning
+        Console.WriteLine("--- Liste over Brætspil (Grupperet) ---");
         if (_boardGames.Count == 0)
         {
-            Console.WriteLine("Der er ikke noget brætspil på listen endnu.");
+            Console.WriteLine("Der er ingen brætspil i listen endnu.");
+            return; // Gå tilbage hvis listen er tom
         }
-        else
+
+        // Gruppér listen efter spillets Titel property
+        // OrderBy(g => g.Title) sorterer titlerne alfabetisk (valgfrit)
+        var groupedGames = _boardGames
+                            .OrderBy(g => g.Title)
+                            .GroupBy(g => g.Title);
+
+        foreach (var group in groupedGames)
         {
-            Console.WriteLine("--- Liste over Brætspil ---");
-            foreach (var game in _boardGames)
+            // Skriv titlen én gang for gruppen
+            Console.WriteLine($"\n{group.Key}:"); // group.Key indeholder titlen
+
+            // Gennemgå hvert spil inden for denne titel-gruppe
+            // OrderBy(g => g.Variant.Variant) sorterer varianterne under titlen (valgfrit)
+            foreach (var game in group.OrderBy(g => g.Variant.Variant))
             {
-                Console.WriteLine(game);
+                // Skriv detaljerne for dette specifikke spil (variant, genre, tilstand)               
+                Console.WriteLine($"  - Variant: {game.Variant.Variant}, Genre: {game.Genre}, Tilstand: {game.Condition}");
             }
         }
+        Console.WriteLine("\n------------------------------------");
         Console.ReadLine();
     }
 
@@ -186,7 +153,7 @@ class BoardGameList
         string searchTitle = Console.ReadLine();
 
         //Søg efter indput
-        var foundGames = _boardGames.FindAll(g => g.Title().Contains(searchTitle, StringComparison.OrdinalIgnoreCase));
+        var foundGames = _boardGames.FindAll(g => g.Title.Contains(searchTitle, StringComparison.OrdinalIgnoreCase));
         if (foundGames.Count > 0)
         {
             Console.WriteLine($"--- Fundne Brætspil (Søgning: '{searchTitle}') ---");
@@ -209,7 +176,7 @@ class BoardGameList
     /// <summary>
     /// Fjern brætspil
     /// </summary>
-    private void RemoveBoardGame()
+    public void RemoveBoardGame()
     {
         Console.Clear();
         Console.WriteLine("--- Fjern Brætspil ---");
@@ -259,7 +226,7 @@ class BoardGameList
                 {
                     // Fjern spillet fra listen ved det valgte index
                     _boardGames.RemoveAt(indexToRemove);
-                    Console.WriteLine($"'{gameToRemove.Title()}' er blevet fjernet.");
+                    Console.WriteLine($"'{gameToRemove.Title}' er blevet fjernet.");
                 }
                 else
                 {
