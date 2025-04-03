@@ -83,7 +83,7 @@ internal class Program
         
        
     }
-
+    BoardGameList boardgamelist = new BoardGameList();
     static void Logout()
     {
         _auth.Logout();
@@ -92,22 +92,23 @@ internal class Program
 
     static void ShowBoardGame()
     {
-        throw new NotImplementedException();
+
+        BoardGameList.Instance.DisplayBoardGames();
     }
 
     static void AddBoardGame()
     {
-        throw new NotImplementedException();
+        BoardGameList.Instance.AddBoardGame();
     }
 
     static void RemoveBoardGame()
     {
-        throw new NotImplementedException();
+        BoardGameList.Instance.RemoveBoardGame();
     }
 
     static void SeekBoardGame()
     {
-        throw new NotImplementedException();
+        BoardGameList.Instance.SearchBoardGames();
     }
 
     static void ShowReportBoardGameSort()
@@ -259,6 +260,8 @@ internal class Program
             List<MenuItem> menuItems = new();
             menuItems.Add(new MenuItem("Vælg spil", MenuChooseBoardGame));
             menuItems.Add(new MenuItem("Tilføj spil", AddBoardGame));
+            menuItems.Add(new MenuItem("List spil", ShowBoardGame));
+            menuItems.Add(new MenuItem("Fjern spil", RemoveBoardGame));
             menuItems.Add(new MenuItem("Søg", SeekBoardGame));
             MenuPaginator menu = new(menuItems, pageSize: 10);
             if (menu.menuItem != null && menu.menuItem.Action is Action action)
