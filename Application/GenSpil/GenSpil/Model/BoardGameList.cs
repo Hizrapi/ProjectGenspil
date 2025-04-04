@@ -152,25 +152,33 @@ class BoardGameList
         Console.Write("Indtast titel - eller del af den: ");
         string searchTitle = Console.ReadLine();
 
-        //Søg efter indput
-        var foundGames = _boardGames.FindAll(g => g.Title.Contains(searchTitle, StringComparison.OrdinalIgnoreCase));
-        if (foundGames.Count > 0)
+        var foundGames = _boardGames
+                            .Where(g => g.Title.Contains(searchTitle, StringComparison.OrdinalIgnoreCase)) //Filtrer elementer i en liste basseret på en betingelse
+                            .OrderBy(g => g.Title) //Sortere en liste efter en bestemt egenskab.
+                            .GroupBy(g => g.Title); //Grupperer en liste efter en bestemt egenskab
+
+        if (foundGames.Any()) // Tjekker om der er fundne resultater
         {
             Console.WriteLine($"--- Fundne Brætspil (Søgning: '{searchTitle}') ---");
-            foreach (var game in foundGames)
+
+            foreach (var group in foundGames)
             {
-                Console.WriteLine(game);
+                Console.WriteLine($"\n{group.Key}:"); // Titel Bliver skrevet øverst
+
+                foreach (var game in group.OrderBy(g => g.Variant.Variant)) // Kigger videre ud fra titlen, og sortere efter dens varianter
+                {
+                    Console.WriteLine($"  - Variant: {game.Variant.Variant}, Genre: {game.Genre}, Tilstand: {game.Condition}");
+                }
             }
             Console.WriteLine("----------------------------------------------");
         }
         else
         {
-            Console.WriteLine($"Ingen brætspil med {searchTitle}  fundet.");
+            Console.WriteLine($"Ingen brætspil med '{searchTitle}' fundet.");
         }
+
         Console.ReadLine();
-
-        return foundGames;
-
+        return foundGames.SelectMany(g => g).ToList(); // Konverterer grupperingen tilbage til en flad liste
     }
 
     /// <summary>
