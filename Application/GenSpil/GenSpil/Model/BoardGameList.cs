@@ -34,13 +34,19 @@ class BoardGameList
     /// </summary>
     public void AddBoardGame()
     {
+        Console.ForegroundColor = ConsoleColor.Green;
         Console.Write("Titel: ");
+        Console.ResetColor();
         string title = Console.ReadLine();
+        Console.ForegroundColor = ConsoleColor.Green;
         Console.Write("Variant: ");
+        Console.ResetColor();
         string variant = Console.ReadLine();
 
-
+        Console.ForegroundColor = ConsoleColor.Green;
         Console.Write($"Genre ({string.Join(" / ", Enum.GetNames(typeof(Genre)))}): ");
+        Console.ResetColor();
+
         string genreInput = Console.ReadLine();
 
         // Forsøg at konvertere genre-input til Genre enum (ignorerer store/små bogstaver)
@@ -53,7 +59,9 @@ class BoardGameList
 
 
         // Viser de mulige tilstands-valg
+        Console.ForegroundColor = ConsoleColor.Green;
         Console.Write($"Tilstand ({string.Join(" / ", Enum.GetNames(typeof(Type.Condition)))}): ");
+        Console.ResetColor();
         string conditionInput = Console.ReadLine();
 
         // Forsøg at konvertere tilstands-input til ConditionEnum (ignorerer store/små bogstaver)
@@ -64,8 +72,10 @@ class BoardGameList
             return;
         }
 
-
+        Console.ForegroundColor = ConsoleColor.Green;
         Console.Write("Antal: ");
+        Console.ResetColor();
+
         string quantityInput = Console.ReadLine();
 
         // Forsøg at konvertere antal-input til et heltal (int)
@@ -77,7 +87,9 @@ class BoardGameList
         }
 
         // --- Price Input ---
+        Console.ForegroundColor = ConsoleColor.Green;
         Console.Write("Pris: ");
+        Console.ResetColor();
         string priceInput = Console.ReadLine();
 
         // Forsøg at konvertere pris-input til et decimaltal
@@ -101,7 +113,9 @@ class BoardGameList
 
         // Tilføj spillet til listen
         _boardGames.Add(newGame);
+        Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine("Brætspil tilføjet!");
+        Console.ResetColor();
 
         Console.ReadLine();
         return;
@@ -129,6 +143,8 @@ class BoardGameList
 
         foreach (var group in groupedGames)
         {
+
+            Console.ForegroundColor = ConsoleColor.Green;
             // Skriv titlen én gang for gruppen
             Console.WriteLine($"\n{group.Key}:"); // group.Key indeholder titlen
 
@@ -136,8 +152,10 @@ class BoardGameList
             // OrderBy(g => g.Variant.Variant) sorterer varianterne under titlen (valgfrit)
             foreach (var game in group.OrderBy(g => g.Variant.Variant))
             {
+                Console.ForegroundColor = ConsoleColor.Magenta;
                 // Skriv detaljerne for dette specifikke spil (variant, genre, tilstand)               
                 Console.WriteLine($"  - Variant: {game.Variant.Variant}, Genre: {game.Genre}, Tilstand: {game.Condition}");
+                Console.ResetColor();
             }
         }
         Console.WriteLine("\n------------------------------------");
@@ -182,7 +200,7 @@ class BoardGameList
     }
 
     /// <summary>
-    /// Fjern brætspil
+    /// Fjern brætspil helt.
     /// </summary>
     public void RemoveBoardGame()
     {
@@ -253,5 +271,83 @@ class BoardGameList
             Console.WriteLine("Ugyldigt input. Indtast venligst et tal.");
         }
         Console.ReadLine();
+    }
+  
+    /// <summary>
+    /// Metode til at redigere et brætspil baseret på titel.
+    /// Brugeren indtaster titlen på spillet, vælger det korrekte spil, og kan derefter redigere tilstand, antal og pris.
+    /// Hvis antallet sættes til 0, fjernes spillet automatisk fra listen.
+    /// </summary>
+    public void EditBoardGame()
+    {
+        Console.Write("Indtast titel på spillet, du vil redigere: ");
+        string searchTitle = Console.ReadLine();
+
+        // Find alle spil, der matcher titlen 
+        var foundGames = _boardGames
+                            .Where(g => g.Title.Contains(searchTitle, StringComparison.OrdinalIgnoreCase)) // Søger efte
+                            .OrderBy(g => g.Title) // Sorterer fundne spil alfabetisk ud fra Variant.
+                            .ToList();
+
+        if (foundGames.Count == 0) // Hvis ingen spil matcher titlen
+        {
+            Console.WriteLine($"Ingen spil fundet med titlen '{searchTitle}'.");
+            Console.ReadLine();
+            return; // Stopper metoden
+        }
+
+        // Viser fundne spil med deres detaljer
+        Console.WriteLine("\n--- Fundne spil ---");
+        for (int i = 0; i < foundGames.Count; i++)
+        {
+            Console.WriteLine($"{i + 1}. {foundGames[i].Title} - Variant: {foundGames[i].Variant.Variant}, Genre: {foundGames[i].Genre}, " +
+                              $"Tilstand: {foundGames[i].Condition.ConditionType}, Antal: {foundGames[i].Condition.Quantity}, Pris: {foundGames[i].Condition.Price} kr.");
+        }
+
+        // Brugeren vælger hvilket spil der skal redigeres
+        Console.Write("\nIndtast nummeret på det spil, du vil redigere: ");
+        if (!int.TryParse(Console.ReadLine(), out int gameIndex) || gameIndex < 1 || gameIndex > foundGames.Count) // out int  gameIndex = variablen først er gældende ved tildeling af resultat.
+        {
+            Console.WriteLine("Ugyldigt valg.");
+            Console.ReadLine();
+            return;
+        }
+
+        BoardGame selectedGame = foundGames[gameIndex - 1]; // Henter det valgte spil. - 1 pga. at den nummeringen starter med 0, med vises med 1.
+        Console.WriteLine($"\nRedigerer: {selectedGame.Title} - {selectedGame.Variant.Variant}");
+
+        // Brugeren kan vælge at ændre tilstand
+        Console.Write($"Ny tilstand (tryk Enter for at beholde den nuværende: {selectedGame.Condition.ConditionType}): ");
+        string newCondition = Console.ReadLine();
+        if (!string.IsNullOrWhiteSpace(newCondition) && Enum.TryParse(newCondition, true, out Type.Condition condition)) // String blank = ingen ændring. Ellers sker ændring.
+            selectedGame.Condition.ConditionType = condition; // Opdaterer tilstanden
+
+        // Brugeren kan vælge at ændre antal
+        Console.Write($"Nyt antal (tryk Enter for at beholde det nuværende: {selectedGame.Condition.Quantity}): ");
+        string newQuantity = Console.ReadLine();
+        if (int.TryParse(newQuantity, out int quantity) && quantity >= 0)
+            selectedGame.Condition.Quantity = quantity;
+
+        // Brugeren kan vælge at ændre pris
+        Console.Write($"Ny pris (tryk Enter for at beholde den nuværende: {selectedGame.Condition.Price} kr.): ");
+        string newPrice = Console.ReadLine();
+        if (decimal.TryParse(newPrice, out decimal price) && price >= 0) // Hvis værdien ikke er højere eller lig 0. Ingen værdi.
+            selectedGame.Condition.Price = price;
+
+        // Hvis antallet nu er 0, fjernes spillet fra listen
+        if (selectedGame.Condition.Quantity == 0)
+        {
+            _boardGames.Remove(selectedGame);
+            Console.WriteLine($"'{selectedGame.Title}' er blevet fjernet, da antallet er 0.");
+        }
+        else
+        {
+            // Bekræfter at spillet er opdateret
+            Console.WriteLine("\nSpillet er opdateret!");
+            Console.WriteLine($"{selectedGame.Title} - Variant: {selectedGame.Variant.Variant}, Genre: {selectedGame.Genre}, " +
+                              $"Tilstand: {selectedGame.Condition.ConditionType}, Antal: {selectedGame.Condition.Quantity}, Pris: {selectedGame.Condition.Price} kr.");
+        }
+
+        Console.ReadLine(); // Forhindrer konsollen i at lukke med det samme
     }
 }

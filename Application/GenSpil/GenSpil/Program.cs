@@ -282,6 +282,7 @@ internal class Program
     /// </summary>
     static void MenuChooseBoardGame()
     {
+        BoardGameList.Instance.EditBoardGame();
         //do
         //{
         //    Console.Clear();
