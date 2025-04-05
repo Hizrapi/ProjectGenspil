@@ -127,9 +127,9 @@ internal class Program
         throw new NotImplementedException();
     }
 
-    static void RemoveBoardGame()
+    static void RemoveBoardGame(BoardGame boardGame)
     {
-        throw new NotImplementedException();
+        _boardGameList.Remove(boardGame);
     }
 
     static List<BoardGame>? SearchBoardGame()
