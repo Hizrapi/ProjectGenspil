@@ -1,11 +1,12 @@
-﻿//using GenSpil.Model;
-
-using System.Text.Json;
+﻿using System.Text.Json;
 using GenSpil.Model;
 
 namespace GenSpil.Handler;
 
-class JsonFileHandler
+/// <summary>
+/// JsonFileHandler class for handling JSON file operations.
+/// </summary>
+public class JsonFileHandler
 {
     private static JsonFileHandler? _instance;
     private static readonly object _lock = new object();
@@ -39,7 +40,7 @@ class JsonFileHandler
 
         public Version Version { get; set; }
         public BoardGameList? BoardGames { get; set; }
-        //public CustomerList? Customers { get; set; }
+        public CustomerList? Customers { get; set; }
 
         public DataContainer()
         {
@@ -86,7 +87,7 @@ class JsonFileHandler
                 if (File.Exists(filename))
                 {
                     BoardGameList.Instance.Clear();
-                    //CustomerList.Instance.Clear();
+                    CustomerList.Instance.Clear();
                     string jsonString = File.ReadAllText(filename);
                     var options = new JsonSerializerOptions { };
                     var data = JsonSerializer.Deserialize<DataContainer>(jsonString, options);
