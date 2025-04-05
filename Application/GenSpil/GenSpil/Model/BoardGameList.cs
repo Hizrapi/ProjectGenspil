@@ -1,6 +1,6 @@
 ﻿using GenSpil.Type;
 
-//TODO : All interactions with the user should be handled in the UI layer, not in the model.
+//TODO: All interactions with the user should be handled in the UI layer, not in the model.
 
 namespace GenSpil.Model;
 
