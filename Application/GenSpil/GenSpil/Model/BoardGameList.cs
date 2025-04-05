@@ -27,9 +27,6 @@ public sealed class BoardGameList
     BoardGameList()
     {
         BoardGames = new List<BoardGame>();
-#if DEBUG
-        Seed();
-#endif
     }
 
     /// <summary>
@@ -152,20 +149,4 @@ public sealed class BoardGameList
     {
         BoardGames.Remove(boardGame);
     }
-#if DEBUG
-    private void Seed()
-    {
-        BoardGameVariant boardGameVariant;
-
-        Console.WriteLine("Seeding board games...");
-        boardGameVariant = new BoardGameVariant("Standard", new ConditionList());
-        boardGameVariant.ConditionList.Conditions.Where(c => c.ConditionEnum == Type.Condition.Ny).First().Quantity = 5;
-        boardGameVariant.ConditionList.Conditions.Where(c => c.ConditionEnum == Type.Condition.Ny).First().Price = 250;
-        boardGameVariant.ConditionList.Conditions.Where(c => c.ConditionEnum == Type.Condition.God).First().Quantity = 1;
-        boardGameVariant.ConditionList.Conditions.Where(c => c.ConditionEnum == Type.Condition.God).First().Price = 200;
-        boardGameVariant.ConditionList.Conditions.Where(c => c.ConditionEnum == Type.Condition.Slidt).First().Quantity = 2;
-        boardGameVariant.ConditionList.Conditions.Where(c => c.ConditionEnum == Type.Condition.God).First().Price = 100;
-        BoardGames.Add(new BoardGame(1, "Catan", new List<BoardGameVariant> { boardGameVariant }, new List<Type.Genre> { Type.Genre.Strategi }));
-    }
-#endif
 }
