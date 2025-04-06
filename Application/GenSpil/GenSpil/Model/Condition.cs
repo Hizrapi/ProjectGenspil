@@ -2,7 +2,7 @@
 {
     public class Condition
     {
-        public Type.Condition ConditionEnum { get; set; }
+        public Type.Condition ConditionType { get; set; }
         public int Quantity { get; set; }
         public decimal Price { get; set; }
 
@@ -14,11 +14,11 @@
         /// <param name="price"></param>
         public Condition(Type.Condition condition, int quantity, decimal price)
         {
-            ConditionEnum = condition;
+            ConditionType = condition;
             Quantity = quantity;
             Price = price;
         }
 
-        public override string ToString() => $"{ConditionEnum} - Antal: {Quantity}, Pris: {Price} kr";
+        public override string ToString() => $"{ConditionType} - Antal: {Quantity}, Pris: {Price} kr";
     }
 }
