@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using GenSpil.Model;
 
 namespace GenSpil.Handler;
@@ -28,33 +29,36 @@ public class JsonFileHandler
         }
     }
 
-    private readonly Version _version = new Version(1, 0); ///> The _version of the JSON file.
     private readonly DataContainer _dataContainer = new DataContainer(); ///> The data container for the JSON file.
+    private readonly JsonSerializerOptions _jsonSerializerOptions; ///> The JSON serializer options for serialization and deserialization.
 
     /// <summary>
     /// Represents the data container for the JSON file.
     /// </summary>
     public class DataContainer
     {
-        private Version _version;
-
-        public Version Version { get; set; }
-        public BoardGameList? BoardGames { get; set; }
-        public CustomerList? Customers { get; set; }
+        public Version Version { get; set; } ///> The version of the data container.
+        public BoardGameList? BoardGames { get; set; } ///> The list of board games.
+        public UserList? Users { get; set; } ///> The list of users.
+        public CustomerList? Customers { get; set; } ///> The list of customers.
 
         public DataContainer()
         {
             Version = new Version(1, 0);
-            BoardGameList BoardGames = BoardGameList.Instance; // Instance of BoardGameList when the class is created.
-            //Customers = null;  // Instance of CustomerList when the class is created.
+            BoardGames = BoardGameList.Instance; // Instance of BoardGameList when the class is created.
+            Users = UserList.Instance; // Instance of UserList when the class is created.
+            Customers = CustomerList.Instance;  // Instance of CustomerList when the class is created.
         }
     }
 
     private JsonFileHandler()
     {
-        _dataContainer = new DataContainer()
+        _dataContainer = new DataContainer();
+        _jsonSerializerOptions = new JsonSerializerOptions
         {
-            Version = _version,
+            WriteIndented = true,
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase, ///> Use camel case for property names
+            Converters = { /*new JsonStringEnumConverter()*/ }
         };
     } ///> Private constructor for singleton pattern
 
@@ -67,8 +71,9 @@ public class JsonFileHandler
     {
         lock (_lock)
         {
-            var options = new JsonSerializerOptions { WriteIndented = true };
-            string jsonString = JsonSerializer.Serialize(_dataContainer, options);
+            if (!File.Exists(filePath))
+                File.Create(filePath);
+            string jsonString = JsonSerializer.Serialize(_dataContainer, _jsonSerializerOptions);
             File.WriteAllText(filePath, jsonString);
         }
     }
@@ -77,20 +82,22 @@ public class JsonFileHandler
     /// Imports data from a JSON file.
     /// Reassign owner object for Car objects. So owner object is the same in OwnerList and CarList.
     /// </summary>
-    /// <param name="filename">Optional. Default value from Constants.jsonFilePath</param>
-    public void ImportData(string filename)
+    /// <param name="filePath">Optional. Default value from Constants.jsonFilePath</param>
+    public void ImportData(string filePath)
     {
         lock (_lock)
         {
             try
             {
-                if (File.Exists(filename))
+                CheckAndCreateEmptyJsonFile(filePath);
+
+                if (File.Exists(filePath))
                 {
                     BoardGameList.Instance.Clear();
+                    UserList.Instance.Users.Clear();
                     CustomerList.Instance.Clear();
-                    string jsonString = File.ReadAllText(filename);
-                    var options = new JsonSerializerOptions { };
-                    var data = JsonSerializer.Deserialize<DataContainer>(jsonString, options);
+                    string jsonString = File.ReadAllText(filePath);
+                    var data = JsonSerializer.Deserialize<DataContainer>(jsonString, _jsonSerializerOptions);
 
                     if (data == null)
                     {
@@ -99,11 +106,18 @@ public class JsonFileHandler
                     }
                     if (data.Version?.Major == 1)
                     {
-                        //for (int i = 0; i < data.BoardGames?.Count; i++)
-                        //{
-                        //    BoardGame boardGame = data.BoardGames[i];
-                        //    BoardGameList.Instance.AddOwner(boardGame);
-                        //}
+                        for (int i = 0; i < data.BoardGames?.BoardGames.Count; i++)
+                        {
+                            BoardGameList.Instance.Add(data.BoardGames.BoardGames[i]);
+                        }
+                        for (int i = 0; i < data.Users?.Users.Count; i++)
+                        {
+                            UserList.Instance.Add(data.Users.Users[i]);
+                        }
+                        for (int i = 0; i < data.Customers?.Customers.Count; i++)
+                        {
+                            CustomerList.Instance.Add(data.Customers.Customers[i]);
+                        }
                     }
                     else
                     {
@@ -119,5 +133,21 @@ public class JsonFileHandler
             }
         }
     }
+    public void CheckAndCreateEmptyJsonFile(string filePath)
+    {
+        lock (_lock)
+        {
+            if (!File.Exists(filePath) || new FileInfo(filePath).Length == 0)
+            {
+                var options = new JsonSerializerOptions
+                {
+                    WriteIndented = true,
+                    Converters = { new JsonStringEnumConverter() }
+                };
 
+                string jsonString = JsonSerializer.Serialize(_dataContainer, options);
+                File.WriteAllText(filePath, jsonString);
+            }
+        }
+    }
 }
