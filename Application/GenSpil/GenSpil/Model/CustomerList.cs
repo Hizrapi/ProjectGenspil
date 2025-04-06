@@ -2,7 +2,7 @@
 
 namespace GenSpil.Model
 {
-    public class CustomerList
+    public sealed class CustomerList
     {
         static CustomerList? instance = null; ///> Singleton instance of the CustomerList
         static readonly object _lock = new object(); ///> Lock object for thread safety
@@ -23,20 +23,25 @@ namespace GenSpil.Model
 
         public List<Customer> Customers { get; set; } ///> List of customers
 
-        [JsonConstructor]
         private CustomerList()
         {
             Customers = new List<Customer>();
         }
 
+        [JsonConstructor]
+        private CustomerList(List<Customer> customers)
+        {
+            Customers = customers ?? new List<Customer>();
+        }
+
         //Adds a customer to the list.
-        public void AddCustomer(Customer customer)
+        public void Add(Customer customer)
         {
             Customers.Add(customer);
         }
 
         //Removes a customer to the list.
-        public void RemoveCustomer(Customer customer)
+        public void Remove(Customer customer)
         {
             Customers.Remove(customer);
         }
@@ -48,7 +53,7 @@ namespace GenSpil.Model
         }
 
         //Update function isn't completed.
-        public void UpdateCustomer(int customerID, string newName, string newAddress)
+        public void Update(int customerID, string newName, string newAddress)
         {
             var customer = Customers.Find(c => c.CustomerID == customerID);
 
