@@ -9,15 +9,18 @@ namespace GenSpil;
 
 internal class Program
 {
+
     const string TITLE = "GenSpil";
-    const string DATA_JSON_FILE = "/data/genspil.json";
-    static BoardGameList _boardGameList;
+    static readonly string DATA_JSON_FILE = "./data/genspil.json";
+
     static Authentication _auth;
+
+    //BoardGameList _boardGameList = BoardGameList.Instance;
 
     static Program()
     {
-        _boardGameList = BoardGameList.Instance;
         _auth = new Authentication();
+
     }
 
     static string GetVersion()
@@ -77,123 +80,32 @@ internal class Program
 
 
     }
-
+    BoardGameList boardgamelist = new BoardGameList();
     static void Logout()
     {
         _auth.Logout();
         Login();
     }
 
-    static void ShowBoardGame(BoardGame boardGame)
+    static void ShowBoardGame()
     {
-        HeadLine(boardGame.Title);
-        Console.WriteLine(boardGame.ToString());
-        Console.ReadKey();
-    }
 
-    static void ShowBoardGame(List<BoardGame> boardGames)
-    {
-        foreach (BoardGame boardGame in boardGames)
-        {
-            ShowBoardGame(boardGame);
-        }
+        BoardGameList.Instance.DisplayBoardGames();
     }
 
     static void AddBoardGame()
     {
-        BoardGame boardGame = new BoardGame(0, "Matador", new List<BoardGameVariant> { new BoardGameVariant("", new ConditionList()) }, [Type.Genre.Familie]);
-        AddBoardGameVariant(boardGame);
-        throw new NotImplementedException();
+        BoardGameList.Instance.Add();
     }
 
-    static BoardGameVariant AddBoardGameVariant(BoardGame boardGame)
+    static void RemoveBoardGame()
     {
-        int cTop;
-        int cInputLeft = 14;
-        string? variant;
-        Console.CursorVisible = true;
-        HeadLine($"Tilføj variant til {boardGame.Title}");
-        // Form
-        cTop = Console.CursorTop;
-        Console.Write("Variants");
-        Console.CursorLeft = cInputLeft - 2;
-        Console.WriteLine(":");
-        // User input
-        Console.SetCursorPosition(cInputLeft, cTop++);
-        variant = Console.ReadLine();
-        Console.CursorVisible = false;
-        // Add variant
-        //return boardGame.AddVariant(variant);
-        throw new NotImplementedException();
+        BoardGameList.Instance.Remove();
     }
 
-    static void RemoveBoardGame(BoardGame boardGame)
+    static void SeekBoardGame()
     {
-        _boardGameList.Remove(boardGame);
-    }
-
-    static List<BoardGame>? SearchBoardGame()
-    {
-        int cTop;
-        int cInputLeft = 14;
-        int i;
-        string? title;
-        string? genre;
-        string? variant;
-        string? condition;
-        string? price;
-        Console.CursorVisible = true;
-        // Headline
-        HeadLine("Søg efter brætspil");
-        // Form
-        cTop = Console.CursorTop;
-        Console.Write("Title");
-        Console.CursorLeft = cInputLeft - 2;
-        Console.WriteLine(":");
-        Console.Write("Genre");
-        Console.CursorLeft = cInputLeft - 2;
-        Console.WriteLine(":");
-        Console.Write("Variants");
-        Console.CursorLeft = cInputLeft - 2;
-        Console.WriteLine(":");
-        Console.Write("Condition");
-        Console.CursorLeft = cInputLeft - 2;
-        Console.WriteLine(":");
-        for (i = 0; i < Enum.GetValues<Type.Condition>().Length; i++)
-        {
-            object? conditionValue = Enum.GetValues<Type.Condition>().GetValue(i);
-            if (conditionValue != null)
-            {
-                Console.Write((int)conditionValue);
-                Console.Write(" - ");
-                Console.WriteLine(Enum.GetName(typeof(Type.Condition), i));
-            }
-        }
-        Console.Write("Pris");
-        Console.CursorLeft = cInputLeft - 2;
-        Console.WriteLine(":");
-        // User input
-        Console.SetCursorPosition(cInputLeft, cTop++);
-        title = Console.ReadLine();
-        Console.SetCursorPosition(cInputLeft, cTop++);
-        genre = Console.ReadLine();
-        Console.SetCursorPosition(cInputLeft, cTop++);
-        variant = Console.ReadLine();
-        Console.SetCursorPosition(cInputLeft, cTop++);
-        condition = Console.ReadLine();
-        Console.SetCursorPosition(cInputLeft, cTop + i);
-        price = Console.ReadLine();
-        Console.CursorVisible = false;
-
-        Type.Condition? conditionEnum = ParseCondition(condition);
-        Type.Genre? genreEnum = ParseGenre(genre);
-
-        List<BoardGame>? boardGames = _boardGameList.Search(title, genreEnum, variant, conditionEnum, price);
-
-        ShowBoardGame(boardGames);
-
-        // Search
-        return boardGames;
+        BoardGameList.Instance.Search();
     }
 
     static void ShowReportBoardGameSort()
@@ -246,65 +158,18 @@ internal class Program
         return new string(' ', leftPadding) + text + new string(' ', rightPadding);
     }
 
-    static Type.Condition? ParseCondition(string? condition)
-    {
-        if (condition == null)
-        {
-            return null;
-        }
-
-        // Try to parse as integer
-        if (int.TryParse(condition, out int conditionInt))
-        {
-            if (Enum.IsDefined(typeof(Type.Condition), conditionInt))
-            {
-                return (Type.Condition)conditionInt;
-            }
-        }
-
-        // Try to parse as string
-        if (Enum.TryParse(condition, true, out Type.Condition conditionEnum))
-        {
-            return conditionEnum;
-        }
-
-        return null;
-    }
-
-    static Type.Genre? ParseGenre(string? gerne)
-    {
-        if (gerne == null)
-        {
-            return null;
-        }
-
-        // Try to parse as integer
-        if (int.TryParse(gerne, out int gerneInt))
-        {
-            if (Enum.IsDefined(typeof(Type.Genre), gerneInt))
-            {
-                return (Type.Genre)gerneInt;
-            }
-        }
-
-        // Try to parse as string
-        if (Enum.TryParse(gerne, true, out Type.Genre genreEnum))
-        {
-            return genreEnum;
-        }
-
-        return null;
-    }
-
     static void ErrorMessage(string message)
     {
         Console.ForegroundColor = ConsoleColor.Red;
         Console.WriteLine();
         Console.WriteLine(message);
         Console.ResetColor();
-        Console.WriteLine("Tryk på en tast for at fortsætte...");
+        Console.WriteLine("Tryk en tast for at fortsætte");
         Console.ReadKey();
     }
+
+
+
 
     #region menu
     /// <summary>
@@ -385,7 +250,6 @@ internal class Program
     /// </summary>
     static void MenuBoardGame()
     {
-        List<BoardGame> boardGames;
         do
         {
             Console.Clear();
@@ -393,8 +257,10 @@ internal class Program
             List<MenuItem> menuItems = new();
             menuItems.Add(new MenuItem("Vælg spil", MenuChooseBoardGame));
             menuItems.Add(new MenuItem("Tilføj spil", AddBoardGame));
-            menuItems.Add(new MenuItem("Søg", new Action(() => boardGames = SearchBoardGame())));
-            MenuPaginator menu = new(menuItems, 10);
+            menuItems.Add(new MenuItem("List spil", ShowBoardGame));
+            menuItems.Add(new MenuItem("Fjern spil", RemoveBoardGame));
+            menuItems.Add(new MenuItem("Søg", SeekBoardGame));
+            MenuPaginator menu = new(menuItems, pageSize: 10);
             if (menu.menuItem != null && menu.menuItem.Action is Action action)
             {
                 action();
@@ -415,23 +281,24 @@ internal class Program
     /// </summary>
     static void MenuChooseBoardGame()
     {
-        do
-        {
-            Console.Clear();
-            HeadLine("Vælg spil");
-            List<MenuItem> menuItems = new();
-            foreach (BoardGame boardGame in _boardGameList.BoardGames)
-            {
-                menuItems.Add(new MenuItem(boardGame.Title, () => ShowBoardGame(boardGame)));
-            }
-            MenuPaginator menu = new(menuItems, 10);
-            if (menu.menuItem != null && menu.menuItem.Action is Action action)
-                action();
-            else
-                return;
-        } while (true);
-    }
+        BoardGameList.Instance.Edit();
+        //do
+        //{
+        //    Console.Clear();
+        //    HeadLine("Vælg spil");
+        //    List<MenuItem> menuItems = new();
+        //    foreach (BoardGame boardGame in _boardGameList.BoardGames)
+        //    {
+        //        menuItems.Add(new MenuItem(boardGame.Title, () => ShowBoardGame(boardGame)));
+        //    }
+        //    MenuPaginator menu = new(menuItems, 10);
+        //    if (menu.menuItem != null && menu.menuItem.Action is Action action)
+        //        action();
+        //    else
+        //        return;
+        //} while (true);
 
+    }
 
     // maybe tihs is not needed as a menu. Maybe it should be a method in the BoardGame class
     static void MenuChooseBoardGameVariant()
@@ -440,12 +307,16 @@ internal class Program
     }
     #endregion menu
 
+    /// <summary>
+    /// Main method of the program.
+    /// Loads data from a JSON file, displays the main menu, and exports data back to the JSON file.
+    /// </summary>
+    /// <param name="args"></param>
     static void Main(string[] args)
     {
-        do
-        {
-            Login();
-            MenuMain();
-        } while (true);
+        JsonFileHandler.Instance.ImportData(DATA_JSON_FILE);
+        Login();
+        MenuMain();
+        JsonFileHandler.Instance.ExportData(DATA_JSON_FILE);
     }
 }
