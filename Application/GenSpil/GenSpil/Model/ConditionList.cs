@@ -12,5 +12,7 @@
                 Conditions.Add(new Condition(condition, 0, 0));
             }
         }
+
+
     }
 }
