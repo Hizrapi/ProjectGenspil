@@ -2,17 +2,17 @@
 {
     public class BoardGameVariant
     {
-        public string Title { get; private set; }
-        public Reserve Reserved { get; private set; } = null!; // Initialize to null to avoid unassigned variable error
-        public ConditionList ConditionList { get; private set; }
+        public string Title { get; private set; } //> Title of the board game
+        public string Variant { get; private set; } //> Variant of the board game
+        public Reserve? Reserved { get; private set; } //> Reserve object for the board game
 
-        public BoardGameVariant(string title, ConditionList conditionList)
+        public BoardGameVariant(string title, string variant)
         {
             Title = title;
-            ConditionList = conditionList;
+            Variant = variant;
         }
 
-        public Reserve GetReserved()
+        public Reserve? GetReserved()
         {
             return Reserved;
         }
