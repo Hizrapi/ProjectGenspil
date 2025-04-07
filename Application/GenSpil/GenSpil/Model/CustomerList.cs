@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace GenSpil.Model
 {
     public class CustomerList
@@ -21,6 +23,7 @@ namespace GenSpil.Model
 
         public List<Customer> Customers { get; private set; }
 
+        [JsonConstructor]
         public CustomerList()
         {
             Customers = new List<Customer>();
@@ -96,7 +99,6 @@ namespace GenSpil.Model
         {
             return Customers.Find(c => c.Address == address);
         }
-
 
         public void DisplayCustomers()
         {
@@ -182,7 +184,6 @@ namespace GenSpil.Model
                 Console.WriteLine("Skriv et navn, en adresse eller et ID");
             }
         }
-
 
         //public void RemoveCustomerByName()
         //{
