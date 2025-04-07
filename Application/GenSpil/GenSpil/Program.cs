@@ -257,6 +257,11 @@ internal class Program
         CustomerList.Instance.AddCustomer();
     }
 
+    static void UpdateCustomerDetails()
+    {
+        CustomerList.Instance.UpdateCustomerDetails();
+    }
+
     static void MenuCustomer()
     {
         do
@@ -269,6 +274,7 @@ internal class Program
             menuItems.Add(new MenuItem("Tilføje kunde", AddCustomer));
             menuItems.Add(new MenuItem("Fjern kunde", RemoveCustomer));
             menuItems.Add(new MenuItem("Søge i kunder", SearchCustomers));
+            menuItems.Add(new MenuItem("Opdater kundeoplysninger", UpdateCustomerDetails));
             menuItems.Add(new MenuItem("Logout", Logout));
 
             // Create a menu paginator
