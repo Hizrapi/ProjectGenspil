@@ -1,23 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace GenSpil.Model
 {
-    public class ConditionHolder
+    public class ConditionList
     {
-        // property med get og set
-       public ICollection<Condition> ConditionList {  get; private set; }
+        public ICollection<Condition> Conditions { get; private set; }
 
-        // Constructor der sætter værdierne
-        public ConditionHolder() 
+        public ConditionList()
         {
-            ConditionList = new List<Condition>((Condition[])Enum.GetValues(typeof(Condition)));
-
+            Conditions = new List<Condition>();
+            foreach (Type.Condition condition in Enum.GetValues(typeof(Type.Condition)))
+            {
+                Conditions.Add(new Condition(condition, 0, 0));
+            }
         }
+
 
     }
 }
-

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GenSpil.Type;
+﻿using GenSpil.Type;
 
 namespace GenSpil.Model
 {
@@ -13,9 +8,9 @@ namespace GenSpil.Model
         public string Password { get; private set; }
         public Role Role { get; private set; } // Enum
 
-        public User (string username, string password, Role role)
+        public User(string name, string password, Role role)
         {
-            Name = username;
+            Name = name;
             Password = password;
             Role = role;
 
