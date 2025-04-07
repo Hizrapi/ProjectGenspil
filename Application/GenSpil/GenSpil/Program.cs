@@ -262,7 +262,8 @@ internal class Program
             menuItems.Add(new MenuItem("Tilføj spil", AddBoardGame));
             menuItems.Add(new MenuItem("List spil", ShowBoardGame));
             menuItems.Add(new MenuItem("Fjern spil", RemoveBoardGame));
-            menuItems.Add(new MenuItem("Tilføj Reservation", MenuAddReservation));
+            menuItems.Add(new MenuItem("Tilføj reservation", MenuAddReservation));
+            menuItems.Add(new MenuItem("Fjern reservation", MenuRemoveReservation));
             menuItems.Add(new MenuItem("Vis reservationer", MenuShowReservations));
             menuItems.Add(new MenuItem("Søg", SeekBoardGame));
             MenuPaginator menu = new(menuItems, pageSize: 10);
@@ -320,12 +321,12 @@ internal class Program
     static void AddReservation()
     {
         Console.Clear();
-        HeadLine(CenterString("Tilføj reservation", 20));
+       
 
         Console.ForegroundColor = ConsoleColor.Green;
         Console.Write("Søg efter spil: ");
         Console.ResetColor();
-        string search = Console.ReadLine();
+        string? search = Console.ReadLine();
 
         var foundGames = BoardGameList.Instance
             .GetAllBoardGames()
@@ -362,10 +363,8 @@ internal class Program
         Console.ResetColor();
         int customerID = Convert.ToInt32(Console.ReadLine());
 
-        Console.ForegroundColor = ConsoleColor.Green;
-        Console.Write("Dato (dd/MM/yyyy): ");
-        Console.ResetColor();
-        DateTime reservedDate = DateTime.Parse(Console.ReadLine());
+        //Sætter dato til tidspunkt for indtasdtning
+        DateTime reservedDate = DateTime.Now;
 
         Console.ForegroundColor = ConsoleColor.Green;
         Console.Write("Antal: ");
@@ -377,6 +376,76 @@ internal class Program
         Console.WriteLine("Reservation tilføjet.");
         Console.ReadLine();
     }
+
+    static void MenuRemoveReservation()
+    {
+        Console.Clear();
+
+        Console.ForegroundColor = ConsoleColor.White;
+        HeadLine("Fjern reservationer");
+
+        Console.WriteLine("\nIndtast en del af titlen eller tryk Enter for at se alle reservationer:");
+        Console.ResetColor();
+
+        string searchTerm = Console.ReadLine().ToLower();
+
+        var games = BoardGameList.Instance.GetAllBoardGames();
+        var reservations = games
+            .Where(game => string.IsNullOrEmpty(searchTerm) || game.Title.ToLower().Contains(searchTerm))
+            .SelectMany(game => game.Variant.GetReservations(), (game, reservation) => new { Game = game, Reservation = reservation })
+            .ToList();
+
+        if (reservations.Count == 0)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("\nIngen reservationer fundet.");
+            Console.ResetColor();
+            return;
+        }
+
+        Console.WriteLine(); // mellemrum før liste
+        for (int i = 0; i < reservations.Count; i++)
+        {
+            var res = reservations[i];
+            string variantPart = string.IsNullOrEmpty(res.Game.Variant.Variant) ? "" : $" ({res.Game.Variant.Variant})";
+
+            // Nummer i GRØN
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write($"{i + 1}. ");
+
+            // Titel og variant i HVID
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine($"{res.Game.Title}{variantPart}");
+
+            // Detaljer i MAGENTA
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.WriteLine($"   - Antal: {res.Reservation.Quantity}, Dato: {res.Reservation.ReservedDate.ToShortDateString()}, Kunde-ID: {res.Reservation.CustomerID}");
+
+            Console.ResetColor();
+        }
+
+        // Nyt linjeskift + prompt i hvid
+        Console.WriteLine();
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.WriteLine("Indtast nummeret på den reservation, du vil fjerne:");
+        Console.ResetColor();
+
+        if (!int.TryParse(Console.ReadLine(), out int reservationIndex) || reservationIndex < 1 || reservationIndex > reservations.Count)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Ugyldigt reservationsnummer.");
+            Console.ResetColor();
+            return;
+        }
+
+        var reservationToRemove = reservations[reservationIndex - 1].Reservation;
+        reservations[reservationIndex - 1].Game.Variant.RemoveReservation(reservationToRemove);
+
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("Reservationen er fjernet.");
+        Console.ResetColor();
+    }
+
 
     static void MenuShowReservations()
     {
