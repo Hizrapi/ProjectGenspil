@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
+using System.Text;
 using GenSpil.Handler;
 using GenSpil.Model;
 using GenSpil.Type;
@@ -170,6 +171,7 @@ internal class Program
         Console.ReadKey();
     }
 
+   
 
 
     #region menu
@@ -282,6 +284,7 @@ internal class Program
     /// </summary>
     static void MenuChooseBoardGame()
     {
+        BoardGameList.Instance.EditBoardGame();
         //do
         //{
         //    Console.Clear();
@@ -300,7 +303,6 @@ internal class Program
 
     }
 
-
     // maybe tihs is not needed as a menu. Maybe it should be a method in the BoardGame class
     static void MenuChooseBoardGameVariant()
     {
@@ -308,12 +310,16 @@ internal class Program
     }
     #endregion menu
 
+    /// <summary>
+    /// Main method of the program.
+    /// Loads data from a JSON file, displays the main menu, and exports data back to the JSON file.
+    /// </summary>
+    /// <param name="args"></param>
     static void Main(string[] args)
     {
-        do
-        {
-            Login();
-            MenuMain();
-        } while (true);
+        JsonFileHandler.Instance.ImportData(DATA_JSON_FILE);
+        Login();
+        MenuMain();
+        JsonFileHandler.Instance.ExportData(DATA_JSON_FILE);
     }
 }
