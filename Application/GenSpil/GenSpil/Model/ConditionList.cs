@@ -1,8 +1,8 @@
-﻿namespace GenSpil.Model
+namespace GenSpil.Model
 {
     public class ConditionList
     {
-        public List<Condition> Conditions { get; private set; }
+        public ICollection<Condition> Conditions { get; private set; }
 
         public ConditionList()
         {
