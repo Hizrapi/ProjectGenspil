@@ -2,6 +2,7 @@
 using System.Net;
 using System.Reflection;
 using System.Xml.Linq;
+using System.Text;
 using GenSpil.Handler;
 using GenSpil.Model;
 using GenSpil.Type;
@@ -172,6 +173,7 @@ internal class Program
         Console.ReadKey();
     }
 
+   
 
 
     #region menu
@@ -295,6 +297,8 @@ internal class Program
             menuItems.Add(new MenuItem("Tilføj spil", AddBoardGame));
             menuItems.Add(new MenuItem("List spil", ShowBoardGame));
             menuItems.Add(new MenuItem("Fjern spil", RemoveBoardGame));
+            menuItems.Add(new MenuItem("Tilføj Reservation", MenuAddReservation));
+            menuItems.Add(new MenuItem("Vis reservationer", MenuShowReservations));
             menuItems.Add(new MenuItem("Søg", SeekBoardGame));
             MenuPaginator menu = new(menuItems, pageSize: 10);
             if (menu.menuItem != null && menu.menuItem.Action is Action action)
@@ -317,6 +321,7 @@ internal class Program
     /// </summary>
     static void MenuChooseBoardGame()
     {
+        BoardGameList.Instance.EditBoardGame();
         //do
         //{
         //    Console.Clear();
@@ -335,20 +340,154 @@ internal class Program
 
     }
 
-
     // maybe tihs is not needed as a menu. Maybe it should be a method in the BoardGame class
     static void MenuChooseBoardGameVariant()
     {
         throw new NotImplementedException();
     }
-    #endregion menu
 
-    static void Main(string[] args)
+    static void MenuAddReservation()
     {
-        do
+        HeadLine(CenterString("Tilføj reservation", 40));   
+        AddReservation();
+    }
+
+    static void AddReservation()
+    {
+        Console.Clear();
+        HeadLine(CenterString("Tilføj reservation", 20));
+
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.Write("Søg efter spil: ");
+        Console.ResetColor();
+        string search = Console.ReadLine();
+
+        var foundGames = BoardGameList.Instance
+            .GetAllBoardGames()
+            .Where(g => g.Title.Contains(search, StringComparison.OrdinalIgnoreCase))
+            .ToList();
+
+        if (!foundGames.Any())
         {
-            Login();
-            MenuMain();
-        } while (true);
+            Console.WriteLine("Ingen spil fundet.");
+            Console.ReadLine();
+            return;
+        }
+
+        for (int i = 0; i < foundGames.Count; i++)
+        {
+            var game = foundGames[i];
+            Console.WriteLine($"{i + 1}. {game.Title} ({game.Variant.Variant}) - Genre: {game.Genre}, Tilstand: {game.Condition}");
+        }
+
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.Write("Vælg spil: ");
+        Console.ResetColor();
+        if (!int.TryParse(Console.ReadLine(), out int index) || index < 1 || index > foundGames.Count)
+        {
+            Console.WriteLine("Ugyldigt valg.");
+            Console.ReadLine();
+            return;
+        }
+
+        var selectedGame = foundGames[index - 1];
+
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.Write("Kunde-ID: ");
+        Console.ResetColor();
+        int customerID = Convert.ToInt32(Console.ReadLine());
+
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.Write("Dato (dd/MM/yyyy): ");
+        Console.ResetColor();
+        DateTime reservedDate = DateTime.Parse(Console.ReadLine());
+
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.Write("Antal: ");
+        Console.ResetColor();
+        int quantity = Convert.ToInt32(Console.ReadLine());
+
+        BoardGameList.Instance.RegisterReservation(selectedGame, customerID, reservedDate, quantity);
+
+        Console.WriteLine("Reservation tilføjet.");
+        Console.ReadLine();
+    }
+
+    static void MenuShowReservations()
+    {
+        HeadLine(CenterString("Reservationer", 20));
+        ShowReservations();
+    }
+
+    public static void ShowReservations()
+    {
+        
+
+        var allGames = BoardGameList.Instance.GetAllBoardGames();
+
+        if (!allGames.Any())
+        {
+            Console.WriteLine("Der er ingen reservationer i listen endnu.");
+            Console.ReadLine();
+            return;
+        }
+
+        var reservationsGrouped = allGames
+            .Where(game => game.Variant.GetReservations().Any())
+            .OrderBy(game => game.Title)
+            .ThenBy(game => game.Variant.Variant);
+
+        foreach (var game in reservationsGrouped)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"\nTitel: {game.Title}");
+            Console.ResetColor();
+
+            var reservations = game.Variant.GetReservations().OrderBy(r => r.ReservedDate);
+
+            foreach (var reservation in reservations)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write(" - Variant: ");
+                Console.ResetColor();
+                Console.WriteLine(game.Variant.Variant);
+
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write("   Dato: ");
+                Console.ResetColor();
+                Console.WriteLine(reservation.ReservedDate.ToString("dd/MM/yyyy"));
+
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write("   Kunde-ID: ");
+                Console.ResetColor();
+                Console.WriteLine(reservation.CustomerID);
+
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write("   Antal: ");
+                Console.ResetColor();
+                Console.WriteLine(reservation.Quantity);
+            }
+        }
+
+            Console.WriteLine();
+            Console.ReadLine();
+
+    }
+
+
+
+        #endregion menu
+
+        /// <summary>
+        /// Main method of the program.
+        /// Loads data from a JSON file, displays the main menu, and exports data back to the JSON file.
+        /// </summary>
+        /// <param name="args"></param>
+        static void Main(string[] args)
+    {
+        JsonFileHandler.Instance.ImportData(DATA_JSON_FILE);
+        Login();
+        MenuMain();
+        JsonFileHandler.Instance.ExportData(DATA_JSON_FILE);
     }
 }

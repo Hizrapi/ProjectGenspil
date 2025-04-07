@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -227,5 +227,20 @@ namespace GenSpil.Model
 
             return _customers.Max(c => c.CustomerID) + 1;
         }
+      
+    public int GenerateID(int customerID)
+    {
+        if (_customers.Count == 0)
+        {
+            return 1;
+        }
+
+        return _customers.Max(c => c.CustomerID) + 1;
+    }
+
+    public void Clear()
+    {
+        _customers.Clear();
+    }
     }
 }
