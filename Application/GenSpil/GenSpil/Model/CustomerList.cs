@@ -1,51 +1,15 @@
-using System.Text.Json.Serialization;
-
 namespace GenSpil.Model
 {
-    public sealed class CustomerList
+    public class CustomerList
     {
-        static CustomerList? instance = null; ///> Singleton instance of the CustomerList
-        static readonly object _lock = new object(); ///> Lock object for thread safety
-
+        private static CustomerList? _instance;
+        private static readonly object _lock = new object();
         public static CustomerList Instance
         {
             get
             {
                 lock (_lock)
                 {
-
-                    if (instance == null)
-                    {
-                        instance = new CustomerList();
-                    }
-                    return instance;
-                }
-            }
-        } ///> Get or set singleton instance of the CustomerList
-
-        public List<Customer> Customers { get; set; } ///> List of customers
-
-        private CustomerList()
-        {
-            Customers = new List<Customer>();
-        }
-
-        [JsonConstructor]
-        private CustomerList(List<Customer> customers)
-        {
-            Customers = customers ?? new List<Customer>();
-        }
-
-        //Adds a customer to the list.
-        public void Add(Customer customer)
-        {
-            Customers.Add(customer);
-        }
-
-        //Removes a customer to the list.
-        public void Remove(Customer customer)
-        {
-            Customers.Remove(customer);
                     if (_instance == null)
                     {
                         _instance = new CustomerList();
@@ -111,24 +75,12 @@ namespace GenSpil.Model
             Console.ReadLine();
 
             return foundCustomers;
+
         }
 
         //Findes a customer on the list.
         public Customer? GetCustomerByID(int customerID)
         {
-
-            return Customers.Find(c => c.CustomerID == customerID);
-        }
-
-        //Update function isn't completed.
-        public void Update(int customerID, string newName, string newAddress)
-        {
-            var customer = Customers.Find(c => c.CustomerID == customerID);
-
-            if (customer != null)
-            {
-                // If customer exists, update the name and address using the setter methods
-
             return _customers.Find(c => c.CustomerID == customerID);
         }
         public Customer? GetCustomerByName(string name)
@@ -157,14 +109,13 @@ namespace GenSpil.Model
         }
 
         //Update function isn't completed.
-        public void UpdateCustomer(int customerID, string newName, string newAddress) 
+        public void UpdateCustomer(int customerID, string newName, string newAddress)
         {
             var customer = _customers.Find(c => c.CustomerID == customerID);
 
             if (customer != null)
             {
                 //If customer exists, update the name and address using the setter methods
-
                 customer.SetName(newName);
                 customer.SetAddress(newAddress);
 
@@ -172,13 +123,10 @@ namespace GenSpil.Model
             }
             else
             {
-
-                // If the customer doesn't exist
-
+                //If the customer doesn't exist
                 Console.WriteLine($"Customer with ID {customerID} not found.");
             }
         }
-
 
         public void RemoveCustomer()
         {
@@ -207,46 +155,73 @@ namespace GenSpil.Model
             else if (!string.IsNullOrWhiteSpace(input))
             {
 
-                    var customerByName = GetCustomerByName(input);
-                    if (customerByName != null)
-                    {
-                        RemoveCustomer(customerByName);
-                        Console.WriteLine($"Kunde ved navn {input} er blevet fjernet.");
-                        return;
-                    }
-
-                    var customerByAddress = GetCustomerByAddress(input);
-                    if (customerByAddress != null)
-                    {
-                        RemoveCustomer(customerByAddress);
-                        Console.WriteLine($"Kunde med adresse {input} er blevet fjernet.");
-                        return;
-                    }
-                    Console.WriteLine($"Kunde med navn eller adresse '{input}' blev ikke fundet.");
-                }
-                else
+                var customerByName = GetCustomerByName(input);
+                if (customerByName != null)
                 {
-                    Console.WriteLine("Skriv et navn, en adresse eller et ID");
+                    RemoveCustomer(customerByName);
+                    Console.WriteLine($"Kunde ved navn {input} er blevet fjernet.");
+                    return;
                 }
+
+                var customerByAddress = GetCustomerByAddress(input);
+                if (customerByAddress != null)
+                {
+                    RemoveCustomer(customerByAddress);
+                    Console.WriteLine($"Kunde med adresse {input} er blevet fjernet.");
+                    return;
+                }
+                Console.WriteLine($"Kunde med navn eller adresse '{input}' blev ikke fundet.");
             }
-
-
-    }
-  
-    public int GenerateID(int customerID)
-    {
-        if (_customers.Count == 0)
-        {
-            return 1;
+            else
+            {
+                Console.WriteLine("Skriv et navn, en adresse eller et ID");
+            }
         }
 
-        return _customers.Max(c => c.CustomerID) + 1;
-    }
 
-    public void Clear()
-    {
-        _customers.Clear();
-    }
+        //public void RemoveCustomerByName()
+        //{
+        //    //Lists customers
+        //    DisplayCustomers();
 
+        //    //What customer do you want to remove?
+        //    Console.WriteLine("Skriv navnet på kunden som du vil fjerne:");
+
+        //    if (int.TryParse(Console.ReadLine(), out int name))
+        //    {
+        //        //Find the customer by name
+        //        var customerToRemove = GetCustomerByID(name);
+
+        //        if (customerToRemove != null)
+        //        {
+        //            //Remove the customer if found
+        //            RemoveCustomer(customerToRemove);
+        //            Console.WriteLine($"Kunder ved navn {name} er blevet fjernet.");
+        //        }
+        //        else
+        //        {
+        //            Console.WriteLine($"kunde with navn {name} blev ikke fundet.");
+        //        }
+        //    }
+        //    else
+        //    {
+        //        Console.WriteLine("Invalid input. Please enter a valid name.");
+        //    }
+        //}
+
+        public int GenerateID(int customerID)
+        {
+            if (_customers.Count == 0)
+            {
+                return 1;
+            }
+
+            return _customers.Max(c => c.CustomerID) + 1;
+        }
+
+        public void Clear()
+        {
+            _customers.Clear();
+        }
+    }
 }
-

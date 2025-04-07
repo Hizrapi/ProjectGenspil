@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-namespace GenSpil.Model;
+﻿namespace GenSpil.Model;
 
 public class BoardGameVariant
 {
@@ -9,37 +8,19 @@ public class BoardGameVariant
 
     public BoardGameVariant(string title, string variant)
     {
-
         Title = title;
         Variant = variant;
     }
 
-    public void AddReservationToList(int customerID, DateTime reservedDate, int quantity, BoardGame game)
+    public void AddReservationToList(int customerID, DateTime reservedDate, int quantity)
     {
-        if (quantity <= 0)
-        {
-            throw new ArgumentException("Antallet skal være større end 0.");
-        }
-        Reserve reservation = new Reserve(reservedDate, customerID, quantity, game);
+        Reserve reservation = new Reserve(reservedDate, customerID, quantity);
         SetReserved(reservation);
     }
-
-        public Reserve? GetReserved()
-        {
-            return Reserved;
-        }
-
-        public void SetReserved(Reserve reserved)
-        {
-            Reserved = reserved;
-        }
-
-
 
     public void SetReserved(Reserve reservation)
     {
         Reservations.Add(reservation);
-
     }
 
     public List<Reserve> GetReservations()
@@ -51,6 +32,4 @@ public class BoardGameVariant
     {
         Reservations.Remove(reservation);
     }
-
-
 }

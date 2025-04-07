@@ -1,5 +1,4 @@
-﻿using System.Text.Json.Serialization;
-using GenSpil.Type;
+﻿using GenSpil.Type;
 
 //TODO: All interactions with the user should be handled in the UI layer, not in the model.
 
@@ -9,13 +8,12 @@ namespace GenSpil.Model;
 /// Singleton class for handling a list of board games.
 /// TODO Should not interact with the user directly. (Tirsvad)
 /// </summary>
-
-public sealed class BoardGameList
+public class BoardGameList
 {
-    static BoardGameList? _instance;
-    static readonly object _lock = new object();
+    private static BoardGameList? _instance;
+    private static readonly object _lock = new object();
     private List<BoardGame> _boardGames = new List<BoardGame>();
-  
+
     public static BoardGameList Instance
     {
         get
@@ -31,14 +29,18 @@ public sealed class BoardGameList
         }
     } ///> Singleton instance of the BoardGameList
 
-    public List<BoardGame> BoardGames { get; private set; }
-
-    [JsonConstructor]
-    public BoardGameList()
+    public void Add(BoardGame? boardGame)
     {
-        // Constructor is private to prevent instantiation from outside
-        BoardGames = new List<BoardGame>();
-    }
+        _boardGames.Add(boardGame);
+    } ///> Adds a board game to the list
+
+    public void Remove(BoardGame? boardGame)
+    {
+        _boardGames.Remove(boardGame);
+    } ///> Removes a board game from the list
+
+    public void Edit(boardGame)
+    { } ///> Edits a board game in the list
 
     public List<BoardGame> GetAllBoardGames()
     {
@@ -46,10 +48,11 @@ public sealed class BoardGameList
     }
 
 
+
     /// <summary>
     /// Tilføjer et brætspil.
     /// </summary>
-    public void Add()
+    public void AddBoardGame()
     {
         Console.ForegroundColor = ConsoleColor.Green;
         Console.Write("Titel: ");
@@ -126,10 +129,10 @@ public sealed class BoardGameList
         Condition bgCondition = new Condition(conditionEnum, quantity, price);
 
         // Opret det nye brætspil med alle data. + 1 pga. ny linje
-        BoardGame newGame = new BoardGame(BoardGames.Count + 1, title, bgVariant, genre, bgCondition);
+        BoardGame newGame = new BoardGame(_boardGames.Count + 1, title, bgVariant, genre, bgCondition);
 
         // Tilføj spillet til listen
-        BoardGames.Add(newGame);
+        _boardGames.Add(newGame);
         Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine("Brætspil tilføjet!");
         Console.ResetColor();
@@ -140,21 +143,13 @@ public sealed class BoardGameList
     }
 
     /// <summary>
-    /// Tilføjer et brætspil.
-    /// </summary>
-    public void Add(BoardGame boardGame)
-    {
-        this.BoardGames.Add(boardGame);
-    }
-
-    /// <summary>
     /// Vis brætspil
     /// </summary>
     public void DisplayBoardGames()
     {
         Console.Clear(); // Ryd skærm før visning
         Console.WriteLine("--- Liste over Brætspil (Grupperet) ---");
-        if (BoardGames.Count == 0)
+        if (_boardGames.Count == 0)
         {
             Console.WriteLine("Der er ingen brætspil i listen endnu.");
             return; // Gå tilbage hvis listen er tom
@@ -162,7 +157,7 @@ public sealed class BoardGameList
 
         // Gruppér listen efter spillets Titel property
         // OrderBy(g => g.Title) sorterer titlerne alfabetisk (valgfrit)
-        var groupedGames = BoardGames
+        var groupedGames = _boardGames
                             .OrderBy(g => g.Title)
                             .GroupBy(g => g.Title);
 
@@ -190,12 +185,12 @@ public sealed class BoardGameList
     /// <summary>
     /// Søg efter brætspil
     /// </summary>
-    public List<BoardGame> Search() //Search() should take parameters (Tirsvad)
+    public List<BoardGame> SearchBoardGames() //SearchBoardGames() should take parameters (Tirsvad)
     {
         Console.Write("Indtast titel - eller del af den: ");
         string searchTitle = Console.ReadLine();
 
-        var foundGames = BoardGames
+        var foundGames = _boardGames
                             .Where(g => g.Title.Contains(searchTitle, StringComparison.OrdinalIgnoreCase)) //Filtrer elementer i en liste basseret på en betingelse
                             .OrderBy(g => g.Title) //Sortere en liste efter en bestemt egenskab.
                             .GroupBy(g => g.Title); //Grupperer en liste efter en bestemt egenskab
@@ -227,12 +222,12 @@ public sealed class BoardGameList
     /// <summary>
     /// Fjern brætspil helt.
     /// </summary>
-    public void Remove()
+    public void RemoveBoardGame()
     {
         Console.Clear();
         Console.WriteLine("--- Fjern Brætspil ---");
 
-        if (BoardGames.Count == 0)
+        if (_boardGames.Count == 0)
         {
             Console.WriteLine("Listen er tom. Der er ingen spil at fjerne.");
             return; // Gå tilbage, da der ikke er noget at gøre
@@ -241,10 +236,10 @@ public sealed class BoardGameList
         Console.WriteLine("Vælg nummeret på det spil, du vil fjerne:");
 
         // Vis alle spil med et nummer (startende fra 1 (Den starter normalt med 0)
-        for (int i = 0; i < BoardGames.Count; i++)
+        for (int i = 0; i < _boardGames.Count; i++)
         {
             // Brug i + 1 for at vise 1-baseret nummerering til brugeren
-            Console.WriteLine($"{i + 1}. {BoardGames[i]}"); // Bruger BoardGame.ToString()
+            Console.WriteLine($"{i + 1}. {_boardGames[i]}"); // Bruger BoardGame.ToString()
         }
         Console.WriteLine("-------------------------");
         Console.Write("Indtast nummer på spil der skal fjernes (eller 0 for at annullere): ");
@@ -260,13 +255,13 @@ public sealed class BoardGameList
                 return; // Gå tilbage
             }
             // Tjek om nummeret er inden for det gyldige område (1 til antal spil)
-            if (choice >= 1 && choice <= BoardGames.Count)
+            if (choice >= 1 && choice <= _boardGames.Count)
             {
                 // Konverter brugerens 1-baserede valg til 0-baseret index
                 int indexToRemove = choice - 1;
 
                 // Få fat i spillet der skal fjernes for at vise det i beskeden
-                BoardGame gameToRemove = BoardGames[indexToRemove];
+                BoardGame gameToRemove = _boardGames[indexToRemove];
 
                 // Valgfri: Spørg om bekræftelse
                 Console.WriteLine($"\nDu er ved at fjerne: {gameToRemove}");
@@ -276,7 +271,7 @@ public sealed class BoardGameList
                 if (confirmation != null && confirmation.Trim().Equals("J", StringComparison.OrdinalIgnoreCase))
                 {
                     // Fjern spillet fra listen ved det valgte index
-                    BoardGames.RemoveAt(indexToRemove);
+                    _boardGames.RemoveAt(indexToRemove);
                     Console.WriteLine($"'{gameToRemove.Title}' er blevet fjernet.");
                 }
                 else
@@ -303,13 +298,13 @@ public sealed class BoardGameList
     /// Brugeren indtaster titlen på spillet, vælger det korrekte spil, og kan derefter redigere tilstand, antal og pris.
     /// Hvis antallet sættes til 0, fjernes spillet automatisk fra listen.
     /// </summary>
-    public void Edit()
+    public void EditBoardGame()
     {
         Console.Write("Indtast titel på spillet, du vil redigere: ");
         string searchTitle = Console.ReadLine();
 
         // Find alle spil, der matcher titlen 
-        var foundGames = BoardGames
+        var foundGames = _boardGames
                             .Where(g => g.Title.Contains(searchTitle, StringComparison.OrdinalIgnoreCase)) // Søger efte
                             .OrderBy(g => g.Title) // Sorterer fundne spil alfabetisk ud fra Variant.
                             .ToList();
@@ -362,7 +357,7 @@ public sealed class BoardGameList
         // Hvis antallet nu er 0, fjernes spillet fra listen
         if (selectedGame.Condition.Quantity == 0)
         {
-            BoardGames.Remove(selectedGame);
+            _boardGames.Remove(selectedGame);
             Console.WriteLine($"'{selectedGame.Title}' er blevet fjernet, da antallet er 0.");
         }
         else
@@ -376,16 +371,9 @@ public sealed class BoardGameList
         Console.ReadLine(); // Forhindrer konsollen i at lukke med det samme
     }
 
-
-    internal void Clear()
-    {
-        BoardGames.Clear(); // Rydder listen for at undgå dubletter
-    }
-}
-
     public void RegisterReservation(BoardGame game, int customerID, DateTime date, int quantity)
     {
-        game.Variant.AddReservationToList(customerID, date, quantity, game);
+        //game.Variant.AddReservationToList(customerID, date, quantity);
     }
 
     public void Clear()
@@ -393,4 +381,3 @@ public sealed class BoardGameList
         _boardGames.Clear();
     }
 }
-
