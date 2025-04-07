@@ -13,9 +13,14 @@ public class BoardGameVariant
         Variant = variant;
     }
 
-    public void AddReservationToList(int customerID, DateTime reservedDate, int quantity)
+    public void AddReservationToList(int customerID, DateTime reservedDate, int quantity, BoardGame game)
     {
-        Reserve reservation = new Reserve(reservedDate, customerID, quantity);
+        if (quantity <= 0)
+        {
+            throw new ArgumentException("Antallet skal være større end 0.");
+        }
+
+        Reserve reservation = new Reserve(reservedDate, customerID, quantity, game);
         SetReserved(reservation);
     }
 
@@ -33,4 +38,6 @@ public class BoardGameVariant
     {
         Reservations.Remove(reservation);
     }
+
+
 }

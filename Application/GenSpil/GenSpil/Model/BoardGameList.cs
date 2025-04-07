@@ -361,7 +361,7 @@ public class BoardGameList
 
     public void RegisterReservation(BoardGame game, int customerID, DateTime date, int quantity)
     {
-        game.Variant.AddReservationToList(customerID, date, quantity);
+        game.Variant.AddReservationToList(customerID, date, quantity, game);
     }
 
     public void Clear()
