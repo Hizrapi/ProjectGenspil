@@ -188,7 +188,7 @@ internal class Program
             // Create a list of menu items
             List<MenuItem> menuItems = new();
             menuItems.Add(new MenuItem("Brætspil", MenuBoardGame));
-            menuItems.Add(new MenuItem("Kunde", MenuCostumer));
+            menuItems.Add(new MenuItem("Kunde", MenuCustomer));
             menuItems.Add(new MenuItem("Rapporter", MenuReport));
             menuItems.Add(new MenuItem("Admin", MenuAdmin));
             menuItems.Add(new MenuItem("Logout", Logout));
@@ -201,9 +201,42 @@ internal class Program
         } while (true);
     }
 
-    static void MenuCostumer()
+    static void RemoveCustomer()
     {
-        throw new NotImplementedException();
+        CustomerList.Instance.RemoveCustomer();
+    }
+
+    static void SearchCustomers()
+    {
+        CustomerList.Instance.SearchCustomers();
+    }
+
+    static void AddCustomer()
+    {
+        CustomerList.Instance.AddCustomer();
+    }
+
+    static void MenuCustomer()
+    {
+        do
+        {
+            Console.Clear();
+            HeadLine("Kunder");
+
+            // Create a list of menu items
+            List<MenuItem> menuItems = new();
+            menuItems.Add(new MenuItem("Tilføje kunde", AddCustomer));
+            menuItems.Add(new MenuItem("Fjern kunde", RemoveCustomer));
+            menuItems.Add(new MenuItem("Søge i kunder", SearchCustomers));
+            menuItems.Add(new MenuItem("Logout", Logout));
+
+            // Create a menu paginator
+            MenuPaginator menu = new(menuItems, 10);
+            if (menu.menuItem != null && menu.menuItem.Action is Action action)
+                action(); // Execute the action
+            else
+                return;
+        } while (true);
     }
 
     /// <summary>
@@ -259,6 +292,9 @@ internal class Program
             menuItems.Add(new MenuItem("Tilføj spil", AddBoardGame));
             menuItems.Add(new MenuItem("List spil", ShowBoardGame));
             menuItems.Add(new MenuItem("Fjern spil", RemoveBoardGame));
+            menuItems.Add(new MenuItem("Tilføj reservation", MenuAddReservation));
+            menuItems.Add(new MenuItem("Fjern reservation", MenuRemoveReservation));
+            menuItems.Add(new MenuItem("Vis reservationer", MenuShowReservations));
             menuItems.Add(new MenuItem("Søg", SeekBoardGame));
             MenuPaginator menu = new(menuItems, pageSize: 10);
             if (menu.menuItem != null && menu.menuItem.Action is Action action)
@@ -305,14 +341,213 @@ internal class Program
     {
         throw new NotImplementedException();
     }
-    #endregion menu
 
-    /// <summary>
-    /// Main method of the program.
-    /// Loads data from a JSON file, displays the main menu, and exports data back to the JSON file.
-    /// </summary>
-    /// <param name="args"></param>
-    static void Main(string[] args)
+    static void MenuAddReservation()
+    {
+        HeadLine(CenterString("Tilføj reservation", 40));   
+        AddReservation();
+    }
+
+    static void AddReservation()
+    {
+        Console.Clear();
+       
+
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.Write("Søg efter spil: ");
+        Console.ResetColor();
+        string? search = Console.ReadLine();
+
+        var foundGames = BoardGameList.Instance
+            .GetAllBoardGames()
+            .Where(g => g.Title.Contains(search, StringComparison.OrdinalIgnoreCase))
+            .ToList();
+
+        if (!foundGames.Any())
+        {
+            Console.WriteLine("Ingen spil fundet.");
+            Console.ReadLine();
+            return;
+        }
+
+        for (int i = 0; i < foundGames.Count; i++)
+        {
+            var game = foundGames[i];
+            Console.WriteLine($"{i + 1}. {game.Title} ({game.Variant.Variant}) - Genre: {game.Genre}, Tilstand: {game.Condition}");
+        }
+
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.Write("Vælg spil: ");
+        Console.ResetColor();
+        if (!int.TryParse(Console.ReadLine(), out int index) || index < 1 || index > foundGames.Count)
+        {
+            Console.WriteLine("Ugyldigt valg.");
+            Console.ReadLine();
+            return;
+        }
+
+        var selectedGame = foundGames[index - 1];
+
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.Write("Kunde-ID: ");
+        Console.ResetColor();
+        int customerID = Convert.ToInt32(Console.ReadLine());
+
+        //Sætter dato til tidspunkt for indtasdtning
+        DateTime reservedDate = DateTime.Now;
+
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.Write("Antal: ");
+        Console.ResetColor();
+        int quantity = Convert.ToInt32(Console.ReadLine());
+
+        BoardGameList.Instance.RegisterReservation(selectedGame, customerID, reservedDate, quantity);
+
+        Console.WriteLine("Reservation tilføjet.");
+        Console.ReadLine();
+    }
+
+    static void MenuRemoveReservation()
+    {
+        Console.Clear();
+
+        Console.ForegroundColor = ConsoleColor.White;
+        HeadLine("Fjern reservationer");
+
+        Console.WriteLine("\nIndtast en del af titlen eller tryk Enter for at se alle reservationer:");
+        Console.ResetColor();
+
+        string searchTerm = Console.ReadLine().ToLower();
+
+        var games = BoardGameList.Instance.GetAllBoardGames();
+        var reservations = games
+            .Where(game => string.IsNullOrEmpty(searchTerm) || game.Title.ToLower().Contains(searchTerm))
+            .SelectMany(game => game.Variant.GetReservations(), (game, reservation) => new { Game = game, Reservation = reservation })
+            .ToList();
+
+        if (reservations.Count == 0)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("\nIngen reservationer fundet.");
+            Console.ResetColor();
+            return;
+        }
+
+        Console.WriteLine(); // mellemrum før liste
+        for (int i = 0; i < reservations.Count; i++)
+        {
+            var res = reservations[i];
+            string variantPart = string.IsNullOrEmpty(res.Game.Variant.Variant) ? "" : $" ({res.Game.Variant.Variant})";
+
+            // Nummer i GRØN
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write($"{i + 1}. ");
+
+            // Titel og variant i HVID
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine($"{res.Game.Title}{variantPart}");
+
+            // Detaljer i MAGENTA
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.WriteLine($"   - Antal: {res.Reservation.Quantity}, Dato: {res.Reservation.ReservedDate.ToShortDateString()}, Kunde-ID: {res.Reservation.CustomerID}");
+
+            Console.ResetColor();
+        }
+
+        // Nyt linjeskift + prompt i hvid
+        Console.WriteLine();
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.WriteLine("Indtast nummeret på den reservation, du vil fjerne:");
+        Console.ResetColor();
+
+        if (!int.TryParse(Console.ReadLine(), out int reservationIndex) || reservationIndex < 1 || reservationIndex > reservations.Count)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Ugyldigt reservationsnummer.");
+            Console.ResetColor();
+            return;
+        }
+
+        var reservationToRemove = reservations[reservationIndex - 1].Reservation;
+        reservations[reservationIndex - 1].Game.Variant.RemoveReservation(reservationToRemove);
+
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("Reservationen er fjernet.");
+        Console.ResetColor();
+    }
+
+
+    static void MenuShowReservations()
+    {
+        HeadLine(CenterString("Reservationer", 20));
+        ShowReservations();
+    }
+
+    public static void ShowReservations()
+    {
+        
+
+        var allGames = BoardGameList.Instance.GetAllBoardGames();
+
+        if (!allGames.Any())
+        {
+            Console.WriteLine("Der er ingen reservationer i listen endnu.");
+            Console.ReadLine();
+            return;
+        }
+
+        var reservationsGrouped = allGames
+            .Where(game => game.Variant.GetReservations().Any())
+            .OrderBy(game => game.Title)
+            .ThenBy(game => game.Variant.Variant);
+
+        foreach (var game in reservationsGrouped)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"\nTitel: {game.Title}");
+            Console.ResetColor();
+
+            var reservations = game.Variant.GetReservations().OrderBy(r => r.ReservedDate);
+
+            foreach (var reservation in reservations)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write(" - Variant: ");
+                Console.ResetColor();
+                Console.WriteLine(game.Variant.Variant);
+
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write("   Dato: ");
+                Console.ResetColor();
+                Console.WriteLine(reservation.ReservedDate.ToString("dd/MM/yyyy"));
+
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write("   Kunde-ID: ");
+                Console.ResetColor();
+                Console.WriteLine(reservation.CustomerID);
+
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write("   Antal: ");
+                Console.ResetColor();
+                Console.WriteLine(reservation.Quantity);
+            }
+        }
+
+            Console.WriteLine();
+            Console.ReadLine();
+
+    }
+
+
+
+        #endregion menu
+
+        /// <summary>
+        /// Main method of the program.
+        /// Loads data from a JSON file, displays the main menu, and exports data back to the JSON file.
+        /// </summary>
+        /// <param name="args"></param>
+        static void Main(string[] args)
     {
         JsonFileHandler.Instance.ImportData(DATA_JSON_FILE);
         Login();

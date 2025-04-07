@@ -8,7 +8,6 @@ namespace GenSpil.Model
         public string Password { get; private set; }
         public Role Role { get; private set; } // Enum
 
-
         public User(string name, string password, Role role)
         {
             Name = name;
@@ -17,7 +16,7 @@ namespace GenSpil.Model
 
         }
 
-
     }
+
 }
 

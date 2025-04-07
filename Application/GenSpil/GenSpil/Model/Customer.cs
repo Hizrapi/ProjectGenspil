@@ -11,8 +11,8 @@ namespace GenSpil.Model
     public class Customer
     {
         public int CustomerID { get; private set; }
-        string Name { get; set; }
-        string Address { get; set; }
+        public string Name { get; set; }
+        public string Address { get; set; }
 
         public Customer(int customerID, string name, string address)
         {
