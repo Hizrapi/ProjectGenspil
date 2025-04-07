@@ -144,8 +144,9 @@ namespace GenSpil.Model
 
             //What customer do you want to remove?
             Console.WriteLine("Skrive; navn, adresse eller ID på den kunde som du vil fjerne:");
+            string input = Console.ReadLine();
 
-            if (int.TryParse(Console.ReadLine(), out int customerID))
+            if (int.TryParse(input, out int customerID))
             {
                 //Find the customer by ID
                 var customerToRemove = GetCustomerByID(customerID);
@@ -160,12 +161,9 @@ namespace GenSpil.Model
                     Console.WriteLine($"Kunde med ID {customerID} blev ikke fundet.");
                 }
             }
-            else
+            else if (!string.IsNullOrWhiteSpace(input))
             {
-                string input = Console.ReadLine();
 
-                if (!string.IsNullOrWhiteSpace(input))
-                {
                     var customerByName = GetCustomerByName(input);
                     if (customerByName != null)
                     {
@@ -188,7 +186,7 @@ namespace GenSpil.Model
                     Console.WriteLine("Skriv et navn, en adresse eller et ID");
                 }
             }
-        }
+        
 
         //public void RemoveCustomerByName()
         //{
