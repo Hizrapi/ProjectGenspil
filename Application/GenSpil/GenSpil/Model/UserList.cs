@@ -52,7 +52,7 @@ public class UserList
         Users.Remove(user);
     }
 
-# if DEBUG
+#if DEBUG
     public void Seed()
     {
         Users.Add(new User("admin", "admin", Type.Role.Admin));

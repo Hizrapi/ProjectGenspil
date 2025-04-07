@@ -1,0 +1,23 @@
+{
+  "version": "1.0",
+  "boardGames": {
+    "boardGames": []
+  },
+  "users": {
+    "users": [
+      {
+        "name": "admin",
+        "password": "admin",
+        "role": 0
+      },
+      {
+        "name": "user",
+        "password": "user",
+        "role": 1
+      }
+    ]
+  },
+  "customers": {
+    "customers": []
+  }
+}
