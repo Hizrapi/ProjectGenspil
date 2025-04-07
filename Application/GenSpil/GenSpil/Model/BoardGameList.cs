@@ -12,8 +12,6 @@ public class BoardGameList
 {
     private static BoardGameList? _instance;
     private static readonly object _lock = new object();
-    private List<BoardGame> _boardGames = new List<BoardGame>();
-
     public static BoardGameList Instance
     {
         get
@@ -28,15 +26,21 @@ public class BoardGameList
             }
         }
     } ///> Singleton instance of the BoardGameList
+    private BoardGameList()
+    {
+        BoardGames = new List<BoardGame>(); // Initialize the list of board games
+    } ///> Private constructor to prevent instantiation from outside
+
+    public List<BoardGame> BoardGames;
 
     public void Add(BoardGame? boardGame)
     {
-        _boardGames.Add(boardGame);
+        BoardGames.Add(boardGame);
     } ///> Adds a board game to the list
 
     public void Remove(BoardGame? boardGame)
     {
-        _boardGames.Remove(boardGame);
+        BoardGames.Remove(boardGame);
     } ///> Removes a board game from the list
 
     public void Edit(BoardGame boardGame)
@@ -44,7 +48,7 @@ public class BoardGameList
 
     public List<BoardGame> GetAllBoardGames()
     {
-        return _boardGames.ToList(); // Returner en kopi af listen for at undgå direkte manipulation
+        return BoardGames.ToList(); // Returner en kopi af listen for at undgå direkte manipulation
     }
 
 
@@ -129,10 +133,10 @@ public class BoardGameList
         Condition bgCondition = new Condition(conditionEnum, quantity, price);
 
         // Opret det nye brætspil med alle data. + 1 pga. ny linje
-        BoardGame newGame = new BoardGame(_boardGames.Count + 1, title, bgVariant, genre, bgCondition);
+        BoardGame newGame = new BoardGame(BoardGames.Count + 1, title, bgVariant, genre, bgCondition);
 
         // Tilføj spillet til listen
-        _boardGames.Add(newGame);
+        BoardGames.Add(newGame);
         Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine("Brætspil tilføjet!");
         Console.ResetColor();
@@ -149,7 +153,7 @@ public class BoardGameList
     {
         Console.Clear(); // Ryd skærm før visning
         Console.WriteLine("--- Liste over Brætspil (Grupperet) ---");
-        if (_boardGames.Count == 0)
+        if (BoardGames.Count == 0)
         {
             Console.WriteLine("Der er ingen brætspil i listen endnu.");
             return; // Gå tilbage hvis listen er tom
@@ -157,7 +161,7 @@ public class BoardGameList
 
         // Gruppér listen efter spillets Titel property
         // OrderBy(g => g.Title) sorterer titlerne alfabetisk (valgfrit)
-        var groupedGames = _boardGames
+        var groupedGames = BoardGames
                             .OrderBy(g => g.Title)
                             .GroupBy(g => g.Title);
 
@@ -190,7 +194,7 @@ public class BoardGameList
         Console.Write("Indtast titel - eller del af den: ");
         string searchTitle = Console.ReadLine();
 
-        var foundGames = _boardGames
+        var foundGames = BoardGames
                             .Where(g => g.Title.Contains(searchTitle, StringComparison.OrdinalIgnoreCase)) //Filtrer elementer i en liste basseret på en betingelse
                             .OrderBy(g => g.Title) //Sortere en liste efter en bestemt egenskab.
                             .GroupBy(g => g.Title); //Grupperer en liste efter en bestemt egenskab
@@ -227,7 +231,7 @@ public class BoardGameList
         Console.Clear();
         Console.WriteLine("--- Fjern Brætspil ---");
 
-        if (_boardGames.Count == 0)
+        if (BoardGames.Count == 0)
         {
             Console.WriteLine("Listen er tom. Der er ingen spil at fjerne.");
             return; // Gå tilbage, da der ikke er noget at gøre
@@ -236,10 +240,10 @@ public class BoardGameList
         Console.WriteLine("Vælg nummeret på det spil, du vil fjerne:");
 
         // Vis alle spil med et nummer (startende fra 1 (Den starter normalt med 0)
-        for (int i = 0; i < _boardGames.Count; i++)
+        for (int i = 0; i < BoardGames.Count; i++)
         {
             // Brug i + 1 for at vise 1-baseret nummerering til brugeren
-            Console.WriteLine($"{i + 1}. {_boardGames[i]}"); // Bruger BoardGame.ToString()
+            Console.WriteLine($"{i + 1}. {BoardGames[i]}"); // Bruger BoardGame.ToString()
         }
         Console.WriteLine("-------------------------");
         Console.Write("Indtast nummer på spil der skal fjernes (eller 0 for at annullere): ");
@@ -255,13 +259,13 @@ public class BoardGameList
                 return; // Gå tilbage
             }
             // Tjek om nummeret er inden for det gyldige område (1 til antal spil)
-            if (choice >= 1 && choice <= _boardGames.Count)
+            if (choice >= 1 && choice <= BoardGames.Count)
             {
                 // Konverter brugerens 1-baserede valg til 0-baseret index
                 int indexToRemove = choice - 1;
 
                 // Få fat i spillet der skal fjernes for at vise det i beskeden
-                BoardGame gameToRemove = _boardGames[indexToRemove];
+                BoardGame gameToRemove = BoardGames[indexToRemove];
 
                 // Valgfri: Spørg om bekræftelse
                 Console.WriteLine($"\nDu er ved at fjerne: {gameToRemove}");
@@ -271,7 +275,7 @@ public class BoardGameList
                 if (confirmation != null && confirmation.Trim().Equals("J", StringComparison.OrdinalIgnoreCase))
                 {
                     // Fjern spillet fra listen ved det valgte index
-                    _boardGames.RemoveAt(indexToRemove);
+                    BoardGames.RemoveAt(indexToRemove);
                     Console.WriteLine($"'{gameToRemove.Title}' er blevet fjernet.");
                 }
                 else
@@ -304,7 +308,7 @@ public class BoardGameList
         string searchTitle = Console.ReadLine();
 
         // Find alle spil, der matcher titlen 
-        var foundGames = _boardGames
+        var foundGames = BoardGames
                             .Where(g => g.Title.Contains(searchTitle, StringComparison.OrdinalIgnoreCase)) // Søger efte
                             .OrderBy(g => g.Title) // Sorterer fundne spil alfabetisk ud fra Variant.
                             .ToList();
@@ -357,7 +361,7 @@ public class BoardGameList
         // Hvis antallet nu er 0, fjernes spillet fra listen
         if (selectedGame.Condition.Quantity == 0)
         {
-            _boardGames.Remove(selectedGame);
+            BoardGames.Remove(selectedGame);
             Console.WriteLine($"'{selectedGame.Title}' er blevet fjernet, da antallet er 0.");
         }
         else
@@ -378,6 +382,6 @@ public class BoardGameList
 
     public void Clear()
     {
-        _boardGames.Clear();
+        BoardGames.Clear();
     }
 }

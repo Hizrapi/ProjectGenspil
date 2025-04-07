@@ -19,11 +19,16 @@ namespace GenSpil.Model
             }
         }
 
-        public List<Customer> _customers = new List<Customer>();
+        public List<Customer> Customers { get; private set; }
 
         public CustomerList()
         {
-            _customers = new List<Customer>();
+            Customers = new List<Customer>();
+        }
+
+        public void Add(Customer customer)
+        {
+            Customers.Add(customer);
         }
 
         //Adds a customer to the list.
@@ -38,7 +43,7 @@ namespace GenSpil.Model
 
             Customer customer = new Customer(newCustomerID, name, address);
 
-            _customers.Add(customer);
+            Customers.Add(customer);
 
             Console.WriteLine($"Kunde {name} med ID {newCustomerID} tilføjet.");
         }
@@ -46,7 +51,7 @@ namespace GenSpil.Model
         //Removes a customer to the list.
         public void RemoveCustomer(Customer customer)
         {
-            _customers.Remove(customer);
+            Customers.Remove(customer);
         }
 
         public List<Customer> SearchCustomers()
@@ -58,7 +63,7 @@ namespace GenSpil.Model
             string searchName = Console.ReadLine();
 
             //Søg efter indput
-            var foundCustomers = _customers.FindAll(g => g.Name.Contains(searchName, StringComparison.OrdinalIgnoreCase));
+            var foundCustomers = Customers.FindAll(g => g.Name.Contains(searchName, StringComparison.OrdinalIgnoreCase));
             if (foundCustomers.Count > 0)
             {
                 Console.WriteLine($"--- Fundne Kunder (Søgning: '{searchName}') ---");
@@ -81,28 +86,28 @@ namespace GenSpil.Model
         //Findes a customer on the list.
         public Customer? GetCustomerByID(int customerID)
         {
-            return _customers.Find(c => c.CustomerID == customerID);
+            return Customers.Find(c => c.CustomerID == customerID);
         }
         public Customer? GetCustomerByName(string name)
         {
-            return _customers.Find(c => c.Name == name);
+            return Customers.Find(c => c.Name == name);
         }
         public Customer? GetCustomerByAddress(string address)
         {
-            return _customers.Find(c => c.Address == address);
+            return Customers.Find(c => c.Address == address);
         }
 
 
         public void DisplayCustomers()
         {
-            if (_customers.Count == 0)
+            if (Customers.Count == 0)
             {
                 Console.WriteLine($"Ingen kunder fundet.");
                 return;
             }
 
             Console.WriteLine($"Customers List:");
-            foreach (var customer in _customers)
+            foreach (var customer in Customers)
             {
                 Console.WriteLine($"{customer.CustomerID}: {customer.Name} - {customer.Address}");
             }
@@ -111,7 +116,7 @@ namespace GenSpil.Model
         //Update function isn't completed.
         public void UpdateCustomer(int customerID, string newName, string newAddress)
         {
-            var customer = _customers.Find(c => c.CustomerID == customerID);
+            var customer = Customers.Find(c => c.CustomerID == customerID);
 
             if (customer != null)
             {
@@ -211,17 +216,17 @@ namespace GenSpil.Model
 
         public int GenerateID(int customerID)
         {
-            if (_customers.Count == 0)
+            if (Customers.Count == 0)
             {
                 return 1;
             }
 
-            return _customers.Max(c => c.CustomerID) + 1;
+            return Customers.Max(c => c.CustomerID) + 1;
         }
 
         public void Clear()
         {
-            _customers.Clear();
+            Customers.Clear();
         }
     }
 }

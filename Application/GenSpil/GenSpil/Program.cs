@@ -81,7 +81,7 @@ internal class Program
 
 
     }
-    BoardGameList boardgamelist = new BoardGameList();
+    BoardGameList boardgamelist = BoardGameList.Instance;
     static void Logout()
     {
         _auth.Logout();
@@ -590,9 +590,9 @@ internal class Program
     /// <param name="args"></param>
     static void Main(string[] args)
     {
-        JsonFileHandler.Instance.ImportData(DATA_JSON_FILE);
+        //JsonFileHandler.Instance.ImportData(DATA_JSON_FILE);
         Login();
         MenuMain();
-        JsonFileHandler.Instance.ExportData(DATA_JSON_FILE);
+        //JsonFileHandler.Instance.ExportData(DATA_JSON_FILE);
     }
 }
