@@ -8,10 +8,12 @@ namespace GenSpil.Model;
 /// Singleton class for handling a list of board games.
 /// TODO Should not interact with the user directly. (Tirsvad)
 /// </summary>
-class BoardGameList
+public class BoardGameList
 {
     private static BoardGameList? _instance;
     private static readonly object _lock = new object();
+    private List<BoardGame> _boardGames = new List<BoardGame>();
+
     public static BoardGameList Instance
     {
         get
@@ -28,9 +30,13 @@ class BoardGameList
     } ///> Singleton instance of the BoardGameList
 
 
-    public List<BoardGame> _boardGames = new List<BoardGame>();
+    public List<BoardGame> GetAllBoardGames()
+    {
+        return _boardGames.ToList(); // Returner en kopi af listen for at undgå direkte manipulation
+    }
 
-    
+
+
     /// <summary>
     /// Tilføjer et brætspil.
     /// </summary>
@@ -274,7 +280,7 @@ class BoardGameList
         }
         Console.ReadLine();
     }
-  
+
     /// <summary>
     /// Metode til at redigere et brætspil baseret på titel.
     /// Brugeren indtaster titlen på spillet, vælger det korrekte spil, og kan derefter redigere tilstand, antal og pris.
@@ -352,4 +358,15 @@ class BoardGameList
 
         Console.ReadLine(); // Forhindrer konsollen i at lukke med det samme
     }
+
+    public void RegisterReservation(BoardGame game, int customerID, DateTime date, int quantity)
+    {
+        game.Variant.AddReservationToList(customerID, date, quantity);
+    }
+
+    public void Clear()
+    {
+        _boardGames.Clear();
+    }
 }
+
