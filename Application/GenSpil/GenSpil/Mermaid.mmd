@@ -1,126 +1,208 @@
 classDiagram
+    direction LR
+ 
+    class Authentication {
+        +User User
+        +List~User~ Users
+        +Authentication()
+        +GetRole()
+        +Login()
+        +Logout()
+    }
+ 
+    class BoardGame {
+        -int boardGameID
+        +Condition Condition
+        +Genre Genre
+        +string Title
+        +string Variant
+        +BoardGame()
+        +ToString() string
+    }
+    note for BoardGame "Repæsenterer et brugt brætspil med tilstand og lager."
+ 
+    class BoardGameList {
+        -List~BoardGame~ boardGames
+        -BoardGameList _instance
+        -object _lock
+        +BoardGameList Instance
+        +AddBoardGame(BoardGame game)
+        +DisplayBoardGames()
+        +EditBoardGame(BoardGame game)
+        +RemoveBoardGame(int id)
+        +SearchBoardGame(string query)
+        +RegisterReservation(BoardGame game, int customerID, DateTime reservedDate, int quantity)
+        +RemoveReservation(Reserve reservation)
+        +GetAllBoardGames() List~BoardGame~
+    }
+ 
+    class BoardGameVariant {
+        -bool _reserved
+        +string Title
+        +string Variant
+        +BoardGameVariant()
+        +bool GetReserved()
+        +SetReserved(bool value)
+        +AddReservationsToList(int customerID, DateTime reservedDate, int quantity, BoardGame game)
+        +GetReservations() List\<Reserve\>
+        +RemoveReservation(Reserve reservation)
+        -Reservations : List~Reserve~
 
-class UserList {
-    list<User> Users
-    GetUders(): list<User>
-    AddUser(Password: string, Username: string): void
-    RemoveUser(Username: string): void
-}
-note for UserList "Indeholder en liste over brugere."
+    }
+ 
+    class Condition {
+        +ConditionType ConditionType
+        +decimal Price
+        +int Quantity
+        +Condition()
+        +ToString() string
+    }
+    note for Condition "Tilstande et brætspil kan være i"
+ 
+    class Customer {
+        +string Address
+        +int CustomerID
+        +string Name
+        +Customer()
+        +string GetAddress()
+        +int GetCustomerID()
+        +string GetName()
+        +SetAddress(string address)
+        +SetName(string name)
+        +ToString() string
+    }
+    note for Customer "Administrerer personlige oplysninger og spilkøb/reservationer"
+ 
+    class CustomerList {
+        -List~Customer~ customers
+        +AddCustomer(Customer customer)
+        +CustomerList()
+        +int GenerateID()
+        +Customer GetCustomerByID(int id)
+        +RemoveCustomer(int id)
+        +UpdateCustomer(Customer customer)
+    }
+    note for CustomerList "Indeholder en liste over kunder"
+ 
+    class JsonFileHandler {
+        -object _dataContainer
+        -JsonFileHandler _instance
+        -object _lock
+        -string _version
+        +JsonFileHandler Instance
+        +ExportData(object data)
+        +object ImportData()
+        +JsonFileHandler()
+        %% Nested Types not shown in detail
+    }
+ 
+    class Program {
+        -Authentication auth
+        -BoardGameList boardgamelist
+        -string DATA_JSON_FILE
+        -string TITLE
+        +AddBoardGame()
+        +CenterString(string text)
+        +ErrorMessage(string message)
+        +string GetVersion()
+        +HeadLine(string text)
+        +Login()
+        +Logout()
+        +Main(string[] args)
+        +MenuAdmin()
+        +MenuBoardGame()
+        +MenuChooseBoardGame()
+        +MenuChooseCustomer()
+        +MenuCustomer()
+        +MenuMain()
+        +MenuReport()
+        +Program()
+        +RemoveBoardGame()
+        +SeekBoardGame()
+        +ShowBoardGame()
+        +showReportBoardGameSort()
+        +ShowReportBoardGameSortGenre()
+        +ShowReportBoardGameSortTitle()
+        +AddReservation()
+        +ShowReservations()
+        +RemoveReservation()
+        +MenuAddReservation()
+        +MenuShowReservations()
+        +MenuRemoveReservation()
+    }
+ 
+    class Reserve {
+       +Reserve(DateTime reservedDate, int customerId, int quantity, BoardGame game)
+       +DateTime ReservedDate
+       +int CustomerID
+       +int Quantity
+       +BoardGame Game
 
-class User {
-    string Username
-    string Password
-    Role Role // enum
-    User(Username: string, Password: string, Role: Role):
-}
-note for User "Bruges til at logge ind og administrere brugere.
-Krav da vi har oplysinger på kunder (GPDR)."
-
-class Role {
-    <<enumeration>>
-    Admin
-    User
-    Guest
-}
-note for Role "Brugerroller"
-
-class Customer {
-    -string CustomerID
-    -string Name
-    -string Address
-    Customer(CustomerID: int, Name: string, Address: string):
-    GetCustomerID(): int
-    GetName(): string
-    GetAddress(): string
-    SetName(Name: string): void
-    SetAddress(Address: string): void
-    GetCustomerID(): int
-    ToString(): string
-}
-note for Customer "Administrerer personlige oplysninger og spilkøb/reservationer."
-
-class CustomerList {
-    list<Customer> Customers
-    GetCustomers(): list<Customer>
-    AddCustomer(Customer: Customer): void
-    UpdateCustomer(Customer: Customer): void
-    RemoveCustomer(Customer: Customer): void
-    GetCustomerByID(): Customer
-    GenerateID(): int
-}
-note for CustomerList "Indeholder en liste over kunder."
-
-class BoardGame {
-    string GameID
-    string Title
-    Genre Genre //enum
-    string Description
-    Condition Condition //enum
-    decimal Price
-    int StockQuantity
-    bool reperation
-    BoardGame(GameID: string, Title: string, Description: string, Condition: Condition, Price: decimal, StockQuantity: int, reperation=false: bool):
-    ToString(): string
-}
-note for BoardGame "Repræsenterer et brugt 
-brætspil med tilstand 
-og lager."
-
-class BoardGameList {
-    list<BoardGame> BoardGames
-    GetBoardGames(): list<BoardGame>
-    Add(BoardGame: BoardGame): void
-    Update(BoardGame: BoardGame): void
-    GetBoardGamesByGenre(genre: Genre): list<BoardGame>
-    GetBoardGamesByTitle(title: string): list<BoardGame>
-    GenerateID(): int
-}
-
-class StockQuantity {
-    int Quantity
-    BoardGameID BoardGameID
-    StockQuantity(Quantity: int):
-}
-
-class reserved {
-    DateTime ReservedDate
-    int Quantity
-    CustomerID CustomerID
-    BoardGameID BoardGameID
-    reserved(ReservedDate: DateTime, Quantity: int):
-}
-note for reserved "Hvornår et brætspil er 
-reserveret. Og til hvem"
-
-class Condition {
-    <<enumeration>>
-    New
-    Good
-    Used
-    Damaged
-}
-note for Condition "Tilstande et brætspil kan
-være i."
-
-class Genre {
-    <<enumeration>>
-    Strategy
-    Party
-    Family
-    Abstract
-    Thematic
-    Children
-}
-note for Genre "Brætspil genre"
-
-CustomerList "1" *-- "*" Customer : Indeholder
-Customer "*" -- "*" BoardGameList : Køber
-Customer "1" *-- "*" reserved : Reserverer
-BoardGameList "1" -- "*" BoardGame : Indeholder
-BoardGame "1" *-- "*" reserved : Reserveres
-BoardGame "1" -- "1" Condition : Har
-BoardGame "1" -- "1" Genre : Har
-Stock -- BoardGame : Har
-UserList "1" *-- "*" User : Indeholder
-User "1" -- "1" Role : Har 
+    }
+ 
+    class User {
+        +string Name
+        +string Password
+        +Role Role
+        +User()
+    }
+    note for User "Bruges til at logge ind og administrere brugere. *GDPR*"
+ 
+    class UserList {
+        -UserList _instance
+        -object _lock
+        +UserList Instance
+        +List~User~ Users
+        +Seed()
+        +UserList()
+    }
+    note for UserList "Indehodler en liste over brugere."  
+ 
+    class ConditionEnum {
+        <<enumeration>>
+        Ny
+        Brugt
+        God
+        Slidt
+    }
+    note for ConditionEnum "Renamed from Condition to avoid clash with Condition class"
+ 
+ 
+    class Genre {
+         <<enumeration>>
+        Familie
+        Boernespil
+        Rollespil
+        Selskab
+        Strategi
+        Quiz
+    }
+     note for Genre "Brætspil genre"
+ 
+ 
+    class Role {
+         <<enumeration>>
+        Admin
+        User
+        Guest
+    }
+    note for Role "Brugerroller"
+ 
+    %% Relationships (inferred or implied)
+    Program *-- Authentication : bruger
+    Program *-- BoardGameList : bruger
+    BoardGameList "1" *-- "*" BoardGame : indeholder
+    CustomerList "1" *-- "*" Customer : indeholder
+    UserList "1" *-- "*" User : indeholder
+    Authentication o-- UserList : aggregates
+    User *-- Role : 
+    BoardGame *-- Condition : 
+    BoardGame *-- Genre : 
+    Condition *-- ConditionEnum : 
+    Reserve -- Customer : Reserver 
+    Reserve --> BoardGame : refererer til
+    JsonFileHandler -- BoardGameList : handles data for
+    JsonFileHandler -- CustomerList : handles data for
+    JsonFileHandler -- UserList : handles data for
+    BoardGame -- BoardGameVariant : 
+    
