@@ -1,36 +1,41 @@
-﻿using System.Collections.Generic;
-namespace GenSpil.Model;
+﻿using System;
+using System.Collections.Generic;
 
-public class BoardGameVariant
+namespace GenSpil.Model
 {
-    public string Title { get; private set; }
-    public string Variant { get; private set; }
-    private List<Reserve> Reservations = new List<Reserve>(); // List of reservations for this variant
-
-    public BoardGameVariant(string title, string variant)
+    public class BoardGameVariant
     {
-        Title = title;
-        Variant = variant;
-    }
+        public string Title { get; set; } = string.Empty;       // [CHANGED] gjort public set + default
+        public string Variant { get; set; } = string.Empty;     // [CHANGED] gjort public set + default
+        public List<Reserve> Reservations { get; set; } = new(); // [CHANGED] gjort public + default
 
-    public void AddReservationToList(int customerID, DateTime reservedDate, int quantity)
-    {
-        Reserve reservation = new Reserve(reservedDate, customerID, quantity);
-        SetReserved(reservation);
-    }
+        public BoardGameVariant() { } // [NEW] parameterløs constructor til JSON
 
-    public void SetReserved(Reserve reservation)
-    {
-        Reservations.Add(reservation);
-    }
+        public BoardGameVariant(string title, string variant)
+        {
+            Title = title;
+            Variant = variant;
+        }
 
-    public List<Reserve> GetReservations()
-    {
-        return Reservations;
-    }
+        public void AddReservationToList(int customerID, DateTime reservedDate, int quantity)
+        {
+            Reserve reservation = new Reserve(reservedDate, customerID, quantity);
+            SetReserved(reservation);
+        }
 
-    public void RemoveReservation(Reserve reservation)
-    {
-        Reservations.Remove(reservation);
+        public void SetReserved(Reserve reservation)
+        {
+            Reservations.Add(reservation);
+        }
+
+        public List<Reserve> GetReservations()
+        {
+            return Reservations;
+        }
+
+        public void RemoveReservation(Reserve reservation)
+        {
+            Reservations.Remove(reservation);
+        }
     }
 }

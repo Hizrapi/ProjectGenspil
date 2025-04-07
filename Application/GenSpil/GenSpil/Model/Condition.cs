@@ -6,6 +6,8 @@
         public int Quantity { get; set; }
         public decimal Price { get; set; }
 
+        public Condition() { } // [NEW] ← vigtigt for JSON
+
         /// <summary>
         /// Constructor til Condition
         /// </summary>
