@@ -4,7 +4,6 @@ using GenSpil.Handler;
 using GenSpil.Model;
 using TirsvadCLI.Frame;
 using TirsvadCLI.MenuPaginator;
-//using GenSpil.Model;
 
 namespace GenSpil;
 
@@ -96,17 +95,17 @@ internal class Program
 
     static void AddBoardGame()
     {
-        BoardGameList.Instance.Add(null);
+        BoardGameList.Instance.AddBoardGame();
     }
 
     static void RemoveBoardGame()
     {
-        BoardGameList.Instance.Remove(null);
+        BoardGameList.Instance.RemoveBoardGame();
     }
 
     static void SeekBoardGame()
     {
-        //BoardGameList.Instance.Search();
+        BoardGameList.Instance.SearchBoardGames();
     }
 
     static void ShowReportBoardGameSort()
