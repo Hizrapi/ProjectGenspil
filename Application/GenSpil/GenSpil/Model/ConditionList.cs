@@ -6,34 +6,18 @@ using System.Threading.Tasks;
 
 namespace GenSpil.Model
 {
-
-    /// <summary>
-    /// Singleton class for handling a list of Conditions.
-    /// </summary>
-
-
-    public class ConditionList
+    public class ConditionHolder
     {
-        private static ConditionList? _instance;
-        private static readonly object padlock = new object();
+        // property med get og set
+       public ICollection<Condition> ConditionList {  get; private set; }
 
-        public static ConditionList Instance
+        // Constructor der sætter værdierne
+        public ConditionHolder() 
         {
-            get
-            {
-                lock (padlock)
-                {
-                    if (_instance == null)
-                    {
-                        _instance = new ConditionList();
-                    }
-                    return _instance;
-                }
+            ConditionList = new List<Condition>((Condition[])Enum.GetValues(typeof(Condition)));
 
-            }
+        }
 
-        } ///> Singleton instance of the Conditionlist
-        public List<Condition> _boardGames = new List<Condition>(); // List of Conditions 
     }
-
 }
+

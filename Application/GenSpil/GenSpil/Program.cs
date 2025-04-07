@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel;
+using System.Net;
 using System.Reflection;
+using System.Xml.Linq;
 using System.Text;
 using GenSpil.Handler;
 using GenSpil.Model;
@@ -191,7 +193,7 @@ internal class Program
             // Create a list of menu items
             List<MenuItem> menuItems = new();
             menuItems.Add(new MenuItem("Brætspil", MenuBoardGame));
-            menuItems.Add(new MenuItem("Kunde", MenuCostumer));
+            menuItems.Add(new MenuItem("Kunde", MenuCustomer));
             menuItems.Add(new MenuItem("Rapporter", MenuReport));
             menuItems.Add(new MenuItem("Admin", MenuAdmin));
             menuItems.Add(new MenuItem("Logout", Logout));
@@ -204,9 +206,42 @@ internal class Program
         } while (true);
     }
 
-    static void MenuCostumer()
+    static void RemoveCustomer()
     {
-        throw new NotImplementedException();
+        CustomerList.Instance.RemoveCustomer();
+    }
+
+    static void SearchCustomers()
+    {
+        CustomerList.Instance.SearchCustomers();
+    }
+
+    static void AddCustomer()
+    {
+        CustomerList.Instance.AddCustomer();
+    }
+
+    static void MenuCustomer()
+    {
+        do
+        {
+            Console.Clear();
+            HeadLine("Kunder");
+
+            // Create a list of menu items
+            List<MenuItem> menuItems = new();
+            menuItems.Add(new MenuItem("Tilføje kunde", AddCustomer));
+            menuItems.Add(new MenuItem("Fjern kunde", RemoveCustomer));
+            menuItems.Add(new MenuItem("Søge i kunder", SearchCustomers));
+            menuItems.Add(new MenuItem("Logout", Logout));
+
+            // Create a menu paginator
+            MenuPaginator menu = new(menuItems, 10);
+            if (menu.menuItem != null && menu.menuItem.Action is Action action)
+                action(); // Execute the action
+            else
+                return;
+        } while (true);
     }
 
     /// <summary>
