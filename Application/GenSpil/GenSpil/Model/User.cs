@@ -9,12 +9,9 @@ namespace GenSpil.Model
 {
     public class User
     {
-        private string username { get; set; }
-        private string password { get; set; }
-        private Role Role { get; set; } // Enum
-
-        public string Username => username;
-        public string Password => password;
+        public string Name { get; private set; }
+        public string Password { get; private set; }
+        public Role Role { get; private set; } // Enum
 
         public User (string username, string password, Role role)
         {
