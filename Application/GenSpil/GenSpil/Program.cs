@@ -1,11 +1,6 @@
-﻿using System.ComponentModel;
-using System.Net;
-using System.Reflection;
-using System.Xml.Linq;
-using System.Text;
+﻿using System.Reflection;
 using GenSpil.Handler;
 using GenSpil.Model;
-using GenSpil.Type;
 using TirsvadCLI.Frame;
 using TirsvadCLI.MenuPaginator;
 //using GenSpil.Model;
@@ -14,9 +9,9 @@ namespace GenSpil;
 
 internal class Program
 {
-    
+
     const string TITLE = "GenSpil";
-    static readonly string DATA_JSON_FILE = "/data/genspil.json";
+    static readonly string DATA_JSON_FILE = "./data/genspil.json";
 
     static Authentication _auth;
 
@@ -43,7 +38,7 @@ internal class Program
         int cInputLeft = 14;
         do
         {
-            Console.CursorVisible = true; 
+            Console.CursorVisible = true;
             // Headline
             HeadLine("Log på");
             // Form 
@@ -64,7 +59,7 @@ internal class Program
             // Authenticate
             if (username == null || password == null)
             {
-               ErrorMessage("Brugernavn eller adgangskode er tom");
+                ErrorMessage("Brugernavn eller adgangskode er tom");
                 continue;
             }
 
@@ -78,12 +73,12 @@ internal class Program
             else
             {
                 ErrorMessage("Forkert brugernavn eller adgangskode");
-               
+
             }
 
         } while (true);
-        
-       
+
+
     }
     BoardGameList boardgamelist = new BoardGameList();
     static void Logout()
@@ -100,17 +95,17 @@ internal class Program
 
     static void AddBoardGame()
     {
-        BoardGameList.Instance.AddBoardGame();
+        BoardGameList.Instance.Add();
     }
 
     static void RemoveBoardGame()
     {
-        BoardGameList.Instance.RemoveBoardGame();
+        BoardGameList.Instance.Remove();
     }
 
     static void SeekBoardGame()
     {
-        BoardGameList.Instance.SearchBoardGames();
+        BoardGameList.Instance.Search();
     }
 
     static void ShowReportBoardGameSort()
@@ -162,7 +157,7 @@ internal class Program
         int rightPadding = padding - leftPadding;
         return new string(' ', leftPadding) + text + new string(' ', rightPadding);
     }
-    
+
     static void ErrorMessage(string message)
     {
         Console.ForegroundColor = ConsoleColor.Red;
@@ -173,7 +168,7 @@ internal class Program
         Console.ReadKey();
     }
 
-   
+
 
 
     #region menu
@@ -322,7 +317,7 @@ internal class Program
     /// </summary>
     static void MenuChooseBoardGame()
     {
-        BoardGameList.Instance.EditBoardGame();
+        BoardGameList.Instance.Edit();
         //do
         //{
         //    Console.Clear();

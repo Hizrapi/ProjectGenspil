@@ -9,6 +9,7 @@ public class BoardGameVariant
 
     public BoardGameVariant(string title, string variant)
     {
+
         Title = title;
         Variant = variant;
     }
@@ -19,14 +20,26 @@ public class BoardGameVariant
         {
             throw new ArgumentException("Antallet skal være større end 0.");
         }
-
         Reserve reservation = new Reserve(reservedDate, customerID, quantity, game);
         SetReserved(reservation);
     }
 
+        public Reserve? GetReserved()
+        {
+            return Reserved;
+        }
+
+        public void SetReserved(Reserve reserved)
+        {
+            Reserved = reserved;
+        }
+
+
+
     public void SetReserved(Reserve reservation)
     {
         Reservations.Add(reservation);
+
     }
 
     public List<Reserve> GetReservations()
