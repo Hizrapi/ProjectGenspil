@@ -35,5 +35,21 @@ public class UserList
         }
 
     }
+    public List<User> Users { get; private set; } // List of users 
 
+    private UserList()
+    {
+        Users = new List<User>();
+#if DEBUG
+     Seed();
+#endif
+    }
+
+# if DEBUG
+    public void Seed()
+    {
+        Users.Add(new User("admin", "admin", Type.Role.Admin));
+        Users.Add(new User("user", "user", Type.Role.User));
+    }
+#endif
 } ///> Singleton instance of the UserList

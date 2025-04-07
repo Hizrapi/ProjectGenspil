@@ -1,4 +1,8 @@
-﻿using System.Reflection;
+﻿using System.ComponentModel;
+using System.Reflection;
+using GenSpil.Handler;
+using GenSpil.Model;
+using GenSpil.Type;
 using TirsvadCLI.Frame;
 using TirsvadCLI.MenuPaginator;
 //using GenSpil.Model;
@@ -7,10 +11,19 @@ namespace GenSpil;
 
 internal class Program
 {
+    
     const string TITLE = "GenSpil";
     static readonly string DATA_JSON_FILE = "/data/genspil.json";
 
+    static Authentication _auth;
+
     //BoardGameList _boardGameList = BoardGameList.Instance;
+
+    static Program()
+    {
+        _auth = new Authentication();
+
+    }
 
     static string GetVersion()
     {
@@ -18,34 +31,83 @@ internal class Program
         return version != null ? $"{version.Major}.{version.Minor}" : "Unknown version";
     }
 
+    /// <summary>
+    /// Login with username and password
+    /// </summary>
     static void Login()
     {
-        throw new NotImplementedException();
-    }
+        int cTop;
+        int cInputLeft = 14;
+        do
+        {
+            Console.CursorVisible = true; 
+            // Headline
+            HeadLine("Log på");
+            // Form 
+            cTop = Console.CursorTop;
+            Console.Write("Brugernavn");
+            Console.CursorLeft = cInputLeft - 2;
+            Console.WriteLine(":");
+            Console.Write("Adgangskode");
+            Console.CursorLeft = cInputLeft - 2;
+            Console.WriteLine(":");
+            // user input 
+            Console.SetCursorPosition(cInputLeft, cTop++);
+            string? username = Console.ReadLine();
+            Console.SetCursorPosition(cInputLeft, cTop++);
+            //TODO hide password input
+            string? password = Console.ReadLine();
+            Console.CursorVisible = false;
+            // Authenticate
+            if (username == null || password == null)
+            {
+               ErrorMessage("Brugernavn eller adgangskode er tom");
+                continue;
+            }
 
+            if (_auth.Login(username, password))
+            {
+                Console.WriteLine($"Du er logget ind som {username}");
+                var role = _auth.GetRole(username);
+                Console.WriteLine($"Din rolle er {role}");
+                break;
+            }
+            else
+            {
+                ErrorMessage("Forkert brugernavn eller adgangskode");
+               
+            }
+
+        } while (true);
+        
+       
+    }
+    BoardGameList boardgamelist = new BoardGameList();
     static void Logout()
     {
-        throw new NotImplementedException();
+        _auth.Logout();
+        Login();
     }
 
     static void ShowBoardGame()
     {
-        throw new NotImplementedException();
+
+        BoardGameList.Instance.DisplayBoardGames();
     }
 
     static void AddBoardGame()
     {
-        throw new NotImplementedException();
+        BoardGameList.Instance.AddBoardGame();
     }
 
     static void RemoveBoardGame()
     {
-        throw new NotImplementedException();
+        BoardGameList.Instance.RemoveBoardGame();
     }
 
     static void SeekBoardGame()
     {
-        throw new NotImplementedException();
+        BoardGameList.Instance.SearchBoardGames();
     }
 
     static void ShowReportBoardGameSort()
@@ -97,6 +159,18 @@ internal class Program
         int rightPadding = padding - leftPadding;
         return new string(' ', leftPadding) + text + new string(' ', rightPadding);
     }
+    
+    static void ErrorMessage(string message)
+    {
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine();
+        Console.WriteLine(message);
+        Console.ResetColor();
+        Console.WriteLine("Tryk en tast for at fortsætte");
+        Console.ReadKey();
+    }
+
+
 
     #region menu
     /// <summary>
@@ -184,8 +258,10 @@ internal class Program
             List<MenuItem> menuItems = new();
             menuItems.Add(new MenuItem("Vælg spil", MenuChooseBoardGame));
             menuItems.Add(new MenuItem("Tilføj spil", AddBoardGame));
+            menuItems.Add(new MenuItem("List spil", ShowBoardGame));
+            menuItems.Add(new MenuItem("Fjern spil", RemoveBoardGame));
             menuItems.Add(new MenuItem("Søg", SeekBoardGame));
-            MenuPaginator menu = new(menuItems, 10);
+            MenuPaginator menu = new(menuItems, pageSize: 10);
             if (menu.menuItem != null && menu.menuItem.Action is Action action)
             {
                 action();
@@ -206,17 +282,22 @@ internal class Program
     /// </summary>
     static void MenuChooseBoardGame()
     {
-        do
-        {
-            Console.Clear();
-            HeadLine("Vælg spil");
-            List<MenuItem> menuItems = new();
-            //foreach (BoardGame boardGame in _boardGameList)
-            //{
-            //    menuItems.Add(new MenuItem(boardGame.Title, () => ShowBoardGame(boardGame)));
-            //}
-            throw new NotImplementedException();
-        } while (true);
+        //do
+        //{
+        //    Console.Clear();
+        //    HeadLine("Vælg spil");
+        //    List<MenuItem> menuItems = new();
+        //    foreach (BoardGame boardGame in _boardGameList.BoardGames)
+        //    {
+        //        menuItems.Add(new MenuItem(boardGame.Title, () => ShowBoardGame(boardGame)));
+        //    }
+        //    MenuPaginator menu = new(menuItems, 10);
+        //    if (menu.menuItem != null && menu.menuItem.Action is Action action)
+        //        action();
+        //    else
+        //        return;
+        //} while (true);
+
     }
 
 
@@ -231,7 +312,7 @@ internal class Program
     {
         do
         {
-            //Login();
+            Login();
             MenuMain();
         } while (true);
     }
