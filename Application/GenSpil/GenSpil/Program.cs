@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Text;
 using GenSpil.Handler;
 using GenSpil.Model;
 using TirsvadCLI.Frame;
@@ -51,10 +52,10 @@ internal class Program
             Console.WriteLine(":");
             // user input 
             Console.SetCursorPosition(cInputLeft, cTop++);
-            string? username = Console.ReadLine();
+            string? username = ReadLineWithEscape();
             Console.SetCursorPosition(cInputLeft, cTop++);
             //TODO hide password input
-            string? password = Console.ReadLine();
+            string? password = ReadLineWithEscape(true);
             Console.CursorVisible = false;
             // Authenticate
             if (username == null || password == null)
@@ -168,6 +169,46 @@ internal class Program
         Console.ReadKey();
     }
 
+    /// <summary>
+    /// Reads a line of input from the console, with optional hiding of input characters.
+    /// </summary>
+    /// <param name="hideInput">Whether to hide the input characters (e.g., for passwords).</param>
+    /// <returns>The input string, or null if the escape key was pressed.</returns>
+    static string? ReadLineWithEscape(bool hideInput = false)
+    {
+        StringBuilder input = new StringBuilder();
+        ConsoleKeyInfo keyInfo;
+        while ((keyInfo = Console.ReadKey(true)).Key != ConsoleKey.Enter)
+        {
+            if (keyInfo.Key == ConsoleKey.Escape)
+            {
+                return null; // Return null if Esc is pressed
+            }
+            if (keyInfo.Key == ConsoleKey.Tab)
+            {
+                continue; // Ignore Tab key
+            }
+            if (keyInfo.Key == ConsoleKey.Backspace && input.Length > 0)
+            {
+                input.Remove(input.Length - 1, 1);
+                Console.Write("\b \b");
+            }
+            else if (keyInfo.Key != ConsoleKey.Backspace)
+            {
+                input.Append(keyInfo.KeyChar);
+                if (hideInput)
+                {
+                    Console.Write('*');
+                }
+                else
+                {
+                    Console.Write(keyInfo.KeyChar);
+                }
+            }
+        }
+        Console.WriteLine();
+        return input.ToString();
+    }
 
 
 
