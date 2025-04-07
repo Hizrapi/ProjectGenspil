@@ -1,4 +1,5 @@
-﻿using GenSpil.Type;
+﻿using System.Text.Json.Serialization;
+using GenSpil.Type;
 
 //TODO: All interactions with the user should be handled in the UI layer, not in the model.
 
@@ -26,6 +27,7 @@ public class BoardGameList
             }
         }
     } ///> Singleton instance of the BoardGameList
+    [JsonConstructor]
     private BoardGameList()
     {
         BoardGames = new List<BoardGame>(); // Initialize the list of board games
