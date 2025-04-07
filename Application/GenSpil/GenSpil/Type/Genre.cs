@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GenSpil.Type
+﻿namespace GenSpil.Type
 {
     /// <summary>
     /// BoardGames Genre 
@@ -12,13 +6,11 @@ namespace GenSpil.Type
     public enum Genre
     {
         Familie,
-        Børnespil, 
+        Børnespil,
         Rollespil,
         Selskab,
         Strategi,
         Quiz
-            
+
     }
-
-
 }

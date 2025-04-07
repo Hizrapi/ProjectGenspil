@@ -1,11 +1,7 @@
-﻿using System.ComponentModel;
-using System.Net;
-using System.Reflection;
-using System.Xml.Linq;
+﻿using System.Reflection;
 using System.Text;
 using GenSpil.Handler;
 using GenSpil.Model;
-using GenSpil.Type;
 using TirsvadCLI.Frame;
 using TirsvadCLI.MenuPaginator;
 //using GenSpil.Model;
@@ -14,9 +10,9 @@ namespace GenSpil;
 
 internal class Program
 {
-    
+
     const string TITLE = "GenSpil";
-    static readonly string DATA_JSON_FILE = "/data/genspil.json";
+    static readonly string DATA_JSON_FILE = "./data/genspil.json";
 
     static Authentication _auth;
 
@@ -43,7 +39,7 @@ internal class Program
         int cInputLeft = 14;
         do
         {
-            Console.CursorVisible = true; 
+            Console.CursorVisible = true;
             // Headline
             HeadLine("Log på");
             // Form 
@@ -56,15 +52,15 @@ internal class Program
             Console.WriteLine(":");
             // user input 
             Console.SetCursorPosition(cInputLeft, cTop++);
-            string? username = Console.ReadLine();
+            string? username = ReadLineWithEscape();
             Console.SetCursorPosition(cInputLeft, cTop++);
             //TODO hide password input
-            string? password = Console.ReadLine();
+            string? password = ReadLineWithEscape(true);
             Console.CursorVisible = false;
             // Authenticate
             if (username == null || password == null)
             {
-               ErrorMessage("Brugernavn eller adgangskode er tom");
+                ErrorMessage("Brugernavn eller adgangskode er tom");
                 continue;
             }
 
@@ -78,14 +74,14 @@ internal class Program
             else
             {
                 ErrorMessage("Forkert brugernavn eller adgangskode");
-               
+
             }
 
         } while (true);
-        
-       
+
+
     }
-    BoardGameList boardgamelist = new BoardGameList();
+    BoardGameList boardgamelist = BoardGameList.Instance;
     static void Logout()
     {
         _auth.Logout();
@@ -100,17 +96,17 @@ internal class Program
 
     static void AddBoardGame()
     {
-        BoardGameList.Instance.AddBoardGame();
+        BoardGameList.Instance.Add(null);
     }
 
     static void RemoveBoardGame()
     {
-        BoardGameList.Instance.RemoveBoardGame();
+        BoardGameList.Instance.Remove(null);
     }
 
     static void SeekBoardGame()
     {
-        BoardGameList.Instance.SearchBoardGames();
+        //BoardGameList.Instance.Search();
     }
 
     static void ShowReportBoardGameSort()
@@ -162,7 +158,7 @@ internal class Program
         int rightPadding = padding - leftPadding;
         return new string(' ', leftPadding) + text + new string(' ', rightPadding);
     }
-    
+
     static void ErrorMessage(string message)
     {
         Console.ForegroundColor = ConsoleColor.Red;
@@ -173,7 +169,47 @@ internal class Program
         Console.ReadKey();
     }
 
-   
+    /// <summary>
+    /// Reads a line of input from the console, with optional hiding of input characters.
+    /// </summary>
+    /// <param name="hideInput">Whether to hide the input characters (e.g., for passwords).</param>
+    /// <returns>The input string, or null if the escape key was pressed.</returns>
+    static string? ReadLineWithEscape(bool hideInput = false)
+    {
+        StringBuilder input = new StringBuilder();
+        ConsoleKeyInfo keyInfo;
+        while ((keyInfo = Console.ReadKey(true)).Key != ConsoleKey.Enter)
+        {
+            if (keyInfo.Key == ConsoleKey.Escape)
+            {
+                return null; // Return null if Esc is pressed
+            }
+            if (keyInfo.Key == ConsoleKey.Tab)
+            {
+                continue; // Ignore Tab key
+            }
+            if (keyInfo.Key == ConsoleKey.Backspace && input.Length > 0)
+            {
+                input.Remove(input.Length - 1, 1);
+                Console.Write("\b \b");
+            }
+            else if (keyInfo.Key != ConsoleKey.Backspace)
+            {
+                input.Append(keyInfo.KeyChar);
+                if (hideInput)
+                {
+                    Console.Write('*');
+                }
+                else
+                {
+                    Console.Write(keyInfo.KeyChar);
+                }
+            }
+        }
+        Console.WriteLine();
+        return input.ToString();
+    }
+
 
 
     #region menu
@@ -303,7 +339,8 @@ internal class Program
             menuItems.Add(new MenuItem("Tilføj spil", AddBoardGame));
             menuItems.Add(new MenuItem("List spil", ShowBoardGame));
             menuItems.Add(new MenuItem("Fjern spil", RemoveBoardGame));
-            menuItems.Add(new MenuItem("Tilføj Reservation", MenuAddReservation));
+            menuItems.Add(new MenuItem("Tilføj reservation", MenuAddReservation));
+            menuItems.Add(new MenuItem("Fjern reservation", MenuRemoveReservation));
             menuItems.Add(new MenuItem("Vis reservationer", MenuShowReservations));
             menuItems.Add(new MenuItem("Søg", SeekBoardGame));
             MenuPaginator menu = new(menuItems, pageSize: 10);
@@ -327,7 +364,7 @@ internal class Program
     /// </summary>
     static void MenuChooseBoardGame()
     {
-        BoardGameList.Instance.EditBoardGame();
+        //BoardGameList.Instance.Edit();
         //do
         //{
         //    Console.Clear();
@@ -354,19 +391,19 @@ internal class Program
 
     static void MenuAddReservation()
     {
-        HeadLine(CenterString("Tilføj reservation", 40));   
+        HeadLine(CenterString("Tilføj reservation", 40));
         AddReservation();
     }
 
     static void AddReservation()
     {
         Console.Clear();
-        HeadLine(CenterString("Tilføj reservation", 20));
+
 
         Console.ForegroundColor = ConsoleColor.Green;
         Console.Write("Søg efter spil: ");
         Console.ResetColor();
-        string search = Console.ReadLine();
+        string? search = Console.ReadLine();
 
         var foundGames = BoardGameList.Instance
             .GetAllBoardGames()
@@ -403,10 +440,8 @@ internal class Program
         Console.ResetColor();
         int customerID = Convert.ToInt32(Console.ReadLine());
 
-        Console.ForegroundColor = ConsoleColor.Green;
-        Console.Write("Dato (dd/MM/yyyy): ");
-        Console.ResetColor();
-        DateTime reservedDate = DateTime.Parse(Console.ReadLine());
+        //Sætter dato til tidspunkt for indtasdtning
+        DateTime reservedDate = DateTime.Now;
 
         Console.ForegroundColor = ConsoleColor.Green;
         Console.Write("Antal: ");
@@ -419,6 +454,76 @@ internal class Program
         Console.ReadLine();
     }
 
+    static void MenuRemoveReservation()
+    {
+        Console.Clear();
+
+        Console.ForegroundColor = ConsoleColor.White;
+        HeadLine("Fjern reservationer");
+
+        Console.WriteLine("\nIndtast en del af titlen eller tryk Enter for at se alle reservationer:");
+        Console.ResetColor();
+
+        string searchTerm = Console.ReadLine().ToLower();
+
+        var games = BoardGameList.Instance.GetAllBoardGames();
+        var reservations = games
+            .Where(game => string.IsNullOrEmpty(searchTerm) || game.Title.ToLower().Contains(searchTerm))
+            .SelectMany(game => game.Variant.GetReservations(), (game, reservation) => new { Game = game, Reservation = reservation })
+            .ToList();
+
+        if (reservations.Count == 0)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("\nIngen reservationer fundet.");
+            Console.ResetColor();
+            return;
+        }
+
+        Console.WriteLine(); // mellemrum før liste
+        for (int i = 0; i < reservations.Count; i++)
+        {
+            var res = reservations[i];
+            string variantPart = string.IsNullOrEmpty(res.Game.Variant.Variant) ? "" : $" ({res.Game.Variant.Variant})";
+
+            // Nummer i GRØN
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write($"{i + 1}. ");
+
+            // Titel og variant i HVID
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine($"{res.Game.Title}{variantPart}");
+
+            // Detaljer i MAGENTA
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.WriteLine($"   - Antal: {res.Reservation.Quantity}, Dato: {res.Reservation.ReservedDate.ToShortDateString()}, Kunde-ID: {res.Reservation.CustomerID}");
+
+            Console.ResetColor();
+        }
+
+        // Nyt linjeskift + prompt i hvid
+        Console.WriteLine();
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.WriteLine("Indtast nummeret på den reservation, du vil fjerne:");
+        Console.ResetColor();
+
+        if (!int.TryParse(Console.ReadLine(), out int reservationIndex) || reservationIndex < 1 || reservationIndex > reservations.Count)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Ugyldigt reservationsnummer.");
+            Console.ResetColor();
+            return;
+        }
+
+        var reservationToRemove = reservations[reservationIndex - 1].Reservation;
+        reservations[reservationIndex - 1].Game.Variant.RemoveReservation(reservationToRemove);
+
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("Reservationen er fjernet.");
+        Console.ResetColor();
+    }
+
+
     static void MenuShowReservations()
     {
         HeadLine(CenterString("Reservationer", 20));
@@ -427,7 +532,7 @@ internal class Program
 
     public static void ShowReservations()
     {
-        
+
 
         var allGames = BoardGameList.Instance.GetAllBoardGames();
 
@@ -475,21 +580,21 @@ internal class Program
             }
         }
 
-            Console.WriteLine();
-            Console.ReadLine();
+        Console.WriteLine();
+        Console.ReadLine();
 
     }
 
 
 
-        #endregion menu
+    #endregion menu
 
-        /// <summary>
-        /// Main method of the program.
-        /// Loads data from a JSON file, displays the main menu, and exports data back to the JSON file.
-        /// </summary>
-        /// <param name="args"></param>
-        static void Main(string[] args)
+    /// <summary>
+    /// Main method of the program.
+    /// Loads data from a JSON file, displays the main menu, and exports data back to the JSON file.
+    /// </summary>
+    /// <param name="args"></param>
+    static void Main(string[] args)
     {
         JsonFileHandler.Instance.ImportData(DATA_JSON_FILE);
         Login();

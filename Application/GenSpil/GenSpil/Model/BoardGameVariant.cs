@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-namespace GenSpil.Model;
+﻿namespace GenSpil.Model;
 
 public class BoardGameVariant
 {

@@ -4,7 +4,7 @@ namespace GenSpil.Model
 {
     public class BoardGame
     {
-        private int _boardGameID;
+        public int BoardGameID { get; private set; }
         public string Title { get; private set; }
         public BoardGameVariant Variant { get; private set; }
         public Genre Genre { get; private set; }
@@ -20,14 +20,14 @@ namespace GenSpil.Model
         /// <param name="condition"></param>
         public BoardGame(int boardGameID, string title, BoardGameVariant variant, Genre genre, Condition condition)
         {
-            _boardGameID = boardGameID;
+            BoardGameID = boardGameID;
             Title = title;
             Variant = variant;
             Genre = genre;
             Condition = condition;
         }
 
-        
+
         public override string ToString() => $"{Title} ({Variant.Variant}) - Genre: {Genre}, Tilstand: {Condition}";
     }
 }

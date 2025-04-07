@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
 namespace GenSpil.Model;
 
@@ -14,7 +10,6 @@ public class UserList
 {
     private static UserList? _instance;
     private static readonly object padlock = new object();
-
     public static UserList Instance
     {
         get
@@ -27,21 +22,38 @@ public class UserList
                 }
                 return _instance;
             }
-        
+
         }
 
     }
+
     public List<User> Users { get; private set; } // List of users 
 
     private UserList()
     {
         Users = new List<User>();
 #if DEBUG
-     Seed();
+        Seed();
 #endif
     }
 
-# if DEBUG
+    [JsonConstructor]
+    private UserList(List<User> users)
+    {
+        Users = users ?? new List<User>();
+    }
+
+    public void Add(User user)
+    {
+        Users.Add(user);
+    }
+
+    public void Remove(User user)
+    {
+        Users.Remove(user);
+    }
+
+#if DEBUG
     public void Seed()
     {
         Users.Add(new User("admin", "admin", Type.Role.Admin));

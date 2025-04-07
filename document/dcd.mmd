@@ -63,6 +63,8 @@ class BoardGameList {
     +Update(BoardGame: BoardGame): void
     +GetBoardGamesByGenre(genre: Genre): list<BoardGame>
     +GetBoardGamesByTitle(title: string): list<BoardGame>
+    +GetReserved(): Reserved
+    +SetReserved(Reserved: Reserved): void
     +GenerateID(): int
     +Seek(title: string, condition: Condition, price: decimal, genre: Genre, numberPlayers: int): list<BoardGameVariant>
 }
@@ -93,8 +95,6 @@ class BoardGameVariant {
     +BoardGameVariant(BoardGame: BoardGame, Variant: string, Condition: Condition): void
     +Condition(): Condition
     +Condition(Condition: Condition): void
-    +GetReserved(): Reserved
-    +SetReserved(Reserved: Reserved): void
 }
 note for BoardGameVariant "Brætspil varianter"
 
@@ -102,6 +102,7 @@ class Reserved {
     -DateTime _reservedDate
     -int _quantity
     -int _customerID
+    -int _boardGameID
     +Reserved(ReservedDate: DateTime, Quantity: int, CustomerID: int, BoardGameID: int): void
 }
 note for Reserved "Hvornår et brætspil er 

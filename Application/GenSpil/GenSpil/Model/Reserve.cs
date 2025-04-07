@@ -2,7 +2,6 @@ namespace GenSpil.Model;
 
 public class Reserve
 {
-
     /// <summary>
     /// Egenskaber for Reserve class 
     /// </summary>
@@ -21,6 +20,5 @@ public class Reserve
         ReservedDate = reservedDate;
         CustomerID = customerID;
         Quantity = quantity;
-       
     }
 }
