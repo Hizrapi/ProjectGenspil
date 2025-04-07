@@ -39,7 +39,7 @@ public class BoardGameList
         _boardGames.Remove(boardGame);
     } ///> Removes a board game from the list
 
-    public void Edit(boardGame)
+    public void Edit(BoardGame boardGame)
     { } ///> Edits a board game in the list
 
     public List<BoardGame> GetAllBoardGames()
