@@ -1,5 +1,4 @@
-﻿using System.Text.Json.Serialization;
-using GenSpil.Type;
+﻿using GenSpil.Type;
 
 //TODO: All interactions with the user should be handled in the UI layer, not in the model.
 
@@ -9,13 +8,10 @@ namespace GenSpil.Model;
 /// Singleton class for handling a list of board games.
 /// TODO Should not interact with the user directly. (Tirsvad)
 /// </summary>
-
-public sealed class BoardGameList
+public class BoardGameList
 {
-    static BoardGameList? _instance;
-    static readonly object _lock = new object();
-    private List<BoardGame> _boardGames = new List<BoardGame>();
-  
+    private static BoardGameList? _instance;
+    private static readonly object _lock = new object();
     public static BoardGameList Instance
     {
         get
@@ -30,26 +26,37 @@ public sealed class BoardGameList
             }
         }
     } ///> Singleton instance of the BoardGameList
-
-    public List<BoardGame> BoardGames { get; private set; }
-
-    [JsonConstructor]
-    public BoardGameList()
+    private BoardGameList()
     {
-        // Constructor is private to prevent instantiation from outside
-        BoardGames = new List<BoardGame>();
-    }
+        BoardGames = new List<BoardGame>(); // Initialize the list of board games
+    } ///> Private constructor to prevent instantiation from outside
+
+    public List<BoardGame> BoardGames;
+
+    public void Add(BoardGame? boardGame)
+    {
+        BoardGames.Add(boardGame);
+    } ///> Adds a board game to the list
+
+    public void Remove(BoardGame? boardGame)
+    {
+        BoardGames.Remove(boardGame);
+    } ///> Removes a board game from the list
+
+    public void Edit(BoardGame boardGame)
+    { } ///> Edits a board game in the list
 
     public List<BoardGame> GetAllBoardGames()
     {
-        return _boardGames.ToList(); // Returner en kopi af listen for at undgå direkte manipulation
+        return BoardGames.ToList(); // Returner en kopi af listen for at undgå direkte manipulation
     }
+
 
 
     /// <summary>
     /// Tilføjer et brætspil.
     /// </summary>
-    public void Add()
+    public void AddBoardGame()
     {
         Console.ForegroundColor = ConsoleColor.Green;
         Console.Write("Titel: ");
@@ -140,14 +147,6 @@ public sealed class BoardGameList
     }
 
     /// <summary>
-    /// Tilføjer et brætspil.
-    /// </summary>
-    public void Add(BoardGame boardGame)
-    {
-        this.BoardGames.Add(boardGame);
-    }
-
-    /// <summary>
     /// Vis brætspil
     /// </summary>
     public void DisplayBoardGames()
@@ -190,7 +189,7 @@ public sealed class BoardGameList
     /// <summary>
     /// Søg efter brætspil
     /// </summary>
-    public List<BoardGame> Search() //Search() should take parameters (Tirsvad)
+    public List<BoardGame> SearchBoardGames() //SearchBoardGames() should take parameters (Tirsvad)
     {
         Console.Write("Indtast titel - eller del af den: ");
         string searchTitle = Console.ReadLine();
@@ -227,7 +226,7 @@ public sealed class BoardGameList
     /// <summary>
     /// Fjern brætspil helt.
     /// </summary>
-    public void Remove()
+    public void RemoveBoardGame()
     {
         Console.Clear();
         Console.WriteLine("--- Fjern Brætspil ---");
@@ -303,7 +302,7 @@ public sealed class BoardGameList
     /// Brugeren indtaster titlen på spillet, vælger det korrekte spil, og kan derefter redigere tilstand, antal og pris.
     /// Hvis antallet sættes til 0, fjernes spillet automatisk fra listen.
     /// </summary>
-    public void Edit()
+    public void EditBoardGame()
     {
         Console.Write("Indtast titel på spillet, du vil redigere: ");
         string searchTitle = Console.ReadLine();
@@ -376,21 +375,13 @@ public sealed class BoardGameList
         Console.ReadLine(); // Forhindrer konsollen i at lukke med det samme
     }
 
-
-    internal void Clear()
-    {
-        BoardGames.Clear(); // Rydder listen for at undgå dubletter
-    }
-}
-
     public void RegisterReservation(BoardGame game, int customerID, DateTime date, int quantity)
     {
-        game.Variant.AddReservationToList(customerID, date, quantity, game);
+        //game.Variant.AddReservationToList(customerID, date, quantity);
     }
 
     public void Clear()
     {
-        _boardGames.Clear();
+        BoardGames.Clear();
     }
 }
-

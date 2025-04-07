@@ -81,7 +81,7 @@ internal class Program
 
 
     }
-    BoardGameList boardgamelist = new BoardGameList();
+    BoardGameList boardgamelist = BoardGameList.Instance;
     static void Logout()
     {
         _auth.Logout();
@@ -96,17 +96,17 @@ internal class Program
 
     static void AddBoardGame()
     {
-        BoardGameList.Instance.Add();
+        BoardGameList.Instance.Add(null);
     }
 
     static void RemoveBoardGame()
     {
-        BoardGameList.Instance.Remove();
+        BoardGameList.Instance.Remove(null);
     }
 
     static void SeekBoardGame()
     {
-        BoardGameList.Instance.Search();
+        //BoardGameList.Instance.Search();
     }
 
     static void ShowReportBoardGameSort()
@@ -358,7 +358,7 @@ internal class Program
     /// </summary>
     static void MenuChooseBoardGame()
     {
-        BoardGameList.Instance.Edit();
+        //BoardGameList.Instance.Edit();
         //do
         //{
         //    Console.Clear();
@@ -385,14 +385,14 @@ internal class Program
 
     static void MenuAddReservation()
     {
-        HeadLine(CenterString("Tilføj reservation", 40));   
+        HeadLine(CenterString("Tilføj reservation", 40));
         AddReservation();
     }
 
     static void AddReservation()
     {
         Console.Clear();
-       
+
 
         Console.ForegroundColor = ConsoleColor.Green;
         Console.Write("Søg efter spil: ");
@@ -526,7 +526,7 @@ internal class Program
 
     public static void ShowReservations()
     {
-        
+
 
         var allGames = BoardGameList.Instance.GetAllBoardGames();
 
@@ -574,25 +574,25 @@ internal class Program
             }
         }
 
-            Console.WriteLine();
-            Console.ReadLine();
+        Console.WriteLine();
+        Console.ReadLine();
 
     }
 
 
 
-        #endregion menu
+    #endregion menu
 
-        /// <summary>
-        /// Main method of the program.
-        /// Loads data from a JSON file, displays the main menu, and exports data back to the JSON file.
-        /// </summary>
-        /// <param name="args"></param>
-        static void Main(string[] args)
+    /// <summary>
+    /// Main method of the program.
+    /// Loads data from a JSON file, displays the main menu, and exports data back to the JSON file.
+    /// </summary>
+    /// <param name="args"></param>
+    static void Main(string[] args)
     {
-        JsonFileHandler.Instance.ImportData(DATA_JSON_FILE);
+        //JsonFileHandler.Instance.ImportData(DATA_JSON_FILE);
         Login();
         MenuMain();
-        JsonFileHandler.Instance.ExportData(DATA_JSON_FILE);
+        //JsonFileHandler.Instance.ExportData(DATA_JSON_FILE);
     }
 }
