@@ -14,13 +14,12 @@ internal class Program
     static readonly string DATA_JSON_FILE = "./data/genspil.json";
 
     static Authentication _auth;
-
-    //BoardGameList _boardGameList = BoardGameList.Instance;
+    static BoardGameList _boardGameList;
 
     static Program()
     {
         _auth = new Authentication();
-
+        _boardGameList = BoardGameList.Instance;
     }
 
     static string GetVersion()
@@ -89,8 +88,12 @@ internal class Program
 
     static void ShowBoardGame()
     {
-
-        BoardGameList.Instance.DisplayBoardGames();
+        //if (boardGame == null)
+        //{
+        //    Console.WriteLine("Ingen spil fundet.");
+        //    return;
+        //}
+        _boardGameList.DisplayBoardGames();
     }
 
     static void AddBoardGame()
@@ -336,7 +339,7 @@ internal class Program
             List<MenuItem> menuItems = new();
             menuItems.Add(new MenuItem("Vælg spil", MenuChooseBoardGame));
             menuItems.Add(new MenuItem("Tilføj spil", AddBoardGame));
-            menuItems.Add(new MenuItem("List spil", ShowBoardGame));
+            menuItems.Add(new MenuItem("List spil", () => ShowBoardGame()));
             menuItems.Add(new MenuItem("Fjern spil", RemoveBoardGame));
             menuItems.Add(new MenuItem("Tilføj reservation", MenuAddReservation));
             menuItems.Add(new MenuItem("Fjern reservation", MenuRemoveReservation));
@@ -363,22 +366,22 @@ internal class Program
     /// </summary>
     static void MenuChooseBoardGame()
     {
-        //BoardGameList.Instance.Edit();
-        //do
-        //{
-        //    Console.Clear();
-        //    HeadLine("Vælg spil");
-        //    List<MenuItem> menuItems = new();
-        //    foreach (BoardGame boardGame in _boardGameList.BoardGames)
-        //    {
-        //        menuItems.Add(new MenuItem(boardGame.Title, () => ShowBoardGame(boardGame)));
-        //    }
-        //    MenuPaginator menu = new(menuItems, 10);
-        //    if (menu.menuItem != null && menu.menuItem.Action is Action action)
-        //        action();
-        //    else
-        //        return;
-        //} while (true);
+        do
+        {
+            Console.Clear();
+            HeadLine("Vælg spil");
+            List<MenuItem> menuItems = new();
+            foreach (BoardGame boardGame in _boardGameList.BoardGames)
+            {
+                menuItems.Add(new MenuItem(boardGame.Title, () => _boardGameList.DisplayBoardGames()));
+            }
+            MenuPaginator menu = new(menuItems, 10);
+            if (menu.menuItem != null && menu.menuItem.Action is Action action)
+                action();
+            else
+                return;
+
+        } while (true);
 
     }
 

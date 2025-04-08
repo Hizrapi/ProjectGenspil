@@ -2,9 +2,9 @@
 {
     public class Condition
     {
-        public Type.Condition ConditionType { get; set; }
-        public int Quantity { get; set; }
-        public decimal Price { get; set; }
+        public Type.Condition ConditionType { get; private set; }
+        public int Quantity { get; private set; }
+        public decimal Price { get; private set; }
 
         /// <summary>
         /// Constructor til Condition
@@ -12,10 +12,25 @@
         /// <param name="condition"></param>
         /// <param name="quantity"></param>
         /// <param name="price"></param>
-        public Condition(Type.Condition condition, int quantity, decimal price)
+        public Condition(Type.Condition conditionType, int quantity, decimal price)
         {
-            ConditionType = condition;
+            ConditionType = conditionType;
             Quantity = quantity;
+            Price = price;
+        }
+
+        public void SetCondition(Type.Condition conditionType)
+        {
+            ConditionType = conditionType;
+        }
+
+        public void SetQuantity(int quantity)
+        {
+            Quantity = quantity;
+        }
+
+        public void SetPrice(decimal price)
+        {
             Price = price;
         }
 
