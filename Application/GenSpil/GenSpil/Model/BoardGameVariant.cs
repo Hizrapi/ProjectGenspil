@@ -4,7 +4,7 @@ public class BoardGameVariant
 {
     public string Title { get; private set; }
     public string Variant { get; private set; }
-    public List<Reserve> Reservations { get; private set; }; // List of reservations for this variant
+    public List<Reserve> Reservations { get; private set; } // List of reservations for this variant
 
     public BoardGameVariant(string title, string variant, List<Reserve>? reservations)
     {

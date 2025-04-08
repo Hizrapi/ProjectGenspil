@@ -137,7 +137,7 @@ public class BoardGameList
         }
 
         // Opret variant-objekt (bruger stadig titel som en del af varianten)
-        BoardGameVariant bgVariant = new BoardGameVariant(title, variant);
+        BoardGameVariant bgVariant = new BoardGameVariant(title, variant, null);
 
         // Opret condition-objekt med de indtastede værdier
         Condition bgCondition = new Condition(conditionEnum, quantity, price);
@@ -382,9 +382,9 @@ public class BoardGameList
         Console.ReadLine(); // Forhindrer konsollen i at lukke med det samme
     }
 
-    public void RegisterReservation(BoardGame game, int customerID, DateTime date, int quantity)
+    public void RegisterReservation(BoardGame boardGame, int customerID, DateTime date, int quantity)
     {
-        //game.Variant.AddReservationToList(customerID, date, quantity);
+        boardGame.Variant.AddReservationToList(customerID, date, quantity);
     }
 
     public int GenerateBoardGameID()
