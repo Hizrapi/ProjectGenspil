@@ -137,7 +137,7 @@ public class BoardGameList
         }
 
         // Opret variant-objekt (bruger stadig titel som en del af varianten)
-        BoardGameVariant bgVariant = new BoardGameVariant(title, variant);
+        BoardGameVariant bgVariant = new BoardGameVariant(title, variant, null);
 
         // Opret condition-objekt med de indtastede værdier
         Condition bgCondition = new Condition(conditionEnum, quantity, price);
