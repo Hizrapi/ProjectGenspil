@@ -27,13 +27,22 @@ public class BoardGameList
             }
         }
     } ///> Singleton instance of the BoardGameList
-    [JsonConstructor]
+
+    public List<BoardGame> BoardGames { get; set; }
+
+    //[JsonConstructor]
     private BoardGameList()
     {
         BoardGames = new List<BoardGame>(); // Initialize the list of board games
     } ///> Private constructor to prevent instantiation from outside
 
-    public List<BoardGame> BoardGames;
+
+    [JsonConstructor]
+    private BoardGameList(List<BoardGame>? boardGames)
+    {
+        BoardGames = boardGames ?? [];
+    } ///> Private constructor to prevent instantiation from outside
+
 
     public void Add(BoardGame? boardGame)
     {
@@ -83,7 +92,6 @@ public class BoardGameList
             return;
         }
 
-
         // Viser de mulige tilstands-valg
         Console.ForegroundColor = ConsoleColor.Green;
         Console.Write($"Tilstand ({string.Join(" / ", Enum.GetNames(typeof(Type.Condition)))}): ");
@@ -124,29 +132,26 @@ public class BoardGameList
         if (!priceValid || price < 0) // Pris skal være et positivt tal
         {
             Console.WriteLine("Ugyldig pris angivet (skal være et positivt tal). Handlingen afbrydes.");
+            Console.ReadKey();
             return; // Gå ud af switch-casen
         }
-
 
         // Opret variant-objekt (bruger stadig titel som en del af varianten)
         BoardGameVariant bgVariant = new BoardGameVariant(title, variant);
 
         // Opret condition-objekt med de indtastede værdier
         Condition bgCondition = new Condition(conditionEnum, quantity, price);
-
         // Opret det nye brætspil med alle data. + 1 pga. ny linje
-        BoardGame newGame = new BoardGame(BoardGames.Count + 1, title, bgVariant, genre, bgCondition);
+        BoardGame newGame = new BoardGame(GenerateBoardGameID(), title, bgVariant, genre, bgCondition);
 
         // Tilføj spillet til listen
         BoardGames.Add(newGame);
         Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine("Brætspil tilføjet!");
         Console.ResetColor();
-
         Console.ReadLine();
-        return;
-
     }
+
 
     /// <summary>
     /// Vis brætspil
@@ -346,19 +351,19 @@ public class BoardGameList
         Console.Write($"Ny tilstand (tryk Enter for at beholde den nuværende: {selectedGame.Condition.ConditionType}): ");
         string newCondition = Console.ReadLine();
         if (!string.IsNullOrWhiteSpace(newCondition) && Enum.TryParse(newCondition, true, out Type.Condition condition)) // String blank = ingen ændring. Ellers sker ændring.
-            selectedGame.Condition.ConditionType = condition; // Opdaterer tilstanden
+            selectedGame.Condition.SetCondition(condition); // Opdaterer tilstanden
 
         // Brugeren kan vælge at ændre antal
         Console.Write($"Nyt antal (tryk Enter for at beholde det nuværende: {selectedGame.Condition.Quantity}): ");
         string newQuantity = Console.ReadLine();
         if (int.TryParse(newQuantity, out int quantity) && quantity >= 0)
-            selectedGame.Condition.Quantity = quantity;
+            selectedGame.Condition.SetQuantity(quantity);
 
         // Brugeren kan vælge at ændre pris
         Console.Write($"Ny pris (tryk Enter for at beholde den nuværende: {selectedGame.Condition.Price} kr.): ");
         string newPrice = Console.ReadLine();
         if (decimal.TryParse(newPrice, out decimal price) && price >= 0) // Hvis værdien ikke er højere eller lig 0. Ingen værdi.
-            selectedGame.Condition.Price = price;
+            selectedGame.Condition.SetPrice(price);
 
         // Hvis antallet nu er 0, fjernes spillet fra listen
         if (selectedGame.Condition.Quantity == 0)
@@ -380,6 +385,12 @@ public class BoardGameList
     public void RegisterReservation(BoardGame game, int customerID, DateTime date, int quantity)
     {
         //game.Variant.AddReservationToList(customerID, date, quantity);
+    }
+
+    public int GenerateBoardGameID()
+    {
+        // Genererer et unikt ID for et nyt brætspil
+        return BoardGames.Count > 0 ? BoardGames.Max(bg => bg.BoardGameID) + 1 : 1;
     }
 
     public void Clear()

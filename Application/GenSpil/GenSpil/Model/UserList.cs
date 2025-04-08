@@ -31,15 +31,12 @@ public class UserList
     private UserList()
     {
         Users = new List<User>();
-#if DEBUG
-        Seed();
-#endif
     }
 
     [JsonConstructor]
     private UserList(List<User> users)
     {
-        Users = users ?? new List<User>();
+        Users = users ?? [];
     }
 
     public void Add(User user)
@@ -51,12 +48,4 @@ public class UserList
     {
         Users.Remove(user);
     }
-
-#if DEBUG
-    public void Seed()
-    {
-        Users.Add(new User("admin", "admin", Type.Role.Admin));
-        Users.Add(new User("user", "user", Type.Role.User));
-    }
-#endif
 } ///> Singleton instance of the UserList
