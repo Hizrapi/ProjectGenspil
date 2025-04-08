@@ -116,6 +116,7 @@ namespace GenSpil.Model
         }
 
         //Update function isn't completed.
+
         public void UpdateCustomer(int customerID, string newName, string newAddress)
         {
             var customer = Customers.Find(c => c.CustomerID == customerID);
@@ -132,6 +133,79 @@ namespace GenSpil.Model
             {
                 //If the customer doesn't exist
                 Console.WriteLine($"Customer with ID {customerID} not found.");
+            }
+        }
+
+        public void UpdateCustomerDetails()
+        {
+            //Lists customers
+            DisplayCustomers();
+
+            Console.WriteLine("Skriv navn, adresse eller ID på den kunde som du vil opdatere:");
+            string input = Console.ReadLine();
+
+            //Check if the input is a valid ID
+            if (int.TryParse(input, out int customerID))
+            {
+                //Find the customer by ID
+                var customerToUpdate = GetCustomerByID(customerID);
+                if (customerToUpdate != null)
+                {
+                    //Ask for new name and address
+                    Console.WriteLine("Indtast det nye navn:");
+                    string newName = Console.ReadLine();
+
+                    Console.WriteLine("Indtast den nye adresse:");
+                    string newAddress = Console.ReadLine();
+
+                    //Update the customer details
+                    UpdateCustomer(customerID, newName, newAddress);
+                }
+                else
+                {
+                    Console.WriteLine($"Kunde med ID {customerID} blev ikke fundet.");
+                }
+            }
+            else if (!string.IsNullOrWhiteSpace(input))
+            {
+                //Try to find the customer by name or address
+                var customerByName = GetCustomerByName(input);
+                if (customerByName != null)
+                {
+                    //Ask for new name and address
+                    Console.WriteLine("Indtast det nye navn:");
+                    string newName = Console.ReadLine();
+
+                    Console.WriteLine("Indtast den nye adresse:");
+                    string newAddress = Console.ReadLine();
+
+                    //Update the customer details
+                    UpdateCustomer(customerByName.CustomerID, newName, newAddress);
+                }
+                else
+                {
+                    var customerByAddress = GetCustomerByAddress(input);
+                    if (customerByAddress != null)
+                    {
+                        //Ask for new name and address
+                        Console.WriteLine("Indtast det nye navn:");
+                        string newName = Console.ReadLine();
+
+                        Console.WriteLine("Indtast den nye adresse:");
+                        string newAddress = Console.ReadLine();
+
+                        //Update the customer details
+                        UpdateCustomer(customerByAddress.CustomerID, newName, newAddress);
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Kunde med navn eller adresse '{input}' blev ikke fundet.");
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine("Skriv et navn, en adresse eller et ID");
             }
         }
 
@@ -183,6 +257,7 @@ namespace GenSpil.Model
             {
                 Console.WriteLine("Skriv et navn, en adresse eller et ID");
             }
+
         }
 
         //public void RemoveCustomerByName()
@@ -214,6 +289,7 @@ namespace GenSpil.Model
         //        Console.WriteLine("Invalid input. Please enter a valid name.");
         //    }
         //}
+
 
         public int GenerateID(int customerID)
         {

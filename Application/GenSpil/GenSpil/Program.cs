@@ -4,7 +4,6 @@ using GenSpil.Handler;
 using GenSpil.Model;
 using TirsvadCLI.Frame;
 using TirsvadCLI.MenuPaginator;
-//using GenSpil.Model;
 
 namespace GenSpil;
 
@@ -96,17 +95,17 @@ internal class Program
 
     static void AddBoardGame()
     {
-        BoardGameList.Instance.Add(null);
+        BoardGameList.Instance.AddBoardGame();
     }
 
     static void RemoveBoardGame()
     {
-        BoardGameList.Instance.Remove(null);
+        BoardGameList.Instance.RemoveBoardGame();
     }
 
     static void SeekBoardGame()
     {
-        //BoardGameList.Instance.Search();
+        BoardGameList.Instance.SearchBoardGames();
     }
 
     static void ShowReportBoardGameSort()
@@ -257,6 +256,11 @@ internal class Program
         CustomerList.Instance.AddCustomer();
     }
 
+    static void UpdateCustomerDetails()
+    {
+        CustomerList.Instance.UpdateCustomerDetails();
+    }
+
     static void MenuCustomer()
     {
         do
@@ -269,6 +273,7 @@ internal class Program
             menuItems.Add(new MenuItem("Tilføje kunde", AddCustomer));
             menuItems.Add(new MenuItem("Fjern kunde", RemoveCustomer));
             menuItems.Add(new MenuItem("Søge i kunder", SearchCustomers));
+            menuItems.Add(new MenuItem("Opdater kundeoplysninger", UpdateCustomerDetails));
             menuItems.Add(new MenuItem("Logout", Logout));
 
             // Create a menu paginator

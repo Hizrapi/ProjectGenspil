@@ -2,7 +2,6 @@
 
 namespace GenSpil.Model;
 
-
 /// <summary>
 /// Singleton class for handling a list of users.
 /// </summary>
