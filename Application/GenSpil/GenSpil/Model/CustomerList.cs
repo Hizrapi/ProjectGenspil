@@ -260,37 +260,6 @@ namespace GenSpil.Model
 
         }
 
-        //public void RemoveCustomerByName()
-        //{
-        //    //Lists customers
-        //    DisplayCustomers();
-
-        //    //What customer do you want to remove?
-        //    Console.WriteLine("Skriv navnet på kunden som du vil fjerne:");
-
-        //    if (int.TryParse(Console.ReadLine(), out int name))
-        //    {
-        //        //Find the customer by name
-        //        var customerToRemove = GetCustomerByID(name);
-
-        //        if (customerToRemove != null)
-        //        {
-        //            //Remove the customer if found
-        //            RemoveCustomer(customerToRemove);
-        //            Console.WriteLine($"Kunder ved navn {name} er blevet fjernet.");
-        //        }
-        //        else
-        //        {
-        //            Console.WriteLine($"kunde with navn {name} blev ikke fundet.");
-        //        }
-        //    }
-        //    else
-        //    {
-        //        Console.WriteLine("Invalid input. Please enter a valid name.");
-        //    }
-        //}
-
-
         public int GenerateID(int customerID)
         {
             if (Customers.Count == 0)

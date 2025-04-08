@@ -382,9 +382,9 @@ public class BoardGameList
         Console.ReadLine(); // Forhindrer konsollen i at lukke med det samme
     }
 
-    public void RegisterReservation(BoardGame game, int customerID, DateTime date, int quantity)
+    public void RegisterReservation(BoardGame boardGame, int customerID, DateTime date, int quantity)
     {
-        //game.Variant.AddReservationToList(customerID, date, quantity);
+        boardGame.Variant.AddReservationToList(customerID, date, quantity);
     }
 
     public int GenerateBoardGameID()
