@@ -1,23 +1,38 @@
 {
-  "version": "1.0",
-  "boardGames": {
-    "boardGames": []
-  },
-  "users": {
-    "users": [
-      {
-        "name": "admin",
-        "password": "admin",
-        "role": 0
-      },
-      {
-        "name": "user",
-        "password": "user",
-        "role": 1
-      }
-    ]
-  },
-  "customers": {
-    "customers": []
-  }
+    "version": "1.0",
+    "boardGames": {
+        "boardGames": [
+            {
+                "boardGameID": 1,
+                "title": "Ludo",
+                "variant": {
+                    "title": "Ludo",
+                    "variant": ""
+                },
+                "genre": 5,
+                "condition": {
+                    "conditionType": 0,
+                    "quantity": 1,
+                    "price": 100
+                }
+            }
+        ]
+    },
+    "users": {
+        "users": [
+            {
+                "name": "admin",
+                "password": "admin",
+                "role": 0
+            },
+            {
+                "name": "user",
+                "password": "user",
+                "role": 1
+            }
+        ]
+    },
+    "customers": {
+        "customers": []
+    }
 }
