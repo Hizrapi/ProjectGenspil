@@ -1,0 +1,9 @@
+<map id="GenSpil.Model.BoardGameList.EditBoardGame" name="GenSpil.Model.BoardGameList.EditBoardGame">
+<area shape="rect" id="Node000001" title="Metode til at redigere et brætspil baseret på titel. Brugeren indtaster titlen på spillet,..." alt="" coords="5,72,210,115"/>
+<area shape="rect" id="Node000002" href="$class_gen_spil_1_1_model_1_1_condition.html#ac1e0b0a03cc450043e17b473b9cdd9a3" title=" " alt="" coords="258,5,427,48"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="184,69,249,50,250,55,186,74"/>
+<area shape="rect" id="Node000003" href="$class_gen_spil_1_1_model_1_1_condition.html#a945ecea1cdb59c533226792e4c2b6e16" title=" " alt="" coords="258,72,427,115"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="210,91,242,91,242,96,210,96"/>
+<area shape="rect" id="Node000004" href="$class_gen_spil_1_1_model_1_1_condition.html#ae146ef4b2482841b67046b086a474bfc" title=" " alt="" coords="258,139,427,181"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="186,113,250,131,249,136,184,118"/>
+</map>
