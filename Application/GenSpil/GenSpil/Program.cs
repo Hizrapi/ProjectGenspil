@@ -381,14 +381,14 @@ internal class Program
 
     static void MenuAddReservation()
     {
-        HeadLine(CenterString("Tilføj reservation", 40));
+        Console.Clear();
+        HeadLine("Tilføj reservation");
         AddReservation();
     }
 
     static void AddReservation()
     {
-        Console.Clear();
-
+        
 
         Console.ForegroundColor = ConsoleColor.Green;
         Console.Write("Søg efter spil: ");
@@ -410,7 +410,7 @@ internal class Program
         for (int i = 0; i < foundGames.Count; i++)
         {
             var game = foundGames[i];
-            Console.WriteLine($"{i + 1}. {game.Title} ({game.Variant.Variant}) - Genre: {game.Genre}, Tilstand: {game.Condition}");
+            Console.WriteLine($"{i + 1}. {game.Title} ({game.Variant.Variant}) -  Tilstand: {game.Condition}");
         }
 
         Console.ForegroundColor = ConsoleColor.Green;
@@ -522,7 +522,7 @@ internal class Program
 
     public static void ShowReservations()
     {
-
+        
 
         var allGames = BoardGameList.Instance.GetAllBoardGames();
 
