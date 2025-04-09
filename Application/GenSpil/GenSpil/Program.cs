@@ -337,7 +337,7 @@ internal class Program
             Console.Clear();
             HeadLine("Brætspil menu");
             List<MenuItem> menuItems = new();
-            menuItems.Add(new MenuItem("Vælg spil", MenuChooseBoardGame));
+            menuItems.Add(new MenuItem("Rediger spil", MenuChooseBoardGame));
             menuItems.Add(new MenuItem("Tilføj spil", AddBoardGame));
             menuItems.Add(new MenuItem("List spil", () => ShowBoardGame()));
             menuItems.Add(new MenuItem("Fjern spil", RemoveBoardGame));
@@ -366,22 +366,10 @@ internal class Program
     /// </summary>
     static void MenuChooseBoardGame()
     {
-        do
-        {
+        
             Console.Clear();
-            HeadLine("Vælg spil");
-            List<MenuItem> menuItems = new();
-            foreach (BoardGame boardGame in _boardGameList.BoardGames)
-            {
-                menuItems.Add(new MenuItem(boardGame.Title, () => _boardGameList.DisplayBoardGames()));
-            }
-            MenuPaginator menu = new(menuItems, 10);
-            if (menu.menuItem != null && menu.menuItem.Action is Action action)
-                action();
-            else
-                return;
-
-        } while (true);
+            HeadLine("Rediger et spil");
+            BoardGameList.Instance.EditBoardGame();
 
     }
 
@@ -393,14 +381,14 @@ internal class Program
 
     static void MenuAddReservation()
     {
-        HeadLine(CenterString("Tilføj reservation", 40));
+        Console.Clear();
+        HeadLine("Tilføj reservation");
         AddReservation();
     }
 
     static void AddReservation()
     {
-        Console.Clear();
-
+        
 
         Console.ForegroundColor = ConsoleColor.Green;
         Console.Write("Søg efter spil: ");
@@ -422,7 +410,7 @@ internal class Program
         for (int i = 0; i < foundGames.Count; i++)
         {
             var game = foundGames[i];
-            Console.WriteLine($"{i + 1}. {game.Title} ({game.Variant.Variant}) - Genre: {game.Genre}, Tilstand: {game.Condition}");
+            Console.WriteLine($"{i + 1}. {game.Title} ({game.Variant.Variant}) -  Tilstand: {game.Condition}");
         }
 
         Console.ForegroundColor = ConsoleColor.Green;
@@ -534,7 +522,7 @@ internal class Program
 
     public static void ShowReservations()
     {
-
+        
 
         var allGames = BoardGameList.Instance.GetAllBoardGames();
 
