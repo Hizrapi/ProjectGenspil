@@ -7,9 +7,31 @@
                 "title": "Ludo",
                 "variant": {
                     "title": "Ludo",
-                    "variant": ""
+                    "variant": "",
+                    "reservations": [
+                        {
+                            "reservedDate": "2025-04-08T16:47:58.9076538+02:00",
+                            "quantity": 1,
+                            "customerID": 12
+                        }
+                    ]
                 },
                 "genre": 5,
+                "condition": {
+                    "conditionType": 0,
+                    "quantity": 1,
+                    "price": 100
+                }
+            },
+            {
+                "boardGameID": 2,
+                "title": "Ticket to ride",
+                "variant": {
+                    "title": "Ticket to ride",
+                    "variant": "Berlin",
+                    "reservations": []
+                },
+                "genre": 3,
                 "condition": {
                     "conditionType": 0,
                     "quantity": 1,
