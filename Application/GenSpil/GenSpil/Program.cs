@@ -337,7 +337,7 @@ internal class Program
             Console.Clear();
             HeadLine("Brætspil menu");
             List<MenuItem> menuItems = new();
-            menuItems.Add(new MenuItem("Vælg spil", MenuChooseBoardGame));
+            menuItems.Add(new MenuItem("Rediger spil", MenuChooseBoardGame));
             menuItems.Add(new MenuItem("Tilføj spil", AddBoardGame));
             menuItems.Add(new MenuItem("List spil", () => ShowBoardGame()));
             menuItems.Add(new MenuItem("Fjern spil", RemoveBoardGame));
@@ -366,22 +366,10 @@ internal class Program
     /// </summary>
     static void MenuChooseBoardGame()
     {
-        do
-        {
+        
             Console.Clear();
-            HeadLine("Vælg spil");
-            List<MenuItem> menuItems = new();
-            foreach (BoardGame boardGame in _boardGameList.BoardGames)
-            {
-                menuItems.Add(new MenuItem(boardGame.Title, () => _boardGameList.DisplayBoardGames()));
-            }
-            MenuPaginator menu = new(menuItems, 10);
-            if (menu.menuItem != null && menu.menuItem.Action is Action action)
-                action();
-            else
-                return;
-
-        } while (true);
+            HeadLine("Rediger et spil");
+            BoardGameList.Instance.EditBoardGame();
 
     }
 
