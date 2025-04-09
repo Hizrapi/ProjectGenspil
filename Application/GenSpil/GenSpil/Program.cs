@@ -167,7 +167,7 @@ internal class Program
         Console.WriteLine();
         Console.WriteLine(message);
         Console.ResetColor();
-        Console.WriteLine("Tryk en tast for at fortsætte");
+        Console.WriteLine("Tryk på en tast for at fortsætte");
         Console.ReadKey();
     }
 
@@ -414,7 +414,7 @@ internal class Program
 
         if (!foundGames.Any())
         {
-            Console.WriteLine("Ingen spil fundet.");
+            ErrorMessage("Ingen spil fundet med den titel.");
             Console.ReadLine();
             return;
         }
@@ -430,7 +430,7 @@ internal class Program
         Console.ResetColor();
         if (!int.TryParse(Console.ReadLine(), out int index) || index < 1 || index > foundGames.Count)
         {
-            Console.WriteLine("Ugyldigt valg.");
+            ErrorMessage("Ugyldigt valg.");
             Console.ReadLine();
             return;
         }
@@ -477,7 +477,7 @@ internal class Program
         if (reservations.Count == 0)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("\nIngen reservationer fundet.");
+            ErrorMessage("Ingen reservationer fundet.");
             Console.ResetColor();
             return;
         }
@@ -512,7 +512,7 @@ internal class Program
         if (!int.TryParse(Console.ReadLine(), out int reservationIndex) || reservationIndex < 1 || reservationIndex > reservations.Count)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("Ugyldigt reservationsnummer.");
+            ErrorMessage("Ugyldigt valg.");
             Console.ResetColor();
             return;
         }
@@ -540,7 +540,7 @@ internal class Program
 
         if (!allGames.Any())
         {
-            Console.WriteLine("Der er ingen reservationer i listen endnu.");
+            ErrorMessage("Ingen spil fundet.");
             Console.ReadLine();
             return;
         }
