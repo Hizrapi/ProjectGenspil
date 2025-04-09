@@ -1,0 +1,7 @@
+<map id="GenSpil.Model.BoardGameList.RegisterReservation" name="GenSpil.Model.BoardGameList.RegisterReservation">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,210,48"/>
+<area shape="rect" id="Node000002" href="$class_gen_spil_1_1_model_1_1_board_game_variant.html#aa545af85b562ce06cd2331efb9135e87" title=" " alt="" coords="258,5,481,48"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="210,24,242,24,242,29,210,29"/>
+<area shape="rect" id="Node000003" href="$class_gen_spil_1_1_model_1_1_board_game_variant.html#a8184e168c64217e1d79c8a3dfe5f5c68" title=" " alt="" coords="529,5,752,48"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="481,24,514,24,514,29,481,29"/>
+</map>
