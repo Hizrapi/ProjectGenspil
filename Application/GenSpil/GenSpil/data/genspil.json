@@ -3,27 +3,6 @@
     "boardGames": {
         "boardGames": [
             {
-                "boardGameID": 1,
-                "title": "Ludo",
-                "variant": {
-                    "title": "Ludo",
-                    "variant": "",
-                    "reservations": [
-                        {
-                            "reservedDate": "2025-04-08T16:47:58.9076538+02:00",
-                            "quantity": 1,
-                            "customerID": 12
-                        }
-                    ]
-                },
-                "genre": 5,
-                "condition": {
-                    "conditionType": 0,
-                    "quantity": 1,
-                    "price": 100
-                }
-            },
-            {
                 "boardGameID": 2,
                 "title": "Ticket to ride",
                 "variant": {
@@ -34,6 +13,399 @@
                 "genre": 3,
                 "condition": {
                     "conditionType": 0,
+                    "quantity": 3,
+                    "price": 100
+                }
+            },
+            {
+                "boardGameID": 3,
+                "title": "Sequence",
+                "variant": {
+                    "title": "Sequence",
+                    "variant": "Original",
+                    "reservations": []
+                },
+                "genre": 3,
+                "condition": {
+                    "conditionType": 2,
+                    "quantity": 1,
+                    "price": 100
+                }
+            },
+            {
+                "boardGameID": 4,
+                "title": "Sequence",
+                "variant": {
+                    "title": "Sequence",
+                    "variant": "Original",
+                    "reservations": []
+                },
+                "genre": 3,
+                "condition": {
+                    "conditionType": 4,
+                    "quantity": 2,
+                    "price": 100
+                }
+            },
+            {
+                "boardGameID": 5,
+                "title": "Sequence",
+                "variant": {
+                    "title": "Sequence",
+                    "variant": "Junior",
+                    "reservations": []
+                },
+                "genre": 0,
+                "condition": {
+                    "conditionType": 3,
+                    "quantity": 1,
+                    "price": 100
+                }
+            },
+            {
+                "boardGameID": 6,
+                "title": "Sequence",
+                "variant": {
+                    "title": "Sequence",
+                    "variant": "Rejsespil",
+                    "reservations": []
+                },
+                "genre": 3,
+                "condition": {
+                    "conditionType": 2,
+                    "quantity": 2,
+                    "price": 100
+                }
+            },
+            {
+                "boardGameID": 9,
+                "title": "Ticket to ride",
+                "variant": {
+                    "title": "Ticket to ride",
+                    "variant": "Berlin",
+                    "reservations": []
+                },
+                "genre": 3,
+                "condition": {
+                    "conditionType": 4,
+                    "quantity": 1,
+                    "price": 100
+                }
+            },
+            {
+                "boardGameID": 13,
+                "title": "7 wonders",
+                "variant": {
+                    "title": "7 wonders",
+                    "variant": "Dansk 2nd edition",
+                    "reservations": [
+                        {
+                            "reservedDate": "2025-04-09T13:27:26.9204195+02:00",
+                            "quantity": 1,
+                            "customerID": 14
+                        }
+                    ]
+                },
+                "genre": 3,
+                "condition": {
+                    "conditionType": 4,
+                    "quantity": 1,
+                    "price": 100
+                }
+            },
+            {
+                "boardGameID": 14,
+                "title": "7 wonders",
+                "variant": {
+                    "title": "7 wonders",
+                    "variant": "Architects - dansk",
+                    "reservations": []
+                },
+                "genre": 3,
+                "condition": {
+                    "conditionType": 1,
+                    "quantity": 2,
+                    "price": 100
+                }
+            },
+            {
+                "boardGameID": 15,
+                "title": "7 wonders",
+                "variant": {
+                    "title": "7 wonders",
+                    "variant": "Architects - dansk",
+                    "reservations": []
+                },
+                "genre": 3,
+                "condition": {
+                    "conditionType": 0,
+                    "quantity": 1,
+                    "price": 100
+                }
+            },
+            {
+                "boardGameID": 16,
+                "title": "7 wonders",
+                "variant": {
+                    "title": "7 wonders",
+                    "variant": "Architects - Medals",
+                    "reservations": []
+                },
+                "genre": 3,
+                "condition": {
+                    "conditionType": 3,
+                    "quantity": 1,
+                    "price": 100
+                }
+            },
+            {
+                "boardGameID": 17,
+                "title": "7 wonders",
+                "variant": {
+                    "title": "7 wonders",
+                    "variant": "dansk Duel - agora",
+                    "reservations": []
+                },
+                "genre": 3,
+                "condition": {
+                    "conditionType": 1,
+                    "quantity": 2,
+                    "price": 100
+                }
+            },
+            {
+                "boardGameID": 18,
+                "title": "7 wonders",
+                "variant": {
+                    "title": "7 wonders",
+                    "variant": "dansk Duel - agora",
+                    "reservations": []
+                },
+                "genre": 3,
+                "condition": {
+                    "conditionType": 0,
+                    "quantity": 1,
+                    "price": 100
+                }
+            },
+            {
+                "boardGameID": 19,
+                "title": "Alverdens",
+                "variant": {
+                    "title": "Alverdens",
+                    "variant": "",
+                    "reservations": [
+                        {
+                            "reservedDate": "2025-04-09T13:27:48.6315024+02:00",
+                            "quantity": 1,
+                            "customerID": 189
+                        }
+                    ]
+                },
+                "genre": 3,
+                "condition": {
+                    "conditionType": 4,
+                    "quantity": 1,
+                    "price": 100
+                }
+            },
+            {
+                "boardGameID": 20,
+                "title": "Alverdens",
+                "variant": {
+                    "title": "Alverdens",
+                    "variant": "Helte",
+                    "reservations": []
+                },
+                "genre": 0,
+                "condition": {
+                    "conditionType": 4,
+                    "quantity": 1,
+                    "price": 100
+                }
+            },
+            {
+                "boardGameID": 21,
+                "title": "Alverdens",
+                "variant": {
+                    "title": "Alverdens",
+                    "variant": "OMG",
+                    "reservations": []
+                },
+                "genre": 0,
+                "condition": {
+                    "conditionType": 0,
+                    "quantity": 1,
+                    "price": 100
+                }
+            },
+            {
+                "boardGameID": 22,
+                "title": "Alverdens",
+                "variant": {
+                    "title": "Alverdens",
+                    "variant": "Popkultur",
+                    "reservations": []
+                },
+                "genre": 0,
+                "condition": {
+                    "conditionType": 2,
+                    "quantity": 1,
+                    "price": 100
+                }
+            },
+            {
+                "boardGameID": 23,
+                "title": "Alverdens",
+                "variant": {
+                    "title": "Alverdens",
+                    "variant": "Popkultur",
+                    "reservations": []
+                },
+                "genre": 0,
+                "condition": {
+                    "conditionType": 1,
+                    "quantity": 2,
+                    "price": 100
+                }
+            },
+            {
+                "boardGameID": 24,
+                "title": "Alverdens",
+                "variant": {
+                    "title": "Alverdens",
+                    "variant": "Arkitektur",
+                    "reservations": []
+                },
+                "genre": 0,
+                "condition": {
+                    "conditionType": 2,
+                    "quantity": 2,
+                    "price": 100
+                }
+            },
+            {
+                "boardGameID": 25,
+                "title": "Alverdens",
+                "variant": {
+                    "title": "Alverdens",
+                    "variant": "Helte",
+                    "reservations": []
+                },
+                "genre": 0,
+                "condition": {
+                    "conditionType": 2,
+                    "quantity": 1,
+                    "price": 100
+                }
+            },
+            {
+                "boardGameID": 26,
+                "title": "A la carte: dessert",
+                "variant": {
+                    "title": "A la carte: dessert",
+                    "variant": "",
+                    "reservations": []
+                },
+                "genre": 3,
+                "condition": {
+                    "conditionType": 2,
+                    "quantity": 1,
+                    "price": 100
+                }
+            },
+            {
+                "boardGameID": 27,
+                "title": "Bad people",
+                "variant": {
+                    "title": "Bad people",
+                    "variant": "",
+                    "reservations": [
+                        {
+                            "reservedDate": "2025-04-09T13:28:07.5004911+02:00",
+                            "quantity": 1,
+                            "customerID": 132
+                        }
+                    ]
+                },
+                "genre": 3,
+                "condition": {
+                    "conditionType": 4,
+                    "quantity": 1,
+                    "price": 100
+                }
+            },
+            {
+                "boardGameID": 28,
+                "title": "Ticket to ride",
+                "variant": {
+                    "title": "Ticket to ride",
+                    "variant": "Berlin",
+                    "reservations": []
+                },
+                "genre": 3,
+                "condition": {
+                    "conditionType": 2,
+                    "quantity": 3,
+                    "price": 100
+                }
+            },
+            {
+                "boardGameID": 29,
+                "title": "Ticket to ride",
+                "variant": {
+                    "title": "Ticket to ride",
+                    "variant": "Berlin",
+                    "reservations": []
+                },
+                "genre": 3,
+                "condition": {
+                    "conditionType": 3,
+                    "quantity": 1,
+                    "price": 100
+                }
+            },
+            {
+                "boardGameID": 30,
+                "title": "Ticket to ride",
+                "variant": {
+                    "title": "Ticket to ride",
+                    "variant": "Europe - dansk",
+                    "reservations": []
+                },
+                "genre": 3,
+                "condition": {
+                    "conditionType": 2,
+                    "quantity": 2,
+                    "price": 100
+                }
+            },
+            {
+                "boardGameID": 31,
+                "title": "Ticket to ride",
+                "variant": {
+                    "title": "Ticket to ride",
+                    "variant": "First journey",
+                    "reservations": []
+                },
+                "genre": 3,
+                "condition": {
+                    "conditionType": 4,
+                    "quantity": 1,
+                    "price": 100
+                }
+            },
+            {
+                "boardGameID": 32,
+                "title": "Ticket to ride",
+                "variant": {
+                    "title": "Ticket to ride",
+                    "variant": "Japan \u0026 Italy",
+                    "reservations": []
+                },
+                "genre": 3,
+                "condition": {
+                    "conditionType": 1,
                     "quantity": 1,
                     "price": 100
                 }
